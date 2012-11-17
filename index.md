@@ -8,7 +8,7 @@ tagline: Math, CS, Data
 
 Hi, I'm [David](http://stat.yale.edu/~wdb22). This blog is about the "three pillars of quantitation": mathematics, computer science, and data analysis. They make for a powerful combination. I strive to continually develop my expertise in all three.
 
-The posts listed below include solved math problems, tutorials, practical advice, and other reflections.
+The posts listed below include tutorials, solved math problems, practical advice, and other reflections.
 
 
 ## Posts

@@ -2,7 +2,7 @@
 layout: post
 title: Including C Code in an R Package
 category: tutorial
-tags: [R, C]
+tags: [r, c]
 ---
 {% include JB/setup %}
 
@@ -36,7 +36,7 @@ Now R code within this package can call the C function `Caddone` by using the `.
       return(x)
     }
 
-Finally, the package has a **DESCRIPTION** file, and the folder **man** contains two simple documentation files. All of these files can be found in **CDemo.tar**. To finish building your package, navigate a terminal session to the parent of your package's main directory and run
+Finally, the package has a **DESCRIPTION** file, and the folder **man** contains two simple documentation files. All of these files can be found in [Cdemo.tar](/static/Cdemo.tar). To finish building your package, navigate a terminal session to the parent of your package's main directory and run
 
 `> R CMD check Cdemo`
 
