@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "How to Become a Quant"
-description: "The core quantitative skills and how to acquire them"
+title: How to Become a Quant
+description: The core quantitative skills and how to develop them
 category: quant
-tags: ["quant", "college"]
+tags: [quant, college]
 ---
 {% include JB/setup %}
 
