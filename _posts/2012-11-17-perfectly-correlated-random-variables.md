@@ -6,26 +6,25 @@ tags: [math]
 ---
 {% include JB/setup %}
 
-Suppose $X$ and $Y$ have finite nonzero variances $\sigma_X^2$ and $\sigma_Y^2$. If $\vert\text{corr}(X, Y)\vert=1$, then there must exist nonzero constants $a$ and $b$ such that $Y = aX + b$ with probability one.
+$\newcommand{\E}{\mathbb{E}}$Suppose $X$ and $Y$ have finite nonzero variances $\sigma_X^2$ and $\sigma_Y^2$. Define $C$ to be the correlation between $X$ and $Y$. If $\vert C \vert=1$, then $Y$ must be an affine linear function of $X$ (and vice versa) with probability one. In particular, $Y = mX + b$ where
+
+<div>\begin{align*}
+m = C \left(\frac{\sigma_Y}{\sigma_X}\right) \qquad \text{and} \qquad b = \E Y - m \E X
+\end{align*}</div>
+
 
 ### Proof
 
-$\vert\text{corr}(X,Y)\vert=1$ implies that one of the following must be true:
-
-- Cov$(X,Y)=\sigma_X \sigma_Y$
-- Cov$(X,Y)=-\sigma_X \sigma_Y$
-
-Assume the first case is true (i.e. Cov$(X,Y)=\sigma_X \sigma_Y$). Then consider the variance of $Y-aX$.
+Consider the variance of $Y-mX$.
 
 <div>\begin{align*}
-\text{Var}(Y-aX) &= \sigma_Y^2 - 2a\text{Cov}(X,Y) + a^2\sigma_X^2\\
- &= \sigma_Y^2 - 2a\sigma_X \sigma_Y + a^2\sigma_X^2 \qquad \text{by our assumption}\\
- &= (\sigma_Y - a\sigma_X)^2
+\text{Var}(Y-mX) &= \sigma_Y^2 + m^2\sigma_X^2 - 2m\text{Cov}(X,Y)\\
+ &= \sigma_Y^2 + m^2\sigma_X^2 - 2m C \sigma_X \sigma_Y \qquad \text{(by the definition of correlation)}\\
+ &= \sigma_Y^2 + (C \sigma_Y / \sigma_X)^2\sigma_X^2 - 2 (C \sigma_Y / \sigma_X) C \sigma_X \sigma_Y\\
+ &= \sigma_Y^2 + C^2 \sigma_Y^2 - 2 C^2 \sigma_Y^2\\
+ &= \sigma_Y^2 + \sigma_Y^2 - 2 \sigma_Y^2 \qquad \qquad \qquad \text{(because $C^2=1$)}\\
+ &= 0
 \end{align*}</div>
 
-which equals zero if $a=\sigma_Y/\sigma_X$.
-
-Assuming the second case is true (i.e. Cov$(X,Y)=-\sigma_X \sigma_Y$), then $a=-\sigma_Y/\sigma_X$ makes Var$(Y-aX)=0$.
-
-Therefore, whenever $\vert\text{corr}(X,Y)\vert=1$, there exists a constant $a$ such that the variance of the random variable $Y-aX$ is zero.  A random variable with zero variance has to be a constant with probability one, so $Y-aX=b$ (equivalently, $Y=aX+b$) with probability one for some constant $b$.
+The variance of the random variable $Y-aX$ is zero.  A random variable with zero variance has to be a constant with probability one, so $Y-mX=b$ with probability one for some constant $b$. Taking expectations of both sides shows that $b$ must be $\E Y - m \E X$.
 
