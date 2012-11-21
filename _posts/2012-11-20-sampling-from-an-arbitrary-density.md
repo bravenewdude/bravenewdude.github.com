@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Sampling From an Arbitrary Density
-category: 
+category: tutorial
 tags: [r]
 ---
 {% include JB/setup %}
@@ -26,9 +26,9 @@ The cdf is
 F(x) &= \int_{-\infty}^x f(t) dt\\
  &= \left\{
      \begin{array}{ll}
-       0 , & \text{if} x < m\\
-       \frac{1}{1-m^2} - \frac{m^2}{(1-m^2)x^2} , & \text{if} x \in [m,1]\\
-       1 , & \text{if} x > 1
+       0 , & \text{if } x < m\\
+       \frac{1}{1-m^2} - \frac{m^2}{(1-m^2)x^2} , & \text{if } x \in [m,1]\\
+       1 , & \text{if } x > 1
      \end{array}
     \right.
 \end{align*}</div>

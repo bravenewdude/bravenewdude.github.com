@@ -5,8 +5,9 @@ category: probability
 tags: [math]
 ---
 {% include JB/setup %}
+<div style='visibility: hidden; height: 0;'>$\newcommand{\E}{\mathbb{E}}$</div>
 
-$\newcommand{\E}{\mathbb{E}}$Suppose $X$ and $Y$ have finite nonzero variances $\sigma_X^2$ and $\sigma_Y^2$. Define $C$ to be the correlation between $X$ and $Y$. If $\vert C \vert=1$, then $Y$ must be an affine linear function of $X$ (and vice versa) with probability one. In particular, $Y = mX + b$ where
+Suppose $X$ and $Y$ have finite nonzero variances $\sigma_X^2$ and $\sigma_Y^2$. Define $C$ to be the correlation between $X$ and $Y$. If $\vert C \vert=1$, then $Y$ must be an affine linear function of $X$ (and vice versa) with probability one. In particular, $Y = mX + b$ where
 
 <div>\begin{align*}
 m = C \left(\frac{\sigma_Y}{\sigma_X}\right) \qquad \text{and} \qquad b = \E Y - m \E X
