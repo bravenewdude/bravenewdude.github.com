@@ -1,11 +1,11 @@
 ---
 layout: post
-title: Sampling from an Arbitrary Density
+title: Sampling From an Arbitrary Density
 category: 
 tags: [r]
 ---
 {% include JB/setup %}
-<div class="hidden">$\newcommand{\I}{\mathbb{1}}$</div>
+<div style='visibility: hidden; height: 0;'>$\newcommand{\I}{\mathbb{1}}$</div>
 
 One way to sample from a known probability density function (pdf) is to use [inverse transform sampling](http://en.wikipedia.org/wiki/Inverse_transform_sampling). First, you integrate the pdf to get the cumulative distribution function (cdf). Next, you find the inverse of the cdf. Finally, apply this inverse cdf to each number in a sample of Uniform(0,1) observations.
 
@@ -23,12 +23,12 @@ The cdf is
 
 
 <div>\begin{align*}
-F(x) &= \int_{-infty}^x f(t) dt\\
+F(x) &= \int_{-\infty}^x f(t) dt\\
  &= \left\{
      \begin{array}{ll}
-       0 & , x < m\\
-       \frac{1}{1-m^2} - \frac{m^2}{(1-m^2)x^2} & , x \in [m,1]\\
-       1 & , x > 1
+       0 , & \text{if} x < m\\
+       \frac{1}{1-m^2} - \frac{m^2}{(1-m^2)x^2} , & \text{if} x \in [m,1]\\
+       1 , & \text{if} x > 1
      \end{array}
     \right.
 \end{align*}</div>
@@ -44,7 +44,7 @@ Finally, we can apply the technique. Below, I generate 100 standard uniform obse
 
 
     invcdf <- function(u, m = 0.5) {
-        return(m^2/(1 - (1 - m^2) * u))
+        return(sqrt(m^2/(1 - (1 - m^2) * u)))
     }
     
     sample1 <- sapply(runif(100), invcdf)
@@ -121,7 +121,7 @@ While `samplepdf` is convenient, it is also computationally slow. The algorithm 
         fit[1], "+", fit[2], "* n."))
 
 
-    ## [1] "The number of seconds required to sample from this density is about 3.01313333333334 + 0.143591212121212 * n."
+    ## [1] "The number of seconds required to sample from this density is about 3.23273333333337 + 0.139229575757576 * n."
 
 
     plot(n, times, ylab = "seconds", xlab = "n", main = "Time Required", col = 3)
@@ -133,4 +133,5 @@ While `samplepdf` is convenient, it is also computationally slow. The algorithm 
 
 
 At the beginning of this document, we found the inverse cdf analytically. The R function that used this analytical result can generate a sample of size 1000 in the blink of an eye, while the `samplepdf` function took about two and a half minutes on my slow netbook. However, if you give the lower and upper endpoints as in `samplepdf(1000, mypdf, .5, 1)`, the function only takes about ten seconds to run.
+
 
