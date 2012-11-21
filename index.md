@@ -1,12 +1,12 @@
 ---
 layout: page
-title: Quantitation Blog
+title: Quantitative Meditations
 tagline: Math, CS, Data
 ---
 {% include JB/setup %}
 
 
-Hi, I'm [David](http://stat.yale.edu/~wdb22). This blog is about the "three pillars of quantitation": mathematics, computer science, and data analysis. They make for a powerful combination. I strive to continually develop my expertise in all three.
+Hi, I'm [David](http://stat.yale.edu/~wdb22). This blog is about mathematics, computer science, and data analysis. They make for a dangerously powerful combination, and I strive to continually develop my expertise in all three.
 
 The posts listed below include tutorials, solved math problems, practical advice, and other reflections.
 

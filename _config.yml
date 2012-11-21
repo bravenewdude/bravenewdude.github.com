@@ -10,11 +10,11 @@ pygments: true
 # Themes are encouraged to use these universal variables 
 # so be sure to set them if your theme uses them.
 #
-title : Quantitation
-tagline: Mathematics, Computer Science, Data Analysis, ...
+title : Quantitations
+tagline: Math, CS, Data
 author :
   name : W. D. Brinda
-  email : william.brinda@yale.edu
+  email : bravenewdude@gmail.com
   github : bravenewdude
   twitter : username
   feedburner : feedname

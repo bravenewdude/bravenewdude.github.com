@@ -15,7 +15,7 @@ m = C \left(\frac{\sigma_Y}{\sigma_X}\right) \qquad \text{and} \qquad b = \E Y -
 
 ### Proof
 
-Consider the variance of $Y-mX$.
+Consider the variance of $Y-mX$. By a simple variance [formula](http://en.wikipedia.org/wiki/Variance#Weighted_sum_of_variables), we can expand this into
 
 <div>\begin{align*}
 \text{Var}(Y-mX) &= \sigma_Y^2 + m^2\sigma_X^2 - 2m\text{Cov}(X,Y)\\
