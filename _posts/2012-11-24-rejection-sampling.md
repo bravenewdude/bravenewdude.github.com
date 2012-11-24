@@ -7,7 +7,7 @@ tags: [r]
 {% include JB/setup %}
 <div style='visibility: hidden; height: 0;'>$\newcommand{\I}{\mathbb{I}} \newcommand{\E}{\mathbb{E}}$</div>
 
-My previous post discussed [inverse transform sampling](/tutorial/2012/11/20/sampling-from-an-arbitrary-density/). Another way to sample from a known pdf is to use [rejection sampling](http://en.wikipedia.org/wiki/Rejection_sampling). First, find a density $f$ that you can sample from and that [dominates](http://en.wikipedia.org/wiki/Absolutely_continuous#Absolute_continuity_of_measures) the density of interest $h$. Next, find a value $M$ such that $Mf /geq h$ (i.e. M f(x) \geq h(x) \forall x \in \Re). Preferably, you should find the smallest such $M$ value, to make the algorithm as fast as possible. Finally, sample from $f$, and keep each sample value $x_i$ with probability $h(x_i)/(Mf(x_i))$.
+My previous post discussed [inverse transform sampling](/tutorial/2012/11/20/sampling-from-an-arbitrary-density/). Another way to sample from a known pdf is to use [rejection sampling](http://en.wikipedia.org/wiki/Rejection_sampling). First, find a density $f$ that you can sample from and that [dominates](http://en.wikipedia.org/wiki/Absolutely_continuous#Absolute_continuity_of_measures) the density of interest $h$. Next, find a value $M$ such that $Mf \geq h$ (i.e. $M f(x) \geq h(x) \forall x \in \Re$). Preferably, you should find the smallest such $M$ value, to make the algorithm as fast as possible. Finally, sample from $f$, and keep each sample value $x_i$ with probability $h(x_i)/(Mf(x_i))$.
 
 
 ## Example Using Exponential Distribution
@@ -40,9 +40,9 @@ For this analysis, let's assume the parameter $m$ is $1/2$. To perform our rejec
 ![plot of chunk unnamed-chunk-1](/static/2012-11-24-rejection-sampling/unnamed-chunk-1.png) 
 
 
-Now, we want to find the smallest $M$ such that $M$ times our exponential density is greater than $h$ for all $x$. We also have the freedom to adjust the exponential rate parameter, if we want. A fundamental result in rejection sampling is that the overall rejection rate of a procedure is exactly equal to $1/M$. Therefore, let's try to find the rate parameter $\lambda>0$ for which the smallest $M$ will suffice. This will give us the procedure that has the highest acceptance rate (fewest "wasted" trials) of any procedure in this shited exponential class.
+Now, we want to find the smallest $M$ such that $M$ times our exponential density is greater than $h$ for all $x$. We also have the freedom to adjust the exponential rate parameter, if we want. A [fundamental result in rejection sampling](/inference/2012/11/24/rejection-sampling-proof/) is that the overall rejection rate of a procedure is exactly equal to $1/M$. Therefore, let's try to find the rate parameter $\lambda>0$ for which the smallest $M$ will suffice. This will give us the procedure that has the highest acceptance rate (fewest "wasted" trials) of any procedure in this shited exponential class.
 
-Our shifted exponential density will be of the form $f(x; \lambda) = \lambda e^{-\lambda (x-.5)} \I\{x>.5\}$. Assuming $x \in [.5, 1]$, we need $M$ to satisfy
+Our shifted exponential density will be of the form $f(x; \lambda) = \lambda e^{-\lambda (x-.5)}$ for $x>.5$. Assuming $x \in [.5, 1]$, we need $M$ to satisfy
 
 
 <div>\begin{align*}
@@ -51,7 +51,7 @@ M f(x; \lambda) \geq h(x)\\
 \Rightarrow M &\geq \frac{2 e^{\lambda (x-.5)}}{3 \lambda x^3}
 \end{align*}</div>
 
-For a given lambda, we want $M$ to be the smallest value satisfying the above condition, so we will let $M$ be the supremum over $x$ of the expression on the right-hand side, which I will call $g(x, \lambda)$. By differentiating $g$ with respect to $x$, we can see that it is convex on the interval; therefore, its maximum must occur at an endpoint. Now, let's define
+For a given $\lambda$, we want $M$ to be the smallest value satisfying the above condition, so we will let $M$ be the supremum over $x$ of the expression on the right-hand side, which I will call $g(x, \lambda)$. By differentiating $g$ with respect to $x$, we can see that it is convex on the interval; therefore, its maximum must occur at an endpoint. Now, let's define
 
 
 <div>\begin{align*}
@@ -64,8 +64,8 @@ Because the supremum occurs at an endpoint, the only two possibilities for $S(\l
 <div>\begin{align*}
 S(\lambda) = \left\{
      \begin{array}{ll}
-       \frac{16}{3 \lambda} , & \text{if} \lambda \in (0,2 \log 8)\\
-       \frac{2 e^{\lambda/2}}{3 \lambda} , & \text{if} \lambda \geq 2 \log 8
+       \frac{16}{3 \lambda} , & \text{if} \; \lambda \in (0,2 \log 8)\\
+       \frac{2 e^{\lambda/2}}{3 \lambda} , & \text{if} \; \lambda \geq 2 \log 8
      \end{array}
     \right.
 \end{align*}</div>
@@ -126,7 +126,7 @@ It is possible that different rate parameters cause the random number generator 
 Therefore, we can be satisfied that using $\lambda=4.16$ is about as well as we can do in drawing from $h$ via an exponential rejection sampling.
 
 
-## Repeat Using Bins
+## Repeat Using Histograms
 
 Another way to use rejection sampling for a density with bounded support is by drawing from a histogram. First, you construct a histogram shape that covers the density of interest, then divide each rectangle's area by the total area to normalize to a probability mass function (pmf) for the bins. Next, draw a bin according to that pmf. Uniformly sample a horizontal and vertical position with that bin's rectangle. If this point is below the density of interest, then keep the $x$ value.
 
@@ -195,7 +195,7 @@ Now, we try out a series of $r$ values to determine the time required as a funct
 ![plot of chunk unnamed-chunk-6](/static/2012-11-24-rejection-sampling/unnamed-chunk-6.png) 
 
 
-The algorithm is linear in $r$. The expected time required to reach 1000 \textcal{accepted} draws is approximately the time required to generate 1000 points divided by the acceptance rate. We could find the acceptance rate by conditioning on the bin selected and finding the conditional acceptance rate for each bin. But it is simpler to just use the result invoked earlier: the acceptance rate is $1/M$, where $M$ is the sum of the rectangle areas. In fact, I wrote code for both the `rejectionprob` function does it "the hard way," while `acceptanceprob` uses the easy method. As a sanity check, you can confirm that the sum of the functions is 1 for any $r$.
+The algorithm is linear in $r$. The expected time required to reach 1000 \textcal{accepted} draws is approximately the time required to generate 1000 points divided by the acceptance rate. We could find the acceptance rate by conditioning on the bin selected and finding the conditional acceptance rate for each bin. But it is simpler to just use the result invoked earlier: the acceptance rate is $1/M$, where $M$ is the sum of the rectangle areas. In fact, I wrote code for both; the `rejectionprob` function does it "the hard way," while `acceptanceprob` uses the easy method. As a sanity check, you can confirm that the sum of these two functions is 1 for any $r$.
 
 
     rejectionprob <- function(r) {
@@ -252,7 +252,7 @@ We want to find the $r$ value that minimizes number-generating time divided by a
 
 
 
-## Comparing Speeds of the Exponential and Bin Algorithms
+## Comparing Speeds of the Exponential and Histogram Algorithms
 
 Lastly, let's compare the two rejection sampling methods described above. Using the histogram method we can make the acceptance probability arbirarily close to 1 simply by increasing the number of bins. That may make it seem like this method is superior to the exponential one. However, the histogram method requires one extra randomization step, so it could still be worse overall. Let's see how the best exponential method and the best histogram method match up head-to-head in sampling from $h$.
 
@@ -271,7 +271,7 @@ Lastly, let's compare the two rejection sampling methods described above. Using 
             x <- m + (s - 1) * binwidth + runif(N, 0, binwidth)
             numaccepted <- sum(runif(N, 0, binheights[s]) - sapply(x, h) <= 0)
         })[3]
-        return(1e+06 * time/numaccepted)
+        return(1e+05 * time/numaccepted)
     }
     
     esample.h.optimal <- function(N = 1e+05) {
@@ -284,7 +284,7 @@ Lastly, let's compare the two rejection sampling methods described above. Using 
             u <- runif(N, max = M * dexp(raw - 0.5, lambda))
             numaccepted <- sum(u <= sapply(raw, h))
         })[3]
-        return(1e+06 * time/numaccepted)
+        return(1e+05 * time/numaccepted)
     }
     
     methods <- c("esample.h.optimal", "rsample.h.optimal")
@@ -309,11 +309,11 @@ Lastly, let's compare the two rejection sampling methods described above. Using 
 
 
     ##      exponential histogram
-    ## [1,]       57.87     57.74
-    ## [2,]       57.03     50.88
-    ## [3,]       59.30     49.61
-    ## [4,]       56.35     52.28
-    ## [5,]       58.78     51.06
+    ## [1,]       5.787     5.774
+    ## [2,]       5.703     5.088
+    ## [3,]       5.930     4.961
+    ## [4,]       5.635     5.228
+    ## [5,]       5.878     5.106
 
 
 
