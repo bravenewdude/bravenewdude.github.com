@@ -131,4 +131,6 @@ While `samplepdf` is convenient, it is also computationally slow. The algorithm 
 
 At the beginning of this document, we found the inverse cdf analytically. The R function that used this analytical result can generate a sample of size 1000 in the blink of an eye, while the `samplepdf` function took about two and a half minutes on my slow netbook. However, if you give the lower and upper endpoints as in `samplepdf(1000, h, m = .5, spdf.lower = .5, spdf.upper = 1)`, the function only takes about ten seconds to run.
 
+Another option for sampling that doesn't require finding the inverse cdf is [rejection sampling](/tutorial/2012/11/24/rejection-sampling/).
+
 

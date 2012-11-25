@@ -44,7 +44,7 @@ The overall probability of accepting a draw is $1/M$.
 
 <div>\begin{align*}
 \P \{ Y \; \text{is accepted} \} &= \P \{ U \leq h(Y)/(Mg(Y)) \}\\
- &= \E h(Y)/(Mg(Y)) \qquad \qquad \qquad \text{(by Lemma 1)}\\
+ &= \E [h(Y)/(Mg(Y))] \qquad \qquad \qquad \text{(by Lemma 1)}\\
  &= \frac{1}{M} \int_{-\infty}^\infty \frac{h(y)}{g(y)} g(y) dy\\
  &= \frac{1}{M} \int_{-\infty}^\infty h(y) dy\\
  &= 1/M

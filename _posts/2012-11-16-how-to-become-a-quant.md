@@ -115,6 +115,6 @@ Do your PhD in Statistics; apply to good programs.
 
 ## Additional Study
 
-As mentioned earlier, a major benefit of this course of study is that it keeps your options open for so long. It provides you with skills that will make you a superpower in any industry or any field of study. If you do have a specific goal in mind (let's take finance as our example), I recommend that you don't specialize until a few years into your PhD program. At that point, get some books on quantitative finance to read in your spare time and during the summers. Complete a finance-related dissertation.
+As mentioned earlier, a major benefit of this course of study is that it keeps your options open for so long. It provides you with skills that will make you a powerhouse in any industry or any field of study. If you do have a specific goal in mind (let's take finance as our example), I recommend that you don't specialize until a few years into your PhD program. At that point, get some books on quantitative finance to read in your spare time and during the summers. Complete a finance-related dissertation.
 
 Congratulations, superstar, you're a quant!

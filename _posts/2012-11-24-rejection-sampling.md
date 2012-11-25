@@ -5,9 +5,9 @@ category: tutorial
 tags: [r]
 ---
 {% include JB/setup %}
-<div style='visibility: hidden; height: 0;'>$\newcommand{\I}{\mathbb{I}} \newcommand{\E}{\mathbb{E}}$</div>
+<div style='visibility: hidden; height: 0;'>$\newcommand{\I}{\mathbb{I}} \newcommand{\E}{\mathbb{E}} \newcommand{\R}{\mathbb{R}}$</div>
 
-My previous post discussed [inverse transform sampling](/tutorial/2012/11/20/sampling-from-an-arbitrary-density/). Another way to sample from a known pdf is to use [rejection sampling](http://en.wikipedia.org/wiki/Rejection_sampling). First, find a density $f$ that you can sample from and that [dominates](http://en.wikipedia.org/wiki/Absolutely_continuous#Absolute_continuity_of_measures) the density of interest $h$. Next, find a value $M$ such that $Mf \geq h$ (i.e. $M f(x) \geq h(x) \forall x \in \Re$). Preferably, you should find the smallest such $M$ value, to make the algorithm as fast as possible. Finally, sample from $f$, and keep each sample value $x_i$ with probability $h(x_i)/(Mf(x_i))$.
+My previous post discussed [inverse transform sampling](/tutorial/2012/11/20/sampling-from-an-arbitrary-density/). Another way to sample from a known pdf is to use [rejection sampling](http://en.wikipedia.org/wiki/Rejection_sampling). First, find a density $f$ that you can sample from and that [dominates](http://en.wikipedia.org/wiki/Absolutely_continuous#Absolute_continuity_of_measures) the density of interest $h$. Next, find a value $M$ such that $Mf \geq h$ (i.e. $M f(x) \geq h(x) \forall x \in \R$). Preferably, you should find the smallest such $M$ value, to make the algorithm as fast as possible. Finally, sample from $f$, and keep each sample value $x_i$ with probability $h(x_i)/(Mf(x_i))$.
 
 
 ## Example Using Exponential Distribution
