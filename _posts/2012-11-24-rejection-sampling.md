@@ -7,7 +7,7 @@ tags: [r]
 {% include JB/setup %}
 <div style='visibility: hidden; height: 0;'>$\newcommand{\I}{\mathbb{I}} \newcommand{\E}{\mathbb{E}} \newcommand{\R}{\mathbb{R}}$</div>
 
-My previous post discussed [inverse transform sampling](/tutorial/2012/11/20/sampling-from-an-arbitrary-density/). Another way to sample from a known pdf is to use [rejection sampling](http://en.wikipedia.org/wiki/Rejection_sampling). First, find a density $f$ that you can sample from and that [dominates](http://en.wikipedia.org/wiki/Absolutely_continuous#Absolute_continuity_of_measures) the density of interest $h$. Next, find a value $M$ such that $Mf \geq h$ (i.e. $M f(x) \geq h(x) \forall x \in \R$). Preferably, you should find the smallest such $M$ value, to make the algorithm as fast as possible. Finally, sample from $f$, and keep each sample value $x_i$ with probability $h(x_i)/(Mf(x_i))$.
+My previous post discussed [inverse transform sampling](/tutorial/2012/11/20/sampling-from-an-arbitrary-density/). Another way to sample from a known pdf is to use [rejection sampling](http://en.wikipedia.org/wiki/Rejection_sampling). First, find a density $f$ that you can sample from and that [dominates](http://en.wikipedia.org/wiki/Absolutely_continuous#Absolute_continuity_of_measures) the density of interest $h$. Next, find a value $M$ such that $Mf \geq h$ (i.e. $M f(x) \geq h(x) , \; \forall x \in \R$). Preferably, you should find the smallest such $M$ value, to make the algorithm as fast as possible. Finally, sample from $f$, and keep each sample value $x_i$ with probability $h(x_i)/(Mf(x_i))$.
 
 
 ## Example Using Exponential Distribution
@@ -40,13 +40,13 @@ For this analysis, let's assume the parameter $m$ is $1/2$. To perform our rejec
 ![plot of chunk unnamed-chunk-1](/static/2012-11-24-rejection-sampling/unnamed-chunk-1.png) 
 
 
-Now, we want to find the smallest $M$ such that $M$ times our exponential density is greater than $h$ for all $x$. We also have the freedom to adjust the exponential rate parameter, if we want. A [fundamental result in rejection sampling](/inference/2012/11/24/rejection-sampling-proof/) is that the overall rejection rate of a procedure is exactly equal to $1/M$. Therefore, let's try to find the rate parameter $\lambda>0$ for which the smallest $M$ will suffice. This will give us the procedure that has the highest acceptance rate (fewest "wasted" trials) of any procedure in this shited exponential class.
+Now, we want to find the smallest $M$ such that $M$ times our exponential density is greater than $h$ for all $x$. We also have the freedom to adjust the exponential rate parameter, if we want. A [fundamental result in rejection sampling](/inference/2012/11/24/rejection-sampling-proof/) is that the overall acceptance rate of a procedure is exactly equal to $1/M$. Therefore, let's try to find the rate parameter $\lambda>0$ for which the smallest $M$ will suffice. This will give us the procedure that has the highest acceptance rate (fewest "wasted" trials) of any procedure in this shited exponential class.
 
-Our shifted exponential density will be of the form $f(x; \lambda) = \lambda e^{-\lambda (x-.5)}$ for $x>.5$. Assuming $x \in [.5, 1]$, we need $M$ to satisfy
+Our shifted exponential density will be of the form $f(x; \lambda) = \lambda e^{-\lambda (x-.5)}$ for $x \geq .5$. Assuming $x \in [.5, 1]$, we need $M$ to satisfy
 
 
 <div>\begin{align*}
-M f(x; \lambda) \geq h(x)\\
+M f(x; \lambda) &\geq h(x)\\
 \Rightarrow M \lambda e^{-\lambda (x-.5)} &\geq \frac{2 (.5)^2}{(1-(.5)^2)x^3}\\
 \Rightarrow M &\geq \frac{2 e^{\lambda (x-.5)}}{3 \lambda x^3}
 \end{align*}</div>
