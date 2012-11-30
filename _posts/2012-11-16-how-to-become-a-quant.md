@@ -29,7 +29,7 @@ This is the most important section of this whole guide. Choosing the right cours
 
 Non-quantitative interests are great. But if you're serious about becoming a quantitative genius, these interests should be considered hobbies. Read about the French Revolution during your free time or during the summers. Don't take a course on it, at least not at this point in your life.
 
-Double-major in math and computer science. To fulfill science requirements, take physics courses. To fulfill social sciences requirements, take economics courses. To fulfill humanities requirements, probably philosophy courses are your best bet; in particular, check for critical thinking and/or logic courses and see it they would count.
+Double-major in math and computer science. To fulfill science requirements, take physics courses. To fulfill social science requirements, take economics courses. To fulfill humanities requirements, probably philosophy courses are your best bet; in particular, check for critical thinking and/or logic courses and see it they would count.
 
 Make sure you take a few statistics courses along the way. Take as many physics courses as you want. Economics is fine too, if you stick to the most quantitative courses. Go for a physics or economics minor if you want.
 
@@ -84,7 +84,7 @@ You may hear that you can make more money by private tutoring. Yes, you can char
 
 ## Summers
 
-During the summers after freshman year and after sophomore year, I recommend taking summer courses. You could stay on campus, but that can be expensive. Some colleges offer some online courses, which would be the most convenient option. Or you might try taking courses from a local institution near home and then transferring the credits, but that can be a bureaucratic headache.
+During the summers after freshman year and after sophomore year, I recommend taking summer courses. You could stay on campus, but that can be expensive. Some colleges offer online courses, which would be the most convenient option. Or you might try taking courses from a local institution near home and then transferring the credits, but that can be a bureaucratic headache.
 
 During the summer after junior year, do an [REU](http://www.nsf.gov/crssprgm/reu/) (Research Experience for Undergraduates) in either Math or Computer Science. These are beneficial experiences, they look great on your grad school application, and you get paid for them. Applications for REUs are usually due in February, so don't miss the deadline. They also require recommendations from professors, so you'll have to give them some time as well. You should probably start working on your applications at the beginning of the junior year's Christmas break.
 
@@ -93,7 +93,7 @@ In your spare time during this REU summer, study for the GRE General Test and th
 
 ## Side Projects
 
-If you come up with any interesting ideas, build them. It's fun and educational, and it's a way to show off your skills. Over the past few years, I've created several web applications, a podcast, a few R packages, an Arduino library, and this blog. Any code you produced for these projects should be available for download (on git-hub for example).
+If you come up with any interesting ideas, build them. It's fun and educational, and it's another way to show off your skills and your initiative. Over the past few years, I've created several web applications, a podcast, a few R packages, an Arduino library, and this blog. Any code you produced for these projects should be available for download (on git-hub for example).
 
 You might also consider joining an open-source project.
 
@@ -115,6 +115,6 @@ Do your PhD in Statistics; apply to good programs.
 
 ## Additional Study
 
-As mentioned earlier, a major benefit of this course of study is that it keeps your options open for so long. It provides you with skills that will make you a powerhouse in any industry or any field of study. If you do have a specific goal in mind (let's take finance as our example), I recommend that you don't specialize until a few years into your PhD program. At that point, get some books on quantitative finance to read in your spare time and during the summers. Complete a finance-related dissertation.
+A major benefit of this course of study is that it keeps your options open for so long. It provides you with skills that will make you a powerhouse in any industry or any field of study. If you do have a specific goal in mind (let's take finance as our example), I recommend that you don't specialize until a few years into your PhD program. At that point, get some books on quantitative finance to read in your spare time and during the summers. And complete a finance-related dissertation.
 
 Congratulations, superstar, you're a quant!
