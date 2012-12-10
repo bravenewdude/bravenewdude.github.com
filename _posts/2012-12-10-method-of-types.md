@@ -69,12 +69,11 @@ The probability of any particular outcome $\x = (x_1, \ldots, x_n)$ is $2^{-n (H
 
 ### Proof
 
-Let $Q^n$ be the product measure for $n$ i.i.d. random variables with distribution $Q$. And let $N(a \vert \x)$ denote the number of occurrences of $a$ in $\x$. Then (from C&T page 350)
+Let $N(a \vert \x)$ denote the number of occurrences of $a$ in $\x$. Then (from C&T page 350)
 
 
 <div>\begin{align*}
-\P \{X = \x\} &= Q^n(\x)\\
- &= \prod_{i=1}^n Q(x_i)\\
+\P \{X = \x\} &= \prod_{i=1}^n Q(x_i)\\
  &= \prod_{a \in A} Q(a)^{N(a \vert \x)}\\
  &= \prod_{a \in A} Q(a)^{n \Px(a)}\\
  &= \prod_{a \in A} 2^{n \Px(a) \log Q(a)}\\
