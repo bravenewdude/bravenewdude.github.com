@@ -61,7 +61,7 @@ The number of possible empirical distributions is bounded by $(n+1)^m$.
 
 ### Proof
 
-There are only $n+1$ fractions in $[0,1]$ with denominator $n$, and each of the $m$ components must take one of these values. There are only $(n+1)^m$ such possibilities. The subset of these that have components summing to 1 are the actual types. \hfill $\square$
+There are only $n+1$ fractions in $[0,1]$ with denominator $n$, and each of the $m$ components must take one of these values. There are only $(n+1)^m$ such possibilities. The subset of these that have components summing to 1 are the actual types. $\square$
 
 ### Theorem 2
 
@@ -81,7 +81,7 @@ Let $Q^n$ be the product measure for $n$ i.i.d. random variables with distributi
  &= 2^{n \sum_{a \in A} \Px(a) \log Q(a)}\\
  &= 2^{-n \sum_{a \in A} (\Px(a) \log \Px(a) - \Px(a) \log \frac{\Px(a)}{Q(a)})}\\
  &= 2^{-n (H(\Px) + D(\Px \Vert Q))}
-\end{align*}</div> \hfill $\square$
+\end{align*}</div> $\square$
 
 Note that all outcomes in the same type class have the same probability. To illustrate entropy and relative entropies over the simplex, I wrote code to generate level curves for the $m=3$ case.
 
@@ -249,7 +249,7 @@ The number of outcomes in the type class of $P$ is bounded by $2^{n H(P)}$.
 
 ### Proof
 
-The number of outcomes in any type class has nothing to do with the true distribution $Q$. Therefore, without loss of generality, let us assume that $P = Q$ so that $D(P \, \Vert Q)=0$. By Theorem 2, the probability of each outcome is $2^{-n H(P)}$. If the number of outcomes in the class were greater than $2^{n H(P)}$, then the total probability of that class would be greater than 1 which is a contradiction. \hfill $\square$
+The number of outcomes in any type class has nothing to do with the true distribution $Q$. Therefore, without loss of generality, let us assume that $P = Q$ so that $D(P \, \Vert Q)=0$. By Theorem 2, the probability of each outcome is $2^{-n H(P)}$. If the number of outcomes in the class were greater than $2^{n H(P)}$, then the total probability of that class would be greater than 1 which is a contradiction. $\square$
 
 In fact, C&T show the stronger result that the number of outcomes in $T(P)$ is approximately $2^{n H(P)}$ for large $n$. The entropy level curves plotted above can give us an idea how many outcomes there are at various points in the simplex.
 
@@ -259,7 +259,7 @@ The probability that $\Px$ equals $P$ is bounded by $2^{-n D(P \, \Vert Q)}$.
 
 ### Proof
 
-Each outcome in the type class is equally probable. Therefore, the probability that an outcome in the class occurs is simply the product of the probability of each outcome in $T(P)$ and the number of outcomes in $T(P)$. Theorem 2 tells us that the probability of each outcome is $2^{-n (H(P) + D(P \, \Vert Q))}$. Theorem 3 bounds the number of outcomes by $2^{n H(P)}$. Therefore, the total probability is bounded by the product of these, which simplifies to $2^{-n D(P \, \Vert Q)}$. \hfill $\square$
+Each outcome in the type class is equally probable. Therefore, the probability that an outcome in the class occurs is simply the product of the probability of each outcome in $T(P)$ and the number of outcomes in $T(P)$. Theorem 2 tells us that the probability of each outcome is $2^{-n (H(P) + D(P \, \Vert Q))}$. Theorem 3 bounds the number of outcomes by $2^{n H(P)}$. Therefore, the total probability is bounded by the product of these, which simplifies to $2^{-n D(P \, \Vert Q)}$. $\square$
 
 Again, C&T show the stronger result that the probability that $\Px$ equals $P$ is approximately $2^{-n D(P \, \Vert Q)}$ for large $n$. The level curves of relatively entropy plotted above show us about how probable different regions of the simplex are.
 
@@ -288,7 +288,7 @@ From C&T page 356
  &\geq 1 - (n+1)^m 2^{-n \epsilon} \qquad \qquad \text{by Theorem 1}\\
  &= 1 - 2^{-n \left( \epsilon - m\frac{\log (n+1)}{n} \right)}\\
  &\rightarrow 1
-\end{align*}</div> \hfill $\square$
+\end{align*}</div> $\square$
 
 Another notion of typicality is also useful. We define the strongly typical set
 
