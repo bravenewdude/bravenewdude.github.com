@@ -11,7 +11,7 @@ This article summarizes the method of types, as presented in Chapter 11 of the C
 
 ## Types (Based on C&T Section 11.1)
 
-Consider a sequence $X_1, \ldots, X_m$ of i.i.d. discrete random variables with alphabet $A = \{a_1, \ldots, a_m\}$. The distribution of $X_i$ comprises the probabilities $Q = (q_1, \ldots, q_m)$ corresponding to the alphabet. By definition, the probabilities satisfy $q_i \geq 0$ and $\sum q_i = 1$, meaning that $Q$ is limited to a bounded $(m-1)$-dimensional figure within $\R^m$, known as the *probability simplex in* $\R^m$.
+Consider a sequence $X\_1, \ldots, X\_n$ of i.i.d. discrete random variables with alphabet $A = \{a\_1, \ldots, a\_m\}$. The distribution of $X_i$ comprises the probabilities $Q = (q_1, \ldots, q_m)$ corresponding to the alphabet. By definition, the probabilities satisfy $q_i \geq 0$ and $\sum q_i = 1$, meaning that $Q$ is limited to a bounded $(m-1)$-dimensional figure within $\R^m$, known as the *probability simplex in* $\R^m$.
 
 This distribution is often estimated by the empirical distribution $\Px$. Component $i$ of $\Px$ is defined to be the proportion of times $a_i$ occurred in $\x$. Notice that this does not depend on the order of the occurrences but only on the number. In other words, any permutation of a given sequence maps to the same empirical distribution. This observation allows us to split the $m^n$ possible sequences into equivalence classes, known as "types." The type class corresponding to a distribution $P$ is denoted $T(P)$.
 
@@ -29,22 +29,20 @@ Notice that $\Px$ has the same constraints as $Q$, so it must lie within the sim
     }
 
 
-
-
     for (n in 1:10) {
         png(paste(n, ".png", sep = ""), width = 400, height = 400)
         grid.newpage()
-        pushViewport(viewport(x = 0.15, y = 0.15, w = unit(10, "cm"), h = unit(10 * 
-            sqrt(3)/2, "cm"), just = c("left", "bottom"), xscale = c(0, n), yscale = c(0, 
-            n)))
+        pushViewport(viewport(x = 0.15, y = 0.15, w = unit(10, "cm"),
+                              h = unit(10 * sqrt(3)/2, "cm"), just = c("left", "bottom"),
+                              xscale = c(0, n), yscale = c(0, n)))
         drawSimplex()
         grid.text("Possible Empirical Distributions", 0.5, 1.25, gp = gpar(fontsize = 20))
-        grid.text(paste("n =", n), 0.04, 0.7, just = "left", gp = gpar(fontsize = 25, 
-            col = 2))
+        grid.text(paste("n =", n), 0.04, 0.7, just = "left", 
+                  gp = gpar(fontsize = 25, col = 2))
         for (i in 0:n) {
             x <- 0:(n - i) + i/2
-            grid.circle(x, i, unit(0.015, "npc"), default.units = "native", gp = gpar(col = 2, 
-                fill = 2))
+            grid.circle(x, i, unit(0.015, "npc"), default.units = "native",
+                        gp = gpar(col = 2, fill = 2))
         }
         popViewport(1)
         dev.off()
@@ -71,7 +69,7 @@ The probability of any particular outcome $\x = (x_1, \ldots, x_n)$ is $2^{-n (H
 
 ### Proof
 
-Let $Q^n$ be the product measure for $n$ iid random variables with distribution $Q$. And let $N(a \vert \x)$ denote the number of occurrences of $a$ in $\x$. Then (from C&T page 350)
+Let $Q^n$ be the product measure for $n$ i.i.d. random variables with distribution $Q$. And let $N(a \vert \x)$ denote the number of occurrences of $a$ in $\x$. Then (from C&T page 350)
 
 
 <div>\begin{align*}
@@ -107,8 +105,7 @@ Note that all outcomes in the same type class have the same probability. To illu
     }
     
     roots <- function(f, ..., a = 0, b = 1, r = (b - a)/100) {
-        # Finds the roots of f on interior of (a, b) (they need to pass through
-        # zero)
+        # Finds the roots of f on interior of (a, b) (they need to pass through 0)
         x <- seq(a + r, b - r, by = r)
         y <- sapply(x, f, ...)
         roots <- c()
@@ -173,7 +170,7 @@ Note that all outcomes in the same type class have the same probability. To illu
         grid.text(paste("Level Curves of", fstr), 0.5, 1.13, gp = gpar(fontsize = 20))
         if (fstr != "H") {
             grid.text("Q", simplexTransform(q1, q2), q1, default.units = "native", 
-                gp = gpar(col = 2))
+                      gp = gpar(col = 2))
         }
         for (d in ds) {
             l <- levelCurve(f, q1 = q1, q2 = q2, d = d)
@@ -182,8 +179,8 @@ Note that all outcomes in the same type class have the same probability. To illu
             m <- length(p1)
             grid.segments(p2, p1, p2[c(2:m, 1)], p1[c(2:m, 1)], gp = gpar(col = 3))
             position <- which.max(p1)
-            grid.text(paste(fstr, "=", d, sep = ""), p2[position], p1[position] - 
-                0.04, gp = gpar(col = 4, fontsize = 10))
+            grid.text(paste(fstr, "=", d, sep = ""), p2[position],
+                      p1[position] - 0.04, gp = gpar(col = 4, fontsize = 10))
         }
         popViewport(1)
     }
@@ -233,7 +230,8 @@ Also, notice that in the $Q=(1/3,1/3,1/3)$ case, this is expression is equal to 
     drawSimplex()
     grid.polygon(x = c(0, 1, 0.5), y = c(0, 0, 1), gp = gpar(fill = 3))
     grid.text("Level Curves of H+D", 0.5, 1.13, gp = gpar(fontsize = 20))
-    grid.text("Q", simplexTransform(1/3, 1/3), 1/3, default.units = "native", gp = gpar(col = 2))
+    grid.text("Q", simplexTransform(1/3, 1/3), 1/3, default.units = "native",
+              gp = gpar(col = 2))
     grid.text("H+D=1.585 everywhere", 0.5, 0.22, gp = gpar(col = 4, fontsize = 10))
     popViewport(1)
     popViewport(1)
@@ -322,7 +320,8 @@ For comparison, I have plotted the typical set and strongly typical set with $\e
     pushViewport(viewport(w = unit(10, "cm"), h = unit(10 * sqrt(3)/2, "cm")))
     drawSimplex()
     grid.text("Typical Set", 0.5, 1.13, gp = gpar(fontsize = 20))
-    grid.text("Q", simplexTransform(q1, q2), q1, default.units = "native", gp = gpar(col = 2))
+    grid.text("Q", simplexTransform(q1, q2), q1, default.units = "native",
+              gp = gpar(col = 2))
     l <- levelCurve(D, q1 = q1, q2 = q2, d = d)
     p1 <- l[, 1]
     p2 <- simplexTransform(l[, 1], l[, 2])
@@ -334,7 +333,8 @@ For comparison, I have plotted the typical set and strongly typical set with $\e
     pushViewport(viewport(w = unit(10, "cm"), h = unit(10 * sqrt(3)/2, "cm")))
     drawSimplex()
     grid.text("Strongly Typical Set", 0.5, 1.13, gp = gpar(fontsize = 20))
-    grid.text("Q", simplexTransform(q1, q2), q1, default.units = "native", gp = gpar(col = 2))
+    grid.text("Q", simplexTransform(q1, q2), q1, default.units = "native",
+              gp = gpar(col = 2))
     l <- levelCurve(maxDiff, q1 = q1, q2 = q2, d = d/3)
     p1 <- l[, 1]
     p2 <- simplexTransform(l[, 1], l[, 2])
