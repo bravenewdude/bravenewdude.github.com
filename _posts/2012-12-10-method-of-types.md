@@ -36,7 +36,7 @@ Notice that $\Px$ has the same constraints as $Q$, so it must lie within the sim
                               h = unit(10 * sqrt(3)/2, "cm"), just = c("left", "bottom"),
                               xscale = c(0, n), yscale = c(0, n)))
         drawSimplex()
-        grid.text("Possible Empirical Distributions", 0.5, 1.25, gp = gpar(fontsize = 20))
+        grid.text("Possible Empirical Distributions", 0.5, 1.2, gp = gpar(fontsize = 20))
         grid.text(paste("n =", n), 0.04, 0.7, just = "left", 
                   gp = gpar(fontsize = 25, col = 2))
         for (i in 0:n) {
