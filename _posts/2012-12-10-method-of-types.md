@@ -293,11 +293,11 @@ From C&T page 356
 
 ### Theorem 5
 
-As $n$ goes to $\infinity$, $D(\Px \Vert Q) \rightarrow 0$ with probability 1.
+As $n$ goes to $\infty$, $D(\Px \Vert Q) \rightarrow 0$ with probability 1.
 
 ### Proof
 
-(From C \& T page 356) The probability of the compliment of the typical set is $\P \{ D(\Px \Vert Q) > \epsilon \}$. Notice from the proof of Lemma 1 that this probability is bounded by $2^{-n \left( \epsilon - m \frac{\log(n+1)}{n} \right)}$. If we sum these probabilities over all $n$, we get a finite value. Therefore, by the [Borel-Cantelli lemma](https://en.wikipedia.org/wiki/Borel-Cantelli_lemma), the probability that the event $\{ D(\Px \Vert Q) > \epsilon \}$ occurs an infinite number of times is 0. In other words, with probability 1, $D(\Px \Vert Q)$ will be greater than any given $\epsilon$ only finitely many times, meaning that $D(\Px \Vert Q) \rightarrow 0$. $\square$
+(From C&T page 356) The probability of the compliment of the typical set is the probability that $D(\Px \Vert Q) > \epsilon$. Notice from the proof of Lemma 1 that this probability is bounded by $2^{-n \left( \epsilon - m \frac{\log(n+1)}{n} \right)}$. If we sum these probabilities over all $n$, we get a finite value. Therefore, by the [Borel-Cantelli lemma](https://en.wikipedia.org/wiki/Borel-Cantelli_lemma), the probability that the event $\{ D(\Px \Vert Q) > \epsilon \}$ occurs an infinite number of times is 0. In other words, with probability 1, $D(\Px \Vert Q)$ will be greater than any given $\epsilon$ only finitely many times, meaning that $D(\Px \Vert Q) \rightarrow 0$. $\square$
 
 Another notion of typicality is also useful. We define the strongly typical set
 
@@ -312,7 +312,7 @@ A_\epsilon^{*(n)} := \left\{ \x :
 
 ### Theorem 6
 
-The probability of the strongly typical set goes to 1 as $n$ goes to $\infinity$.
+The probability of the strongly typical set goes to 1 as $n$ goes to $\infty$.
 
 ### Proof
 
@@ -379,28 +379,28 @@ One of the most fundamental results in [large deviations theory](https://en.wiki
 
 When the support of $X_i$ is discrete or a [Polish space](https://en.wikipedia.org/wiki/Polish_space), Sanov's Theorem requires $E$ to be a convex and weakly-closed set in the space of possible distributions for $X_i$. However, in the finite setting that we have been dealing with, a similar Theorem holds with no such requirements on $E$.
 
-We can use the Method of Types tools developed above to prove a simplified version of Sanov's result for any rare event $E$ in the probability simplex.
+We can use the method of types tools developed above to prove a simplified version of Sanov's result for any rare event $E$ in the probability simplex.
 
-\subsubsection*{Finite Sanov's Theorem (Abridged)}
+### Finite Sanov's Theorem (Abridged)
 
 If $E$ is a subset of the probability simplex, then $\P E$ is bounded by $(n+1)^m 2^{-n D( E \, \Vert Q )}$, where
 
-\begin{align*}
+<div>\begin{align*}
 D( E \, \Vert Q ) := \inf_{P \in E} D(P \, \Vert Q)
-\end{align*}
+\end{align*}</div>
 
-\subsubsection*{Proof}
+### Proof
 
 This proof follows almost the exact same format as that of Lemma 1 above. It is from page 363 of C&T. Let $\Pn$ be the set of possible empirical distributions when there are $n$ observations.
 
-\begin{align*}
-\P E &= \sum_{P \in \Pn} \I \{ P \in E \} \P T(P)\\
+<div>\begin{align*}
+\P E &= \P \{ \Px \in E \}\\
+ &= \sum_{P \in \Pn} \I \{ P \in E \} \P T(P)\\
  &\leq \sum_{P \in \Pn} \I \{ P \in E \} 2^{-n D(P \, \Vert Q)} \qquad \qquad \text{by Theorem 4}\\
  &\leq \sum_{P \in \Pn} \I \{ P \in E \} 2^{-n D(E \, \Vert Q)}\\
  &\leq \sum_{P \in \Pn} 2^{-n D(E \, \Vert Q)}\\
  &\leq (n+1)^m 2^{-n D(E \, \Vert Q)} \qquad \qquad \qquad \text{by Theorem 1}
-\end{align*}
-$\square$
+\end{align*}</div> $\square$
 
 Using their lower bound for the total probability of a type class, C&T show the more powerful result that if $E$ is the closure of its interior, then $\P E \approx 2^{-n D(E \, \Vert Q) + o(n)}$ for large $n$.
 
