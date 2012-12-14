@@ -395,7 +395,7 @@ This proof follows almost the exact same format as that of Lemma 1 above. It is 
 
 <div>\begin{align*}
 \P E &= \P \{ \Px \in E \}\\
- &= \sum_{P \in \Pn} \I \{ P \in E \} \P T(P)\\
+ &= \sum_{P \in \Pn} \I \{ P \in E \} \P \{ \Px = P \}\\
  &\leq \sum_{P \in \Pn} \I \{ P \in E \} 2^{-n D(P \, \Vert Q)} \qquad \qquad \text{by Theorem 4}\\
  &\leq \sum_{P \in \Pn} \I \{ P \in E \} 2^{-n D(E \, \Vert Q)}\\
  &\leq \sum_{P \in \Pn} 2^{-n D(E \, \Vert Q)}\\
