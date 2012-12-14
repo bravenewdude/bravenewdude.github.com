@@ -12,7 +12,7 @@ Often it is useful to use other programming languages within an R package. In pa
 
 The process described below was completed on the Ubuntu 11.04 operating system. Likely, the same process will work for other Linux releases, as well as for Mac OS. However, the Windows operating system is quite different, and these instruction probably won't work in that case.
 
-Also, note that these instructions should work for pretty much any scripting language, not just Python.
+Also, note that these instructions should work for pretty much any scripting language, not just Python. However, keep in mind that the user may have a different version of the language than you are expecting, so that can cause your package to break.
 
 
 ## A Look at the Pydemo Package

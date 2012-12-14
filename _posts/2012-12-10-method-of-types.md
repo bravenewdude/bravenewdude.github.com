@@ -5,15 +5,15 @@ category: information theory
 tags: [math]
 ---
 {% include JB/setup %}
-<div style='visibility: hidden; height: 0;'>$\renewcommand{\P}{\mathbb{P}} \newcommand{\R}{\mathbb{R}} \newcommand{\x}{\mathbf{x}} \newcommand{\Px}{P_\x}$</div>
+<div style='visibility: hidden; height: 0;'>$\renewcommand{\P}{\mathbb{P}} \newcommand{\R}{\mathbb{R}} \newcommand{\x}{\mathbf{x}} \newcommand{\Px}{P_\x} \newcommand{\I}{\mathbb{I}} \newcommand{\Pn}{\mathcal{P}_n}$</div>
 
 This article summarizes the method of types, as presented in Chapter 11 of the Cover and Thomas (C&T) text *Elements of Information Theory*.
 
 ## Types (Based on C&T Section 11.1)
 
-Consider a sequence $X\_1, \ldots, X\_n$ of i.i.d. discrete random variables with alphabet $A = \{a\_1, \ldots, a\_m\}$. The distribution of $X_i$ comprises the probabilities $Q = (q_1, \ldots, q_m)$ corresponding to the alphabet. By definition, the probabilities satisfy $q_i \geq 0$ and $\sum q_i = 1$, meaning that $Q$ is limited to a bounded $(m-1)$-dimensional figure within $\R^m$, known as the *probability simplex in* $\R^m$.
+Consider a sequence $X\_1, \ldots, X\_n$ of i.i.d. discrete random variables with alphabet $A = \{a\_1, \ldots, a\_m\}$. The distribution of $X_i$ comprises the probabilities $Q = (q_1, \ldots, q_m)$ corresponding to the alphabet. By definition, the probabilities satisfy $q_i \geq 0$ and $\sum q_i = 1$, meaning that $Q$ is limited to a bounded $(m-1)$-dimensional figure within $\R^m$, known as the *[probability simplex](http://en.wikipedia.org/wiki/Categorical_distribution#Properties) in* $\R^m$.
 
-This distribution is often estimated by the empirical distribution $\Px$. Component $i$ of $\Px$ is defined to be the proportion of times $a_i$ occurred in $\x$. Notice that this does not depend on the order of the occurrences but only on the number. In other words, any permutation of a given sequence maps to the same empirical distribution. This observation allows us to split the $m^n$ possible sequences into equivalence classes, known as "types." The type class corresponding to a distribution $P$ is denoted $T(P)$.
+This distribution is often estimated by the [empirical distribution](http://en.wikipedia.org/wiki/Empirical_measure) $\Px$. Component $i$ of $\Px$ is defined to be the proportion of times $a_i$ occurred in $\x$. Notice that this does not depend on the order of the occurrences but only on the number. In other words, any permutation of a given sequence maps to the same empirical distribution. This observation allows us to split the $m^n$ possible sequences into equivalence classes, known as "types." The type class corresponding to a distribution $P$ is denoted $T(P)$.
 
 Notice that $\Px$ has the same constraints as $Q$, so it must lie within the simplex as well. Furthermore, for any given $n$, there are only a finite number of possible values for $\Px$. Each component of $\Px$ must be representable by a fraction in $[0,1]$ with denominator $n$. Therefore, the possible values of $\Px$ form a grid within the simplex. For example, the possible empirical distributions in the $m=3$ case are displayed below. (I used [Picasion](http://picasion.com/) to merge the pictures into a single animation.)
 
@@ -62,6 +62,8 @@ The number of possible empirical distributions is bounded by $(n+1)^m$.
 ### Proof
 
 There are only $n+1$ fractions in $[0,1]$ with denominator $n$, and each of the $m$ components must take one of these values. There are only $(n+1)^m$ such possibilities. The subset of these that have components summing to 1 are the actual types. $\square$
+
+The remaining theorems relate to [entropy](http://en.wikipedia.org/wiki/Entropy_%28information_theory%29) and [relative entropies](http://en.wikipedia.org/wiki/Relative_entropy).
 
 ### Theorem 2
 
@@ -218,7 +220,7 @@ p_1 \log \frac{1}{q_1} + p_2 \log \frac{1}{q_2} + p_3 \log \frac{1}{q_3}
 \end{align*}</div>
 a linear combination of the components of $P$. Its level sets are represented by 2-dimensional planes in $\R^3$. A subset of these planes intersect the probability simplex, and those intersections form line segments.
 
-Also, notice that in the $Q=(1/3,1/3,1/3)$ case, this is expression is equal to $\log 3$ for all $P$. The level curves for this case are plotted below.
+Also, notice that in the $Q=(1/3,1/3,1/3)$ case, this expression is equal to $\log 3$ for all $P$. The level curves for this case are plotted below.
 
 
     png("Q2.png", height = 700, width = 700)
@@ -262,7 +264,7 @@ Each outcome in the type class is equally probable. Therefore, the probability t
 
 Again, C&T show the stronger result that the probability that $\Px$ equals $P$ is approximately $2^{-n D(P \, \Vert Q)}$ for large $n$. The level curves of relatively entropy plotted above show us about how probable different regions of the simplex are.
 
-## Law of Large Numbers (Based on C&T Section 11.2)
+## Typical Sets (Based on C&T Section 11.2)
 
 For any true distribution $Q$, we can define the $\epsilon$-typical set
 
@@ -284,10 +286,18 @@ From C&T page 356
  &= 1 - \sum_{P: D(P \, \Vert Q) > \epsilon} \P \{\Px = P\}\\
  &\geq 1 - \sum_{P: D(P \, \Vert Q) > \epsilon} 2^{-n D(P \, \Vert Q)} \qquad \qquad \text{by Theorem 4}\\
  &\geq 1 - \sum_{P: D(P \, \Vert Q) > \epsilon} 2^{-n \epsilon}\\
- &\geq 1 - (n+1)^m 2^{-n \epsilon} \qquad \qquad \text{by Theorem 1}\\
+ &\geq 1 - (n+1)^m 2^{-n \epsilon} \qquad \qquad \qquad \text{by Theorem 1}\\
  &= 1 - 2^{-n \left( \epsilon - m\frac{\log (n+1)}{n} \right)}\\
  &\rightarrow 1
 \end{align*}</div> $\square$
+
+### Theorem 5
+
+As $n$ goes to $\infinity$, $D(\Px \Vert Q) \rightarrow 0$ with probability 1.
+
+### Proof
+
+(From C \& T page 356) The probability of the compliment of the typical set is $\P \{ D(\Px \Vert Q) > \epsilon \}$. Notice from the proof of Lemma 1 that this probability is bounded by $2^{-n \left( \epsilon - m \frac{\log(n+1)}{n} \right)}$. If we sum these probabilities over all $n$, we get a finite value. Therefore, by the [Borel-Cantelli lemma](https://en.wikipedia.org/wiki/Borel-Cantelli_lemma), the probability that the event $\{ D(\Px \Vert Q) > \epsilon \}$ occurs an infinite number of times is 0. In other words, with probability 1, $D(\Px \Vert Q)$ will be greater than any given $\epsilon$ only finitely many times, meaning that $D(\Px \Vert Q) \rightarrow 0$. $\square$
 
 Another notion of typicality is also useful. We define the strongly typical set
 
@@ -299,6 +309,16 @@ A_\epsilon^{*(n)} := \left\{ \x :
      \end{array}
     \right.
 \end{align*}</div>
+
+### Theorem 6
+
+The probability of the strongly typical set goes to 1 as $n$ goes to $\infinity$.
+
+### Proof
+
+We know from Theorem 5 that $D(\Px \Vert Q) \rightarrow 0$ on a set of probability 1; let us call this set $F$. By [Pinsker's inequality](http://en.wikipedia.org/wiki/Pinsker%27s_inequality), the [total variation distance](http://en.wikipedia.org/wiki/Total_variation_distance_of_probability_measures) from $\Px$ to $Q$ must also go to 0 on $F$. This distance can be expressed as $\sum_{a \in A} \vert \Px(a) - Q(a) \vert$. For the sum to go to zero, each component must go to zero, so for all $a \in A$, $\vert \Px(a) - Q(a) \vert \rightarrow 0$.
+
+The other condition we need for strong typicality is that $\Px(a) = 0$ for all $a$ that have $Q(a)=0$. The probability of any sequence that contains such an $a$ is zero, so this condition is is clearly true on some set $G$ with probability 1. The intersection of $F$ and $G$ has probability 1, and all outcomes in this intersection are eventually in the strongly typical set. Therefore, the probability of the strongly typical set goes to 1. $\square$
 
 For comparison, I have plotted the typical set and strongly typical set with $\epsilon=.15$ in the $m=3$ case.
 
@@ -332,13 +352,18 @@ For comparison, I have plotted the typical set and strongly typical set with $\e
     pushViewport(viewport(w = unit(10, "cm"), h = unit(10 * sqrt(3)/2, "cm")))
     drawSimplex()
     grid.text("Strongly Typical Set", 0.5, 1.13, gp = gpar(fontsize = 20))
+    e <- d/3
+    p1 <- c(q1+e, q1+e, q1, q1-e, q1-e, q1)
+    p2 <- c(q2, q2-e, q2-e, q2, q2+e, q2+e)
+    grid.polygon(x=simplexTransform(p1, p2), y=p1,
+                 gp=gpar(col=3, lty=3))
     grid.text("Q", simplexTransform(q1, q2), q1, default.units = "native",
               gp = gpar(col = 2))
-    l <- levelCurve(maxDiff, q1 = q1, q2 = q2, d = d/3)
-    p1 <- l[, 1]
-    p2 <- simplexTransform(l[, 1], l[, 2])
-    m <- length(p1)
-    grid.segments(p2, p1, p2[c(2:m, 1)], p1[c(2:m, 1)], gp = gpar(col = 3, lty = 3))
+    #l <- levelCurve(maxDiff, q1 = q1, q2 = q2, d = d/3)
+    #p1 <- l[, 1]
+    #p2 <- simplexTransform(l[, 1], l[, 2])
+    #m <- length(p1)
+    #grid.segments(p2, p1, p2[c(2:m, 1)], p1[c(2:m, 1)], gp = gpar(col = 3, lty = 3))
     popViewport(1)
     popViewport(1)
     dev.off()
@@ -348,5 +373,36 @@ For comparison, I have plotted the typical set and strongly typical set with $\e
 ![typical set and strongly typical set](/static/2012-12-10-method-of-types/TypicalSets.png) 
 
 
+## Large Deviations (Based on C&T Section 11.4)
 
+One of the most fundamental results in [large deviations theory](https://en.wikipedia.org/wiki/Large_deviations_theory) is [Sanov's Theorem](https://en.wikipedia.org/wiki/Sanov%27s_theorem). It tells us about the probabilities of rare events as $n$ gets large.
+
+When the support of $X_i$ is discrete or a [Polish space](https://en.wikipedia.org/wiki/Polish_space), Sanov's Theorem requires $E$ to be a convex and weakly-closed set in the space of possible distributions for $X_i$. However, in the finite setting that we have been dealing with, a similar Theorem holds with no such requirements on $E$.
+
+We can use the Method of Types tools developed above to prove a simplified version of Sanov's result for any rare event $E$ in the probability simplex.
+
+\subsubsection*{Finite Sanov's Theorem (Abridged)}
+
+If $E$ is a subset of the probability simplex, then $\P E$ is bounded by $(n+1)^m 2^{-n D( E \, \Vert Q )}$, where
+
+\begin{align*}
+D( E \, \Vert Q ) := \inf_{P \in E} D(P \, \Vert Q)
+\end{align*}
+
+\subsubsection*{Proof}
+
+This proof follows almost the exact same format as that of Lemma 1 above. It is from page 363 of C&T. Let $\Pn$ be the set of possible empirical distributions when there are $n$ observations.
+
+\begin{align*}
+\P E &= \sum_{P \in \Pn} \I \{ P \in E \} \P T(P)\\
+ &\leq \sum_{P \in \Pn} \I \{ P \in E \} 2^{-n D(P \, \Vert Q)} \qquad \qquad \text{by Theorem 4}\\
+ &\leq \sum_{P \in \Pn} \I \{ P \in E \} 2^{-n D(E \, \Vert Q)}\\
+ &\leq \sum_{P \in \Pn} 2^{-n D(E \, \Vert Q)}\\
+ &\leq (n+1)^m 2^{-n D(E \, \Vert Q)} \qquad \qquad \qquad \text{by Theorem 1}
+\end{align*}
+$\square$
+
+Using their lower bound for the total probability of a type class, C&T show the more powerful result that if $E$ is the closure of its interior, then $\P E \approx 2^{-n D(E \, \Vert Q) + o(n)}$ for large $n$.
+
+Also, other formulations of Sanov's Theorem would take $D( E \, \Vert Q )$ to be the information projection of $Q$ onto $E$. However, without assuming that $E$ is convex or weakly-closed, we are not guaranteed existence or uniqueness of an information projection.
 
