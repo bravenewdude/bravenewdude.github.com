@@ -404,5 +404,5 @@ This proof follows almost the exact same format as that of Lemma 1 above. It is 
 
 Using their lower bound for the total probability of a type class, C&T show the more powerful result that if $E$ is the closure of its interior, then $\P E \approx 2^{-n D(E \, \Vert Q) + o(n)}$ for large $n$.
 
-Also, other formulations of Sanov's Theorem would take $D( E \, \Vert Q )$ to be the relative entropy of $P^*$, the information projection of $Q$ onto $E$. However, without assuming that $E$ is convex or weakly-closed, we are not guaranteed existence or uniqueness of an information projection.
+Also, other formulations of Sanov's Theorem would take $D( E \, \Vert Q )$ to be the relative entropy $D( P^* \, \Vert Q )$, where $P^*$ is the information projection of $Q$ onto $E$. However, without assuming that $E$ is convex or weakly-closed, we are not guaranteed existence or uniqueness of an information projection.
 
