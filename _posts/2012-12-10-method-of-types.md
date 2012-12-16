@@ -61,7 +61,7 @@ The number of possible empirical distributions is bounded by $(n+1)^m$.
 
 ### Proof
 
-There are only $n+1$ fractions in $[0,1]$ with denominator $n$, and each of the $m$ components must take one of these values. There are only $(n+1)^m$ such possibilities. The subset of these that have components summing to 1 are the actual types. $\square$
+There are only $n+1$ fractions in $[0,1]$ with denominator $n$, and each of the $m$ components must take one of these values. There are only $(n+1)^m$ such possibilities. The subset of these that have components summing to 1 are the possible empirical distributions in the simplex. $\square$
 
 The remaining theorems relate to [entropy](http://en.wikipedia.org/wiki/Entropy_%28information_theory%29) and [relative entropies](http://en.wikipedia.org/wiki/Relative_entropy).
 
@@ -404,5 +404,5 @@ This proof follows almost the exact same format as that of Lemma 1 above. It is 
 
 Using their lower bound for the total probability of a type class, C&T show the more powerful result that if $E$ is the closure of its interior, then $\P E \approx 2^{-n D(E \, \Vert Q) + o(n)}$ for large $n$.
 
-Also, other formulations of Sanov's Theorem would take $D( E \, \Vert Q )$ to be the information projection of $Q$ onto $E$. However, without assuming that $E$ is convex or weakly-closed, we are not guaranteed existence or uniqueness of an information projection.
+Also, other formulations of Sanov's Theorem would take $D( E \, \Vert Q )$ to be the relative entropy of $P^*$, the information projection of $Q$ onto $E$. However, without assuming that $E$ is convex or weakly-closed, we are not guaranteed existence or uniqueness of an information projection.
 
