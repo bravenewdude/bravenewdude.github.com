@@ -6,8 +6,6 @@ tags: [r, python]
 ---
 {% include JB/setup %}
 
-## Introduction
-
 Often it is useful to use other programming languages within an R package. In particular, some things can be done more easily with Python than with R. Personally, I prefer Python for web scraping and for dealing with files. When using Python with R, I don't recommend trying to pass data back and forth directly between the two; I don't know of any simple way to do this. Instead, let the two languages communicate via external files that they create or modify. This paper, along with the accompanying package Pydemo, are intended to provide guidance for beginners who wish to use Python code with R. The Pydemo package includes minimal working Python code that interacts successfully with R. The [Pydemo.tar](/static/Pydemo.tar) archive contains the original set of files and folders that are built up into the full Pydemo package.
 
 The process described below was completed on the Ubuntu 11.04 operating system. Likely, the same process will work for other Linux releases, as well as for Mac OS. However, the Windows operating system is quite different, and these instruction probably won't work in that case.
