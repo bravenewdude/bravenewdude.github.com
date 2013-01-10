@@ -5,7 +5,7 @@ category: stochastic processes
 tags: [finance]
 ---
 {% include JB/setup %}
-
+<div style='visibility: hidden; height: 0;'>$\newcommand{\V}{\text{Var}}$</div>
 
 One of my earlier posts derives the [Black-Scholes formula](/stochastic processes/2012/12/28/the-black-scholes-model/) for stock prices. The main unknown variable in the formula is the stock's volatility. This post describes a couple methods for estimating this volatility, based largely on \textit{An Elementary Introduction to Mathematical Finance} by Sheldon Ross.
 
@@ -22,7 +22,6 @@ X_i &:= \log \left( \frac{U(i l)}{U((i-1)l)} \right)\\
 each of which is normal with mean $l \mu$ and variance $l \sigma^2$. These random variables are independent because of the Markov property of Brownian Motion.
 
 The random variable $Y := \sum(X_i - \bar{X})^2/(\sigma^2 l)$ has a $\chi^2_{n-1}$ distribution, so the standard unbiased estimator of $\sigma^2$ is $S^2/l$, where $S^2 := \sum(X_i - \bar{X})^2/(n-1)$. The mean-squared error of this estimator is equal to its variance
-<div style='visibility: hidden; height: 0;'>$\newcommand{\V}{\text{Var}}$</div>
 
 <div>\begin{align*}
 \V \frac{\sum(X_i - \bar{X})^2}{l(n-1)} &= \frac{\sigma^4}{(n-1)^2} \V \frac{\sum(X_i - \bar{X})^2}{\sigma^2 l}\\
@@ -33,7 +32,7 @@ The random variable $Y := \sum(X_i - \bar{X})^2/(\sigma^2 l)$ has a $\chi^2_{n-1
 
 Thus, if we had true GBM, then we could let $n$ be as large as we like by splitting our interval into smaller pieces, and thereby estimate squared volatility, and [therefore volatility](/inference/2012/12/29/an-unbiased-estimator-for-normal-standard-deviation), with arbitrary precision. The problem is, actual stock prices only behave like GBM when the time intervals are large enough.
 
-To demonstrate this issue, I have performed a simulation. It generates a 6.5 hour interval of GBM (equal to one trading day on the stock market) refined to $2^4$ units of time (about a minute and a half each). This process has the "look" of GBM, as long as we do not zoom in too far. The squared volatility of the simulated GBM (with true volatility of 1) was estimated as described above, splitting our data into $n = 2^k$ data points for $k = 2,3,4,5,6$. This process was repeated 10000 times, and the squared error for each $n$ was computed in each trial. Note that the code below uses the `GenerateBM` [function](/stochastic processes/2012/12/28/the-black-scholes-model#Generate) defined in the Black-Scholes article.
+To demonstrate this issue, I have performed a simulation. It generates a 6.5 hour interval of GBM (equal to one trading day on the stock market) refined to $2^4$ units of time (about a minute and a half each). This process has the "look" of GBM, as long as we do not zoom in too far. The squared volatility of the simulated GBM (with true volatility of 1) was estimated as described above, splitting our data into $n = 2^k$ data points for $k = 2,3,4,5,6$. This process was repeated 10000 times, and the squared error for each $n$ was computed in each trial. Note that the code below uses the `GenerateBM` function [defined in the Black-Scholes article](/stochastic processes/2012/12/28/the-black-scholes-model#Generate).
 
 
     EstVol <- function(n, GBM) {
