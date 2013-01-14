@@ -7,7 +7,7 @@ tags: [finance]
 {% include JB/setup %}
 
 
-For a project I'm working on, I need to deal with historical daily TAQ (Trade and Quote) data for a selection of stocks. Each day's TAQ file consists of all of the stock transactions that occurred during that trading day. The data were downloaded from the [Wharton Research Data Services](https://wrds-web.wharton.upenn.edu/wrds/) website, using the [Yale Center for Analytical Sciences](http://publichealth.yale.edu/ycas/index.aspx) subscription.
+For a [project I'm working on](/tutorial/2013/01/14/single-stock-circuit-breakers/), I need to deal with historical daily TAQ (Trade and Quote) data for a selection of stocks. Each day's TAQ file consists of all of the stock transactions that occurred during that trading day. The data were downloaded from the [Wharton Research Data Services](https://wrds-web.wharton.upenn.edu/wrds/) website, using the [Yale Center for Analytical Sciences](http://publichealth.yale.edu/ycas/index.aspx) subscription.
 
 To demonstrate, here are the first few rows of a TAQ file:
 
@@ -25,11 +25,78 @@ To demonstrate, here are the first few rows of a TAQ file:
 
 Each raw TAQ data file is too big to open all at once using, for example, `read.csv`. Attempting to open one on the remote machine I'm using (with 8 GB of RAM) results in [memory swapping](http://en.wikipedia.org/wiki/Virtual_memory), slowing the processing to a practical standstill.
 
-Instead, I processed the TAQ files by reading in one line at a time, which uses a negligible amount of memory. I wrote a Python script `TAQprocess.py` which is shown below. The code is object-oriented, which slows it down somewhat (LINK TO OTHER ARTICLE). But in this case, making the code easier to read and manage seemed worth the added computation time.
+Instead, I processed the TAQ files by reading in one line at a time, which uses a negligible amount of memory. I wrote a Python script **TAQprocess.py** which is shown below. The code is object-oriented, which slows it down somewhat, but in this case, making the code easier to read and manage seemed worth the added computation time.
 
 
-INSERT PYTHON CODE HERE: TAQprocess.py
-
+    import sys
+    import os
+    import string
+    
+    def toSeconds(time):
+      timev = time.split(":")
+      return(3600*int(timev[0]) + 60*int(timev[1]) + int(timev[2]))
+    
+    class Line:
+      def __init__(self, ifile):
+        self.ifile = ifile
+        skip = self.ifile.readline()
+        skip = self.next()
+      def next(self):
+        linev = self.ifile.readline().split(",", 5)
+        if len(linev) == 1:
+          return False
+        self.symbol = linev[0]
+        self.time = toSeconds(linev[2])
+        self.price = float(linev[3])
+        self.size = int(linev[4])
+        return True
+    
+    class Stock:
+      def __init__(self, symbol):
+        self.symbol = symbol
+        self.ofile = open("Processed/%s/%s.csv" % (sys.argv[1], symbol), "w")
+        self.write("time,price\n")
+      def next(self, symbol):
+        self.close()
+        self.__init__(symbol)
+      def write(self, text):
+        self.ofile.write(text)
+      def close(self):
+        self.ofile.close()
+    
+    class Second:
+      def __init__(self, line):
+        self.time = line.time
+        self.spent = line.price*line.size
+        self.volume = line.size
+      def add(self, line):
+        self.spent += line.price*line.size
+        self.volume += line.size
+      def next(self, stock, line):
+        self.write(stock)
+        self.__init__(line)
+      def write(self, stock):
+        stock.write("%s,%s\n" % (self.time, round(self.spent/self.volume, 2)))
+    
+    print "Processing %s." % sys.argv[1]
+    os.makedirs("Processed/%s" % sys.argv[1])
+    os.system("gunzip -c TAQ/taq_%s_trades_all.csv.gz > %s" % (sys.argv[1], sys.argv[1]))
+    ifile = open(sys.argv[1])
+    line = Line(ifile)
+    stock = Stock(line.symbol)
+    second = Second(line)
+    while line.next():
+      if line.symbol != stock.symbol:
+        second.next(stock, line)
+        stock.next(line.symbol)
+      elif line.time == second.time:
+        second.add(line)
+      else:
+        second.next(stock, line)
+    second.write(stock)
+    stock.close()
+    ifile.close()
+    os.remove(sys.argv[1])
 
 
 The following R code was used to run the Python script on each date of interest. It processes the files in parallel, making use of all twelve cores on my machine.
@@ -43,8 +110,8 @@ The following R code was used to run the Python script on each date of interest.
     taqfiles <- list.files(taqdir)
     taqfiles <- taqfiles[grep("20.*_trades", taqfiles)]
     taqdates <- substring(taqfiles, 5, 12)
-    taqdates <- c(taqdates[taqdates >= "20100517" & taqdates <= "20100610"], taqdates[taqdates >= 
-        "20110804" & taqdates <= "20111013"])
+    taqdates <- c(taqdates[taqdates >= "20100517" & taqdates <= "20100610"],
+                  taqdates[taqdates >= "20110804" & taqdates <= "20111013"])
     
     a <- foreach(taqdate = taqdates, .combine = c) %dopar% {
         command <- paste("python TAQprocess.py", taqdate)
@@ -53,7 +120,7 @@ The following R code was used to run the Python script on each date of interest.
 
 
 
-Now we have one folder for each date of interest. Within that folder, there is a file for each stock that was represented on that day's TAQ file. This stock's file has a row for each second of the day during which trades occurred. Each row consists of two columns: time of day (in seconds) and weighted average trade price. For example,
+Now we have one folder for each date of interest. Within that folder, there is a file for each stock that was represented on that day's TAQ file. This stock's file has a row for each second of the day during which trades occurred. Each row consists of two columns: time of day (in seconds) and weighted average trade price during that second. For example,
 
     time,price
     34201,52.41
@@ -101,7 +168,7 @@ For this list of stocks, I ran a script to [scrape the web and determine the num
 
 
 
-This creates a file **outstanding.csv** with the number of shares outstanding on each date for each stock
+This creates a file **outstanding.csv** with the number of shares outstanding on each date for each stock. The first few lines of the file are shown below.
 
     ,20100517,20100610,20110804,20111013
     A,347930000,347930000,347930000,347930000
@@ -179,7 +246,6 @@ Finally, multiplying the number of shares outstanding by the share price tells u
 Here is a glance at the spread of market caps.
 
 
-    cap <- read.csv("cap.csv", row.names = 1, check.names = F)
     boxplot(log(cap), main = "Market Capitalizations", ylab = "Natural Log of Dollars")
 
 
@@ -208,28 +274,26 @@ On some holidays the stock market is only open for a shortened trading day. If a
         }
     }
 
-
-
-
-    activity <- read.csv("activity.csv", row.names = 1)
-    activity <- activity - 1
+    write.csv(activity, "activity.csv")
     means <- apply(activity, 2, mean)
-    boxplot(log(means), main = "Trading Activity Each Day", ylab = "Log of Avg Number of Seconds in which Trades Occurred")
+    boxplot(log(means), main = "Trading Activity Each Day",
+            ylab = "Log of Avg Number of Seconds in which Trades Occurred")
 
 
 {:.center}
 ![plot of chunk unnamed-chunk-8](/static/2013-01-10-processing-taq-data/unnamed-chunk-8.png) 
 
 
-Ultimately, we want to compare SSCB stocks to non-SSCB stocks (LINK), in hopes of determining differences caused by the SSCB rules. To that end, we should try to control for trading activity. In other words, we want amount of trading activity to be about the same within the two groups. The SSCB stocks are, on average, more frequently traded. Therefore, I expect to toss out many of the obscure and infrequently traded non-SSCB stocks in order to make the two groups more similar.
+Ultimately, we want to [compare SSCB stocks to non-SSCB stocks](/tutorial/2013/01/14/single-stock-circuit-breakers/), in hopes of determining differences caused by the SSCB rules. To that end, we should try to control for trading activity. In other words, we want amount of trading activity to be about the same within the two groups. The SSCB stocks are, on average, more frequently traded. Therefore, I expect to toss out many of the obscure and infrequently traded non-SSCB stocks in order to make the two groups more similar.
 
 
-    SSCBstocks <- readLines("../TAQproject/russellOrSP.txt")
+    SSCBstocks <- readLines("RussellOrSP.txt")
     
     mins <- apply(activity, 1, min)
     sscb <- names(mins) %in% SSCBstocks
-    boxplot(log(mins) ~ sscb, main = "Trading Activity Each Stock", ylab = "Log of Min Number of Seconds in which Trades Occurred", 
-        names = c("non-SSCB", "SSCB"))
+    boxplot(log(mins) ~ sscb, main = "Trading Activity Each Stock",
+            ylab = "Log of Min Number of Seconds in which Trades Occurred", 
+            names = c("non-SSCB", "SSCB"))
 
 
 {:.center}
@@ -241,8 +305,9 @@ I decided to discard any stock that had a day of fewer than 400 seconds of tradi
 
     mins <- mins[mins >= 400]
     sscb <- names(mins) %in% SSCBstocks
-    boxplot(log(mins) ~ sscb, main = "Trading Activity Each Stock", ylab = "Log of Min Number of Seconds in which Trades Occurred", 
-        names = c("non-SSCB", "SSCB"))
+    boxplot(log(mins) ~ sscb, main = "Trading Activity Each Stock",
+            ylab = "Log of Min Number of Seconds in which Trades Occurred", 
+            names = c("non-SSCB", "SSCB"))
 
 
 {:.center}
@@ -253,8 +318,6 @@ How many stocks are left for the analysis?
 
 
     writeLines(names(mins), "goodstocks.txt")
-
-
 
 
     print(paste(length(mins), "stocks remaining."))
@@ -337,8 +400,8 @@ Now that the stock data has been simplified, cleaned, and organized into managea
     
     for (year in c("2010", "2011")) {
         yeardates <- dates[grep(year, dates)]
-        a <- matrix(unlist(mclapply(stocks, Profile, yeardates, year)), nrow = length(stocks), 
-            byrow = T)
+        a <- matrix(unlist(mclapply(stocks, Profile, yeardates, year)),
+                    nrow = length(stocks), byrow = T)
         rownames(a) <- stocks
         write.csv(a, paste0(year, ".csv"))
     }
@@ -348,11 +411,13 @@ Now that the stock data has been simplified, cleaned, and organized into managea
 Here's a typical example of a squared volatility profile.
 
 
-    post <- read.csv("2011.csv", row.names = 1)
-    set.seed(4)
-    i <- runif(1, 1, nrow(post))
-    plot(5 * (1:78), post[i, ], main = rownames(post)[i], xlab = "Minutes into Day", 
-        ylab = "Squared Volatility")
+    vols <- read.csv("2010.csv", row.names = 1)
+    t <- 2.5 + 5 * (0:77)
+    
+    set.seed(6)
+    i <- runif(1, 1, nrow(vols))
+    plot(t, vols[i, ], main = rownames(vols)[i], xlab = "Minutes into Day",
+         ylab = "Squared Volatility")
 
 
 {:.center}

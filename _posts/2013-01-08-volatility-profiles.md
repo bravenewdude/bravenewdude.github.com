@@ -43,7 +43,7 @@ has an approximately $\chi^2\_{m-1}$ distribution, so the standard unbiased esti
 
 Refer to earlier posts for an [analysis of this estimator, along with a comparison to other estimators](/stochastic processes/2012/12/30/estimating-stock-volatility/). Yet another post describes how to [estimate volatility](/inference/2012/12/29/an-unbiased-estimator-for-normal-standard-deviation/) rather than squared volatility.
 
-Unfortunately, after glancing at some plots, the assumption of nearly constant volatility over five-minute intervals seems entirely untenable. Often, a volatility seems to change by a large proportion over the course of five minutes. Typical plots showing this can be found in the TAQ data analysis article (LINK TO IT).
+Unfortunately, after glancing at some plots, the assumption of nearly constant volatility over five-minute intervals seems entirely untenable. Often, a volatility seems to change by a large proportion over the course of five minutes. Typical plots showing this can be found in the [another article](/tutorial/2013/01/14/single-stock-circuit-breakers/).
 
 
 ## Linearly Changing Volatility over Small Intervals

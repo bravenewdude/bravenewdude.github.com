@@ -7,7 +7,7 @@ tags: [finance]
 {% include JB/setup %}
 <div style='visibility: hidden; height: 0;'>$\newcommand{\V}{\text{Var}}$</div>
 
-One of my earlier posts derives the [Black-Scholes formula](/stochastic processes/2012/12/28/the-black-scholes-model/) for stock prices. The main unknown variable in the formula is the stock's volatility. This post describes a couple methods for estimating this volatility, based largely on \textit{An Elementary Introduction to Mathematical Finance} by Sheldon Ross.
+One of my earlier posts derives the [Black-Scholes formula](/stochastic processes/2012/12/28/the-black-scholes-model/) for stock prices. The main unknown variable in the formula is the stock's volatility. This post describes a couple methods for estimating this volatility, based largely on *An Elementary Introduction to Mathematical Finance* by Sheldon Ross.
 
 Any arbitrarily small interval of Brownian Motion is sufficient to estimate $\sigma$ exactly, because the interval can be subdivided into infinitely many subintervals, which provide infinitely many data points. With this knowledge, one might assume that it is trivial to find the volatility of a stock. Unfortunately, however, it's not that simple. While stock prices are modelled by GBM over everyday time frames, they do not have GBM properties over very short time intervals. The longer an interval is, the more it's overall behavior will resemble GBM. Another problem is that each stock's volatility may change gradually over time. More recent time intervals will provide better information regarding a stock's current volatility.
 
@@ -106,7 +106,7 @@ A third estimator for squared volatility uses the fact that $\sum X_i^2 / l \sig
 <div>\begin{align*}
 \left(\frac{\mu}{\sigma}\right)^2 \leq \frac{-2/(n-1) + \sqrt{2}\,\sqrt{3n^2 - 5n + 2}}{n(n-1)l}
 \end{align*}</div>
-The estimator $V$ tends to be preferable when $n$ and $l$ are both small. For example, in the case of my pre-circuit-breaker TAQ data (MAKE LINK), we have $n = 18$ dates and use $l = 5$ minutes, making the square root of the right-hand side of the inequality about 67.
+The estimator $V$ tends to be preferable when $n$ and $l$ are both small. For example, in the case of my [volatility profile data anlysis](/tutorial/2013/01/14/single-stock-circuit-breakers/), I have $n = 18$ dates and use $l = 5$ minutes, making the square root of the right-hand side of the inequality about 67.
 
 
     rightside <- function(n, l) {

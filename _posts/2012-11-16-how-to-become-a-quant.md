@@ -11,9 +11,9 @@ First, let me clarify something. Usually, "quant" is used to refer to the math w
 
 Expertise in any of these three areas is valuable, but the combination of all three is many many times more powerful than any one or two on their own. There are a vast array of problems that require all three. If you browse this blog, you will find plenty of examples.
 
-People with this combination of skills are in low supply and high demand. They can work in academia, industry (tech, finance, more), government research labs, or start their own businesses. And they earn a great salary. In short, they have it made.
+People with this combination of skills are in low supply and high demand. They can work in academia, industry (tech, finance, more), government research labs, or start their own businesses. And they generally earn a great salary. In short, they have it made.
 
-If you're naturally gifted at math, hard-working, and ambitious, then you've got what it takes to become a quant. Now just spend the next ten or so years following these steps and voila, you'll be a kick-ass quant.
+If you're naturally gifted at math, hard-working, and ambitious, then you've got what it takes. Now just spend the next ten or so years following these steps and voila, you'll be a kick-ass quant.
 
 
 ## Undergraduate
@@ -55,7 +55,7 @@ Work hard, be smart, and good grades will take care of themselves. Don't be a pe
 
 Simplify and streamline your life as much as possible. For example, live on campus. Get the meal plan. Etc.
 
-Use Dropbox to make sure all of your files are backed-up and are available from any computer. Use a coherent directory structure within dropbox to keep things organized. Make a "Courses" folder. Inside that make a "Freshman" folder. Inside that make folders "1-Fall," "2-Spring," and "3-Summer." Inside each of these, make a folder for each course you take during that term. And so on.
+Use Dropbox to make sure all of your files are backed-up and are available from any computer. Use a coherent directory structure within dropbox to keep things organized. Make a "Courses" folder. Inside that make a "1-Freshman" folder. Inside that make folders "1-Fall," "2-Spring," and "3-Summer." Inside each of these, make a folder for each course you take during that term. And so on.
 
 Type up all of your homework assignments so that you don't lose them and so that you will have them forever. As an added bonus, they will look more professional and impress your professors. But how do you type up mathematics? LaTeX!
 
@@ -66,7 +66,7 @@ Install and learn LaTeX during the summer before you start college. During your 
 
 Writing a blog is a fun way to connect with the world. It also helps you form and retain your ideas. Finally, it is another piece of work that you can show off to employers when the time comes.
 
-However, blogging can be time-consuming. One way to streamline the process is by basing many of your posts on interesting coursework (reports or homework problems, for instance). Furthermore, there is software that can convert LaTeX directly to html. Once you've typed up a clever homework solution in LaTeX, you may as well put it up on your blog too if it only takes a few more minutes.
+However, blogging can be time-consuming. One way to streamline the process is by basing many of your posts on interesting coursework (reports or homework problems, for instance). Furthermore, there are ways to [display LaTeX on the web](http://www.mathjax.org/). Once you've typed up a clever homework solution in LaTeX, you may as well put it up on your blog too if it only takes a few more minutes.
 
 
 ## Extracurricular Activities
@@ -105,7 +105,7 @@ Buy the review books, study hard, and ace your standardized tests. They're impor
 
 ## Master's Degree
 
-Do a two-year Master's Degree in Applied Math. Again, I recommend a university where you are eligible for in-state tuition rates. Find a professor who will let you join his research group during the summer between the two years of your program. Work hard throughout that summer; you will need a good letter of recommendation from this professor.
+Do a two-year Master's Degree in Applied Math. Again, I recommend a university where you're eligible for in-state tuition rates. Find a professor who will let you join his research group during the summer between the two years of your program. Work hard throughout that summer; you will need a good letter of recommendation from this professor.
 
 
 ## PhD
