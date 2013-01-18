@@ -323,19 +323,19 @@ How many stocks are left for the analysis?
     print(paste(length(mins), "stocks remaining."))
 
 
-    ## [1] "1695 stocks remaining."
+    ## [1] "1690 stocks remaining."
 
 
     print(paste(sum(sscb), "SSCB stocks."))
 
 
-    ## [1] "695 SSCB stocks."
+    ## [1] "694 SSCB stocks."
 
 
     print(paste(sum(!sscb), "non-SSCB stocks."))
 
 
-    ## [1] "1000 non-SSCB stocks."
+    ## [1] "996 non-SSCB stocks."
 
 
 
@@ -365,7 +365,13 @@ Now that the stock data has been simplified, cleaned, and organized into managea
         return(p)
     }
     
+    out.discard <- function(x, threshold = 3) {
+        scores <- (x - mean(x)) / sd(x)
+        return(x[abs(scores) <= threshold])
+    }
+
     X <- function(S, l = 5) {
+        x <- out.discard(x)
         times <- seq(34200, 57600, by = 60 * l)
         p <- Prices(S, times)
         return(p[-1]/p[-length(times)])
