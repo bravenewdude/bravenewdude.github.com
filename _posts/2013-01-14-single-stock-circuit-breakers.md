@@ -15,6 +15,8 @@ It is important to note that the rules do not apply to the first fifteen minutes
 
 Under the direction of [Dr. Michael Kane](http://publichealth.yale.edu/people/michael_kane.profile), I am analyzing recent stock data. The aim of our research is to understand the effects of the SSCB rules. In particular, do the rules have any effect on the daily [volatility profiles](/stochastic processes/2013/01/08/volatility-profiles/) of stocks?
 
+My data analysis uses the following files: [2010.csv](/static/2013-01-14-single-stock-circuit-breakers/2010.csv), [2011.csv](/static/2013-01-14-single-stock-circuit-breakers/2011.csv), [cap.csv](/static/2013-01-14-single-stock-circuit-breakers/cap.csv), [activity.csv](/static/2013-01-14-single-stock-circuit-breakers/activity.csv), and [RussellOrSP.txt](/static/2013-01-14-single-stock-circuit-breakers/RussellOrSP.txt).
+
 
 ## Data Analysis
 
@@ -29,7 +31,7 @@ I started by working with the data from 2010. During this period, the SSCB rules
 Here is a typical example of a stock's estimated squared volatility profile.
 
 
-    vols <- read.csv("../2010.csv", row.names = 1)
+    vols <- read.csv("2010.csv", row.names = 1)
     t <- 2.5 + 5 * (0:77)
     
     set.seed(2)
@@ -146,7 +148,7 @@ Ultimately, we want to know whether differences in volatility profiles are relat
 First, let us see if market cap has any effect on volatility profiles by making some plots. There is a clear relationship between market cap and any given column of the volatility profile matrix.
 
 
-    cap <- read.csv("../cap.csv", row.names = 1)
+    cap <- read.csv("cap.csv", row.names = 1)
     cap.log <- log(cap[, 1])  # for 2010
     set.seed(1)
     i <- runif(1, 1, m)
@@ -215,7 +217,7 @@ In fact, the plots look basically the same for each column: there is always a cu
 Next, we will consider the effect of trading frequency on the columns. We must first remove the relationship between trading frequency and market cap.
 
 
-    act <- read.csv("../activity.csv", row.names = 1)
+    act <- read.csv("activity.csv", row.names = 1)
     act.logmean <- log(apply(act[, 1:18], 1, mean))
     plot(cap.log, act.logmean, xlab = "Log of Market Cap",
          ylab = "Log of Avg of Number of Seconds in which Trades Occurred")
@@ -374,11 +376,11 @@ Now, we need to repeat the smoothing and controlling process for the 2011 volati
     }
     
     
-    cap <- read.csv("../cap.csv", row.names = 1, check.names = F)
-    act <- read.csv("../activity.csv", row.names = 1)
+    cap <- read.csv("cap.csv", row.names = 1, check.names = F)
+    act <- read.csv("activity.csv", row.names = 1)
     
-    s2010 <- VolProfile("../2010.csv", cap[, 1], act[, 1:18])
-    s2011 <- VolProfile("../2011.csv", cap[, 2], act[, 19:68])
+    s2010 <- VolProfile("2010.csv", cap[, 1], act[, 1:18])
+    s2011 <- VolProfile("2011.csv", cap[, 2], act[, 19:68])
 
 
 
@@ -446,7 +448,7 @@ Below is a plot of the "landscape" of these two components, colored by group and
     pc1 <- t(load1 %*% (t(combined) - p$center)) + sum(p$center * load1)
     pc2 <- t(load2 %*% (t(combined) - p$center)) + sum(p$center * load2)
     
-    SSCBstocks <- readLines("../RussellOrSP.txt")
+    SSCBstocks <- readLines("RussellOrSP.txt")
     stocks <- rownames(combined)
     sscb <- stocks %in% SSCBstocks
     group <- rep(sscb, 2)

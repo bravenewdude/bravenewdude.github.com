@@ -420,7 +420,7 @@ Here's a typical example of a squared volatility profile.
     vols <- read.csv("2010.csv", row.names = 1)
     t <- 2.5 + 5 * (0:77)
     
-    set.seed(6)
+    set.seed(2)
     i <- runif(1, 1, nrow(vols))
     plot(t, vols[i, ], main = rownames(vols)[i], xlab = "Minutes into Day",
          ylab = "Squared Volatility")
