@@ -53,7 +53,7 @@ Notice that $\Px$ has the same constraints as $Q$, so it must lie within the sim
 ![empirical distributions animation](/static/2012-12-10-method-of-types/EmpiricalAnimated.gif) 
 
 
-The number of possible empirical distributions can be computed exactly, but the following rough upper bound proves more convenient.
+The number of possible empirical distributions can be computed exactly, but the following rough upper bound proves to be more convenient.
 
 ### Theorem 1
 
