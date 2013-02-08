@@ -25,12 +25,12 @@ The cdf is
 <div>\begin{align*}
 H(x) &= \int_{-\infty}^x h(t) dt\\
  &= \left\{
-     \begin{array}{ll}
-       0 , & \text{if} \; x < m\\
-       \frac{1}{1-m^2} - \frac{m^2}{(1-m^2)x^2} , & \text{if} \; x \in [m,1]\\
-       1 , & \text{if} \; x > 1
-     \end{array}
-    \right.
+ \begin{array}{ll}
+   0 , & \text{if} \; x < m\\
+   \frac{1}{1-m^2} - \frac{m^2}{(1-m^2)x^2} , & \text{if} \; x \in [m,1]\\
+   1 , & \text{if} \; x > 1
+ \end{array}
+\right.
 \end{align*}</div>
 
 For $u \in [0,1]$, its inverse is
@@ -42,14 +42,14 @@ H^{-1}(u) &= \sqrt{\frac{m^2}{1-(1-m^2)u}}
 
 Finally, we can apply the technique. Below, I generate 100 standard uniform observations and transform each using the inverse cdf.
 
+{% highlight r %}
+invcdf <- function(u, m) {
+    return(sqrt(m^2/(1 - (1 - m^2) * u)))
+}
 
-    invcdf <- function(u, m) {
-        return(sqrt(m^2/(1 - (1 - m^2) * u)))
-    }
-    
-    sample1 <- sapply(runif(100), invcdf, m = .5)
-    plot(density(sample1), main = "Sample Density using invcdf Function")
-
+sample1 <- sapply(runif(100), invcdf, m = .5)
+plot(density(sample1), main = "Sample Density using invcdf Function")
+{% endhighlight %}
 
 {:.center}
 ![plot of chunk unnamed-chunk-1](/static/2012-11-20-sampling-from-an-arbitrary-density/unnamed-chunk-1.png) 
@@ -60,41 +60,41 @@ Finally, we can apply the technique. Below, I generate 100 standard uniform obse
 
 The R code below uses some of R's built-in numerical methods to accomplish the inverse transform sampling technique for any arbitrary pdf that it is given. I'm sure there are some ugly pdfs for which this function wouldn't work, but it works fine for typical densities.
 
+{% highlight r %}
+endsign <- function(f, sign = 1) {
+    b <- sign
+    while (sign * f(b) < 0) b <- 10 * b
+    return(b)
+}
 
-    endsign <- function(f, sign = 1) {
-        b <- sign
-        while (sign * f(b) < 0) b <- 10 * b
-        return(b)
+samplepdf <- function(n, pdf, ..., spdf.lower = -Inf, spdf.upper = Inf) {
+    vpdf <- function(v) sapply(v, pdf, ...)  # vectorize
+    cdf <- function(x) integrate(vpdf, spdf.lower, x)$value
+    invcdf <- function(u) {
+        subcdf <- function(t) cdf(t) - u
+        if (spdf.lower == -Inf) 
+            spdf.lower <- endsign(subcdf, -1)
+        if (spdf.upper == Inf) 
+            spdf.upper <- endsign(subcdf)
+        return(uniroot(subcdf, c(spdf.lower, spdf.upper))$root)
     }
-    
-    samplepdf <- function(n, pdf, ..., spdf.lower = -Inf, spdf.upper = Inf) {
-        vpdf <- function(v) sapply(v, pdf, ...)  # vectorize
-        cdf <- function(x) integrate(vpdf, spdf.lower, x)$value
-        invcdf <- function(u) {
-            subcdf <- function(t) cdf(t) - u
-            if (spdf.lower == -Inf) 
-                spdf.lower <- endsign(subcdf, -1)
-            if (spdf.upper == Inf) 
-                spdf.upper <- endsign(subcdf)
-            return(uniroot(subcdf, c(spdf.lower, spdf.upper))$root)
-        }
-        sapply(runif(n), invcdf)
-    }
-
+    sapply(runif(n), invcdf)
+}
+{% endhighlight %}
 
 
 We can use `samplepdf` to sample from $h$, which we defined earlier.
 
+{% highlight r %}
+h <- function(t, m) {
+    if (t >= m & t <= 1) 
+        return(2 * m^2/(1 - m^2)/t^3)
+    return(0)
+}
 
-    h <- function(t, m) {
-        if (t >= m & t <= 1) 
-            return(2 * m^2/(1 - m^2)/t^3)
-        return(0)
-    }
-    
-    sample2 <- samplepdf(100, h, m = .5)
-    plot(density(sample2), main = "Sample Density using samplepdf Function")
-
+sample2 <- samplepdf(100, h, m = .5)
+plot(density(sample2), main = "Sample Density using samplepdf Function")
+{% endhighlight %}
 
 {:.center}
 ![plot of chunk unnamed-chunk-3](/static/2012-11-20-sampling-from-an-arbitrary-density/unnamed-chunk-3.png) 
@@ -105,25 +105,25 @@ We can use `samplepdf` to sample from $h$, which we defined earlier.
 
 While `samplepdf` is convenient, it is also computationally slow. The algorithm is $O(n)$, so it is easy to estimate the time required for a large sample size. Simply fit a linear model to the times required for a set of small sample sizes, as shown below.
 
+{% highlight r %}
+ntime <- function(n, f, ...) {
+    return(system.time(f(n, ...))[3])
+}
 
-    ntime <- function(n, f, ...) {
-        return(system.time(f(n, ...))[3])
-    }
-    
-    n <- 100 * 1:10
-    times <- sapply(n, ntime, f = samplepdf, pdf = h)
-    fit <- lm(times ~ n)$coeff
-    fit <- signif(fit, 2)
-    print(paste("The time needed (seconds) to sample from this density is about ", 
-        fit[1], " + ", fit[2], "*n.", sep=""))
-
-
-    ## [1] "The time needed (seconds) to sample from this density is about 3.2 + 0.14*n."
+n <- 100 * 1:10
+times <- sapply(n, ntime, f = samplepdf, pdf = h)
+fit <- lm(times ~ n)$coeff
+fit <- signif(fit, 2)
+print(paste("The time needed (seconds) to sample from this density is about ", 
+    fit[1], " + ", fit[2], "*n.", sep=""))
 
 
-    plot(n, times, ylab = "seconds", xlab = "n", main = "Time Required", col = 3)
-    abline(fit, col = 2)
+## [1] "The time needed (seconds) to sample from this density is about 3.2 + 0.14*n."
 
+
+plot(n, times, ylab = "seconds", xlab = "n", main = "Time Required", col = 3)
+abline(fit, col = 2)
+{% endhighlight %}
 
 {:.center}
 ![plot of chunk unnamed-chunk-4](/static/2012-11-20-sampling-from-an-arbitrary-density/unnamed-chunk-4.png) 

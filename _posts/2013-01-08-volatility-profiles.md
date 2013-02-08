@@ -65,7 +65,7 @@ W(\sigma_0^2 t + \sigma_0 m t^2 + m^2 t^3/3)
 
 This diffusion has the same infinitesimal behavior as $R(t)$ at all times, so they are identical processes. The following simulations support this result. We will plot a diffusion on (0,1) with $\sigma(t) = 1-t$ (i.e. linear with $\sigma_0=1$ and $m=-1$). First, we generate the desired diffusion sequentially.
 
-
+{% highlight r %}
     LinearVolDiffusion <- function(end = 1, initial = 0, mu = 0, sigma0 = 1, m = 0, 
         n = 1000) {
         delta <- 1/n
@@ -83,7 +83,7 @@ This diffusion has the same infinitesimal behavior as $R(t)$ at all times, so th
     for (i in 1:4) {
         lines(LinearVolDiffusion(m = -1), col = i + 1)
     }
-
+{% endhighlight %}
 
 {:.center}
 ![plot of chunk unnamed-chunk-1](/static/2013-01-08-volatility-profiles/unnamed-chunk-1.png) 
@@ -91,7 +91,7 @@ This diffusion has the same infinitesimal behavior as $R(t)$ at all times, so th
 
 Next, we generate the same diffusion using standard Brownian Motion and the $D$ transformation discovered earlier. Note that the `GenerateBM` function invoked below [can be found in an earlier post](/stochastic processes/2012/12/28/the-black-scholes-model#Generate).
 
-
+{% highlight r %}
     right <- function(f, b = 10) {
         while (f(b) < 0) b <- 10 * b
         return(b)
@@ -112,7 +112,7 @@ Next, we generate the same diffusion using standard Brownian Motion and the $D$ 
         b <- GenerateBM(end = D(1))
         lines(sapply(b[, 1], Dinv), b[, 2], col = i + 1)
     }
-
+{% endhighlight %}
 
 {:.center}
 ![plot of chunk unnamed-chunk-2](/static/2013-01-08-volatility-profiles/unnamed-chunk-2.png) 
@@ -129,7 +129,7 @@ Now consider the distribution of $\log V(l)/V(0)$.
  &\approx \mu l + W(l (\sigma_0 + ml/2)^2) \qquad \qquad \text{if $ml$ is small}
 \end{align*}</div>
 
-It is normally distributed with variance approximately $l (\sigma\_0 + ml/2)^2$, assuming the product of $m$ and $l$, which is the change in $\sigma$ over the interval, is much smaller than one. Plots indicate that this assumption holds up quite well overall, though not perfectly. Therefore it is easy to see that estimating the variance from a sample of random variables with this distribution allows us to estimate $(\sigma\_0 + ml/2)^2$, the squared volatility at the midpoint of the interval $(0,l)$. Likewise, it can be shown that the same process provides an estimate for the squared volatilities at the midpoints of the $n$ consecutive intervals of length $l$ from $(0,T)$.
+It is normally distributed with variance approximately $l (\sigma\_0 + ml/2)^2$, assuming the product of $m$ and $l$, which is the change in $\sigma$ over the interval, is much smaller than one. Plots indicate that this assumption holds up quite well overall, though not perfectly; we could always use a smaller interval if necessary to make the assumption more plausible. Therefore, it is easy to see that estimating the variance from a sample of random variables with this distribution allows us to estimate $(\sigma\_0 + ml/2)^2$, the squared volatility at the midpoint of the interval $(0,l)$. Likewise, it can be shown that the same process provides an estimate for the squared volatilities at the midpoints of the $n$ consecutive intervals of length $l$ from $(0,T)$.
 
 The upshot is, we can still use the same estimator derived earlier to estimate the same quantities (midpoint $\sigma^2$ values), but now we have justified ourselves with a more believable model.
 

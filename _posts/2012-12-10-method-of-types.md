@@ -17,37 +17,37 @@ This distribution is often estimated by the [empirical distribution](http://en.w
 
 Notice that $\Px$ has the same constraints as $Q$, so it must lie within the simplex as well. Furthermore, for any given $n$, there are only a finite number of possible values for $\Px$. Each component of $\Px$ must be representable by a fraction in $[0,1]$ with denominator $n$. Therefore, the possible values of $\Px$ form a grid within the simplex. For example, the possible empirical distributions in the $m=3$ case are displayed below. (I used [Picasion](http://picasion.com/) to merge the pictures into a single animation.)
 
+{% highlight r %}
+library(grid)
 
-    library(grid)
-    
-    drawSimplex <- function() {
-        # Draws the probability simplex for the alphabet of size 3
-        grid.polygon(x = c(0, 1, 0.5), y = c(0, 0, 1))
-        grid.text("p1=1", 0.5, 1.05)
-        grid.text("p2=1", -0.03, -0.05)
-        grid.text("p3=1", 1.03, -0.05)
+drawSimplex <- function() {
+    # Draws the probability simplex for the alphabet of size 3
+    grid.polygon(x = c(0, 1, 0.5), y = c(0, 0, 1))
+    grid.text("p1=1", 0.5, 1.05)
+    grid.text("p2=1", -0.03, -0.05)
+    grid.text("p3=1", 1.03, -0.05)
+}
+
+
+for (n in 1:10) {
+    png(paste(n, ".png", sep = ""), width = 400, height = 400)
+    grid.newpage()
+    pushViewport(viewport(x = 0.15, y = 0.15, w = unit(10, "cm"),
+                          h = unit(10 * sqrt(3)/2, "cm"), just = c("left", "bottom"),
+                          xscale = c(0, n), yscale = c(0, n)))
+    drawSimplex()
+    grid.text("Possible Empirical Distributions", 0.5, 1.2, gp = gpar(fontsize = 20))
+    grid.text(paste("n =", n), 0.04, 0.7, just = "left", 
+              gp = gpar(fontsize = 25, col = 2))
+    for (i in 0:n) {
+        x <- 0:(n - i) + i/2
+        grid.circle(x, i, unit(0.015, "npc"), default.units = "native",
+                    gp = gpar(col = 2, fill = 2))
     }
-
-
-    for (n in 1:10) {
-        png(paste(n, ".png", sep = ""), width = 400, height = 400)
-        grid.newpage()
-        pushViewport(viewport(x = 0.15, y = 0.15, w = unit(10, "cm"),
-                              h = unit(10 * sqrt(3)/2, "cm"), just = c("left", "bottom"),
-                              xscale = c(0, n), yscale = c(0, n)))
-        drawSimplex()
-        grid.text("Possible Empirical Distributions", 0.5, 1.2, gp = gpar(fontsize = 20))
-        grid.text(paste("n =", n), 0.04, 0.7, just = "left", 
-                  gp = gpar(fontsize = 25, col = 2))
-        for (i in 0:n) {
-            x <- 0:(n - i) + i/2
-            grid.circle(x, i, unit(0.015, "npc"), default.units = "native",
-                        gp = gpar(col = 2, fill = 2))
-        }
-        popViewport(1)
-        dev.off()
-    }
-
+    popViewport(1)
+    dev.off()
+}
+{% endhighlight %}
 
 {:.center}
 ![empirical distributions animation](/static/2012-12-10-method-of-types/EmpiricalAnimated.gif) 
@@ -86,128 +86,128 @@ Let $N(a \vert \x)$ denote the number of occurrences of $a$ in $\x$. Then (from 
 
 Note that all outcomes in the same type class have the same probability. To illustrate entropy and relative entropies over the simplex, I wrote code to generate level curves for the $m=3$ case.
 
+{% highlight r %}
+H <- function(p1, p2, p3 = 1 - p1 - p2, ...) {
+    # Entropy of a discrete distribution
+    p <- c(p1, p2, p3)
+    return(-sum(log2(p^p)))
+}
 
-    H <- function(p1, p2, p3 = 1 - p1 - p2, ...) {
-        # Entropy of a discrete distribution
-        p <- c(p1, p2, p3)
-        return(-sum(log2(p^p)))
-    }
-    
-    D <- function(p1, p2, p3 = 1 - p1 - p2, q1, q2, q3 = 1 - q1 - q2) {
-        # Relative entropy between two discrete distributions
-        p <- c(p1, p2, p3)
-        q <- c(q1, q2, q3)
-        return(sum(log2(p^p) - log2(q^p)))
-    }
-    
-    HplusD <- function(...) {
-        # Simplifies to -sum(p*log2(q))
-        return(H(...) + D(...))
-    }
-    
-    roots <- function(f, ..., a = 0, b = 1, r = (b - a)/100) {
-        # Finds the roots of f on interior of (a, b) (they need to pass through 0)
-        x <- seq(a + r, b - r, by = r)
-        y <- sapply(x, f, ...)
-        roots <- c()
-        # Each time the sign changes, run uniroot on the interval
-        for (i in 1:(length(x) - 1)) {
-            if (sign(y[i + 1]) != sign(y[i])) {
-                roots <- c(roots, uniroot(f, c(x[i], x[i + 1]), ...)$root)
-            }
+D <- function(p1, p2, p3 = 1 - p1 - p2, q1, q2, q3 = 1 - q1 - q2) {
+    # Relative entropy between two discrete distributions
+    p <- c(p1, p2, p3)
+    q <- c(q1, q2, q3)
+    return(sum(log2(p^p) - log2(q^p)))
+}
+
+HplusD <- function(...) {
+    # Simplifies to -sum(p*log2(q))
+    return(H(...) + D(...))
+}
+
+roots <- function(f, ..., a = 0, b = 1, r = (b - a)/100) {
+    # Finds the roots of f on interior of (a, b) (they need to pass through 0)
+    x <- seq(a + r, b - r, by = r)
+    y <- sapply(x, f, ...)
+    roots <- c()
+    # Each time the sign changes, run uniroot on the interval
+    for (i in 1:(length(x) - 1)) {
+        if (sign(y[i + 1]) != sign(y[i])) {
+            roots <- c(roots, uniroot(f, c(x[i], x[i + 1]), ...)$root)
         }
-        return(roots)
     }
-    
-    levelCurve <- function(f, ..., d) {
-        # Assumes level curve is convex
-        p2 <- seq(0.001, 0.999, by = 0.001)
-        l <- length(p2)
-        p1 <- rep(NaN, 2 * l)
-        for (i in 1:l) {
-            j <- 2 * l - i + 1
-            z <- roots(function(x) f(x, p2 = p2[i], ...) - d, b = 1 - p2[i])
-            if (length(z) == 2) {
-                p1[i] <- min(z)
-                p1[j] <- max(z)
-            } else if (length(z) == 1) {
-                z <- z[1]
-                if (i == 1) {
-                    p1[i] <- z
-                    p1[j] <- z
+    return(roots)
+}
+
+levelCurve <- function(f, ..., d) {
+    # Assumes level curve is convex
+    p2 <- seq(0.001, 0.999, by = 0.001)
+    l <- length(p2)
+    p1 <- rep(NaN, 2 * l)
+    for (i in 1:l) {
+        j <- 2 * l - i + 1
+        z <- roots(function(x) f(x, p2 = p2[i], ...) - d, b = 1 - p2[i])
+        if (length(z) == 2) {
+            p1[i] <- min(z)
+            p1[j] <- max(z)
+        } else if (length(z) == 1) {
+            z <- z[1]
+            if (i == 1) {
+                p1[i] <- z
+                p1[j] <- z
+            } else {
+                # what is z closer to?
+                if (is.na(p1[i - 1])) {
+                  p1[j] <- z
+                  p1[i] <- NA
+                } else if (is.na(p1[j + 1])) {
+                  p1[i] <- z
+                  p1[j] <- NA
+                } else if (abs(p1[i - 1] - z) > abs(p1[j + 1] - z)) {
+                  p1[j] <- z
+                  p1[i] <- NA
                 } else {
-                    # what is z closer to?
-                    if (is.na(p1[i - 1])) {
-                      p1[j] <- z
-                      p1[i] <- NA
-                    } else if (is.na(p1[j + 1])) {
-                      p1[i] <- z
-                      p1[j] <- NA
-                    } else if (abs(p1[i - 1] - z) > abs(p1[j + 1] - z)) {
-                      p1[j] <- z
-                      p1[i] <- NA
-                    } else {
-                      p1[i] <- z
-                      p1[j] <- NA
-                    }
+                  p1[i] <- z
+                  p1[j] <- NA
                 }
             }
         }
-        p2 <- c(p2, rev(p2))
-        keep <- !is.nan(p1)
-        p1 <- p1[keep]
-        p2 <- p2[keep]
-        return(cbind(p1, p2))
     }
-    
-    simplexTransform <- function(p1, p2, p3 = 1 - p1 - p2) {
-        # Returns the horizontal component of the point
-        return(p1/2 + (1 - p2/(p2 + p3)) * (1 - p1))
-    }
-    
-    drawCurves <- function(f, q1 = NA, q2 = NA, fstr, ds) {
-        pushViewport(viewport(w = unit(10, "cm"), h = unit(10 * sqrt(3)/2, "cm")))
-        drawSimplex()
-        grid.text(paste("Level Curves of", fstr), 0.5, 1.13, gp = gpar(fontsize = 20))
-        if (fstr != "H") {
-            grid.text("Q", simplexTransform(q1, q2), q1, default.units = "native", 
-                      gp = gpar(col = 2))
-        }
-        for (d in ds) {
-            l <- levelCurve(f, q1 = q1, q2 = q2, d = d)
-            p1 <- l[, 1]
-            p2 <- simplexTransform(l[, 1], l[, 2])
-            m <- length(p1)
-            grid.segments(p2, p1, p2[c(2:m, 1)], p1[c(2:m, 1)], gp = gpar(col = 3))
-            position <- which.max(p1)
-            grid.text(paste(fstr, "=", d, sep = ""), p2[position],
-                      p1[position] - 0.04, gp = gpar(col = 4, fontsize = 10))
-        }
-        popViewport(1)
-    }
+    p2 <- c(p2, rev(p2))
+    keep <- !is.nan(p1)
+    p1 <- p1[keep]
+    p2 <- p2[keep]
+    return(cbind(p1, p2))
+}
 
+simplexTransform <- function(p1, p2, p3 = 1 - p1 - p2) {
+    # Returns the horizontal component of the point
+    return(p1/2 + (1 - p2/(p2 + p3)) * (1 - p1))
+}
+
+drawCurves <- function(f, q1 = NA, q2 = NA, fstr, ds) {
+    pushViewport(viewport(w = unit(10, "cm"), h = unit(10 * sqrt(3)/2, "cm")))
+    drawSimplex()
+    grid.text(paste("Level Curves of", fstr), 0.5, 1.13, gp = gpar(fontsize = 20))
+    if (fstr != "H") {
+        grid.text("Q", simplexTransform(q1, q2), q1, default.units = "native", 
+                  gp = gpar(col = 2))
+    }
+    for (d in ds) {
+        l <- levelCurve(f, q1 = q1, q2 = q2, d = d)
+        p1 <- l[, 1]
+        p2 <- simplexTransform(l[, 1], l[, 2])
+        m <- length(p1)
+        grid.segments(p2, p1, p2[c(2:m, 1)], p1[c(2:m, 1)], gp = gpar(col = 3))
+        position <- which.max(p1)
+        grid.text(paste(fstr, "=", d, sep = ""), p2[position],
+                  p1[position] - 0.04, gp = gpar(col = 4, fontsize = 10))
+    }
+    popViewport(1)
+}
+{% endhighlight %}
 
 
 Based on Theorem 2, we can visualize the empirical distributions that correspond to equally probable outcomes. Below are plots of level curves for $H(\cdot)$, $D(\cdot \Vert Q)$, and $H(\cdot) + D(\cdot \Vert Q)$, using $Q = (3/6, 2/6, 1/6)$.
 
-
-    drawHD <- function(q1, q2) {
-        pushViewport(viewport(x = 0, w = 0.5, h = 0.5, just = c("left", "bottom")))
-        drawCurves(H, fstr = "H", ds = c(1.5, 1.25, 1))
-        popViewport(1)
-        pushViewport(viewport(x = 0.5, w = 0.5, h = 0.5, just = c("left", "bottom")))
-        drawCurves(D, q1 = q1, q2 = q2, fstr = "D", ds = c(0.1, 0.3, 0.5))
-        popViewport(1)
-    }
-    
-    png("Q1.png", height = 700, width = 700)
-    grid.newpage()
-    drawHD(1/2, 1/3)
-    pushViewport(viewport(x = 0.25, y = 0, w = 0.5, h = 0.5, just = c("left", "bottom")))
-    drawCurves(HplusD, q1 = 1/2, q2 = 1/3, fstr = "H+D", ds = c(1.2, 1.6, 2))
+{% highlight r %}
+drawHD <- function(q1, q2) {
+    pushViewport(viewport(x = 0, w = 0.5, h = 0.5, just = c("left", "bottom")))
+    drawCurves(H, fstr = "H", ds = c(1.5, 1.25, 1))
     popViewport(1)
-    dev.off()
+    pushViewport(viewport(x = 0.5, w = 0.5, h = 0.5, just = c("left", "bottom")))
+    drawCurves(D, q1 = q1, q2 = q2, fstr = "D", ds = c(0.1, 0.3, 0.5))
+    popViewport(1)
+}
 
+png("Q1.png", height = 700, width = 700)
+grid.newpage()
+drawHD(1/2, 1/3)
+pushViewport(viewport(x = 0.25, y = 0, w = 0.5, h = 0.5, just = c("left", "bottom")))
+drawCurves(HplusD, q1 = 1/2, q2 = 1/3, fstr = "H+D", ds = c(1.2, 1.6, 2))
+popViewport(1)
+dev.off()
+{% endhighlight %}
 
 {:.center}
 ![entropy and relative entropies for Q1](/static/2012-12-10-method-of-types/Q1.png) 
@@ -222,22 +222,22 @@ a linear combination of the components of $P$. Its level sets are represented by
 
 Also, notice that in the $Q=(1/3,1/3,1/3)$ case, this expression is equal to $\log 3$ for all $P$. The level curves for this case are plotted below.
 
-
-    png("Q2.png", height = 700, width = 700)
-    grid.newpage()
-    drawHD(1/3, 1/3)
-    pushViewport(viewport(x = 0.25, y = 0, w = 0.5, h = 0.5, just = c("left", "bottom")))
-    pushViewport(viewport(w = unit(10, "cm"), h = unit(10 * sqrt(3)/2, "cm")))
-    drawSimplex()
-    grid.polygon(x = c(0, 1, 0.5), y = c(0, 0, 1), gp = gpar(fill = 3))
-    grid.text("Level Curves of H+D", 0.5, 1.13, gp = gpar(fontsize = 20))
-    grid.text("Q", simplexTransform(1/3, 1/3), 1/3, default.units = "native",
-              gp = gpar(col = 2))
-    grid.text("H+D=1.585 everywhere", 0.5, 0.22, gp = gpar(col = 4, fontsize = 10))
-    popViewport(1)
-    popViewport(1)
-    dev.off()
-
+{% highlight r %}
+png("Q2.png", height = 700, width = 700)
+grid.newpage()
+drawHD(1/3, 1/3)
+pushViewport(viewport(x = 0.25, y = 0, w = 0.5, h = 0.5, just = c("left", "bottom")))
+pushViewport(viewport(w = unit(10, "cm"), h = unit(10 * sqrt(3)/2, "cm")))
+drawSimplex()
+grid.polygon(x = c(0, 1, 0.5), y = c(0, 0, 1), gp = gpar(fill = 3))
+grid.text("Level Curves of H+D", 0.5, 1.13, gp = gpar(fontsize = 20))
+grid.text("Q", simplexTransform(1/3, 1/3), 1/3, default.units = "native",
+          gp = gpar(col = 2))
+grid.text("H+D=1.585 everywhere", 0.5, 0.22, gp = gpar(col = 4, fontsize = 10))
+popViewport(1)
+popViewport(1)
+dev.off()
+{% endhighlight %}
 
 {:.center}
 ![entropy and relative entropies for Q2](/static/2012-12-10-method-of-types/Q2.png) 
@@ -303,11 +303,11 @@ Another notion of typicality is also useful. We define the strongly typical set
 
 <div>\begin{align*}
 A_\epsilon^{*(n)} := \left\{ \x : 
-     \begin{array}{ll}
-       \vert \Px(a) - Q(a) \vert < \epsilon /m , & \text{if} \; P(a) > 0\\
-       \Px = 0 , & \text{if} \; P(a) = 0
-     \end{array}
-    \right.
+ \begin{array}{ll}
+   \vert \Px(a) - Q(a) \vert < \epsilon /m , & \text{if} \; P(a) > 0\\
+   \Px = 0 , & \text{if} \; P(a) = 0
+ \end{array}
+\right.
 \end{align*}</div>
 
 ### Theorem 6
@@ -322,52 +322,52 @@ The other condition we need for strong typicality is that $\Px(a) = 0$ for all $
 
 For comparison, I have plotted the typical set and strongly typical set with $\epsilon=.15$ in the $m=3$ case.
 
+{% highlight r %}
+maxDiff <- function(p1, p2, p3 = 1 - p1 - p2, q1, q2, q3 = 1 - q1 - q2) {
+    # Maximum absolute difference between components
+    p <- c(p1, p2, p3)
+    q <- c(q1, q2, q3)
+    return(max(abs(p - q)))
+}
 
-    maxDiff <- function(p1, p2, p3 = 1 - p1 - p2, q1, q2, q3 = 1 - q1 - q2) {
-        # Maximum absolute difference between components
-        p <- c(p1, p2, p3)
-        q <- c(q1, q2, q3)
-        return(max(abs(p - q)))
-    }
-    
-    q1 <- 1/2
-    q2 <- 1/3
-    d <- 0.15
-    png("TypicalSets.png", height = 350, width = 700)
-    grid.newpage()
-    pushViewport(viewport(x = 0, w = 0.5, y = 0, just = c("left", "bottom")))
-    pushViewport(viewport(w = unit(10, "cm"), h = unit(10 * sqrt(3)/2, "cm")))
-    drawSimplex()
-    grid.text("Typical Set", 0.5, 1.13, gp = gpar(fontsize = 20))
-    grid.text("Q", simplexTransform(q1, q2), q1, default.units = "native",
-              gp = gpar(col = 2))
-    l <- levelCurve(D, q1 = q1, q2 = q2, d = d)
-    p1 <- l[, 1]
-    p2 <- simplexTransform(l[, 1], l[, 2])
-    m <- length(p1)
-    grid.segments(p2, p1, p2[c(2:m, 1)], p1[c(2:m, 1)], gp = gpar(col = 3))
-    popViewport(1)
-    popViewport(1)
-    pushViewport(viewport(x = 0.5, y = 0, w = 0.5, just = c("left", "bottom")))
-    pushViewport(viewport(w = unit(10, "cm"), h = unit(10 * sqrt(3)/2, "cm")))
-    drawSimplex()
-    grid.text("Strongly Typical Set", 0.5, 1.13, gp = gpar(fontsize = 20))
-    e <- d/3
-    p1 <- c(q1+e, q1+e, q1, q1-e, q1-e, q1)
-    p2 <- c(q2, q2-e, q2-e, q2, q2+e, q2+e)
-    grid.polygon(x=simplexTransform(p1, p2), y=p1,
-                 gp=gpar(col=3, lty=3))
-    grid.text("Q", simplexTransform(q1, q2), q1, default.units = "native",
-              gp = gpar(col = 2))
-    #l <- levelCurve(maxDiff, q1 = q1, q2 = q2, d = d/3)
-    #p1 <- l[, 1]
-    #p2 <- simplexTransform(l[, 1], l[, 2])
-    #m <- length(p1)
-    #grid.segments(p2, p1, p2[c(2:m, 1)], p1[c(2:m, 1)], gp = gpar(col = 3, lty = 3))
-    popViewport(1)
-    popViewport(1)
-    dev.off()
-
+q1 <- 1/2
+q2 <- 1/3
+d <- 0.15
+png("TypicalSets.png", height = 350, width = 700)
+grid.newpage()
+pushViewport(viewport(x = 0, w = 0.5, y = 0, just = c("left", "bottom")))
+pushViewport(viewport(w = unit(10, "cm"), h = unit(10 * sqrt(3)/2, "cm")))
+drawSimplex()
+grid.text("Typical Set", 0.5, 1.13, gp = gpar(fontsize = 20))
+grid.text("Q", simplexTransform(q1, q2), q1, default.units = "native",
+          gp = gpar(col = 2))
+l <- levelCurve(D, q1 = q1, q2 = q2, d = d)
+p1 <- l[, 1]
+p2 <- simplexTransform(l[, 1], l[, 2])
+m <- length(p1)
+grid.segments(p2, p1, p2[c(2:m, 1)], p1[c(2:m, 1)], gp = gpar(col = 3))
+popViewport(1)
+popViewport(1)
+pushViewport(viewport(x = 0.5, y = 0, w = 0.5, just = c("left", "bottom")))
+pushViewport(viewport(w = unit(10, "cm"), h = unit(10 * sqrt(3)/2, "cm")))
+drawSimplex()
+grid.text("Strongly Typical Set", 0.5, 1.13, gp = gpar(fontsize = 20))
+e <- d/3
+p1 <- c(q1+e, q1+e, q1, q1-e, q1-e, q1)
+p2 <- c(q2, q2-e, q2-e, q2, q2+e, q2+e)
+grid.polygon(x=simplexTransform(p1, p2), y=p1,
+             gp=gpar(col=3, lty=3))
+grid.text("Q", simplexTransform(q1, q2), q1, default.units = "native",
+          gp = gpar(col = 2))
+#l <- levelCurve(maxDiff, q1 = q1, q2 = q2, d = d/3)
+#p1 <- l[, 1]
+#p2 <- simplexTransform(l[, 1], l[, 2])
+#m <- length(p1)
+#grid.segments(p2, p1, p2[c(2:m, 1)], p1[c(2:m, 1)], gp = gpar(col = 3, lty = 3))
+popViewport(1)
+popViewport(1)
+dev.off()
+{% endhighlight %}
 
 {:.center}
 ![typical set and strongly typical set](/static/2012-12-10-method-of-types/TypicalSets.png) 

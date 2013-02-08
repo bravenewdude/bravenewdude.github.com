@@ -17,21 +17,25 @@ Also, note that these instructions should work for pretty much any scripting lan
 
 The **inst** folder within the package's main directory is where any Python code belongs. In Pydemo, the Python code is in the file **Pygreet.py**. It takes one argument and creates a file with a greeting message.
 
-    import sys
-    filename = "Pygreetings%s.txt" % sys.argv[1]
-    ofile = open(filename, "a")
-    ofile.write("Hello %s, this message is brought to you by Python!\n" % sys.argv[1])
-    ofile.close()
-    print "File created: %s" % filename
+{% highlight py3 %}
+import sys
+filename = "Pygreetings%s.txt" % sys.argv[1]
+ofile = open(filename, "a")
+ofile.write("Hello %s, this message is brought to you by Python!\n" % sys.argv[1])
+ofile.close()
+print "File created: %s" % filename
+{% endhighlight %}
 
 Now R code within this package can run the python script **Pygreet.py**, as shown below. Within the **R** folder, we have a file **greet.R** with the code
 
-    greet <- function(name) {
-      path <- paste(system.file(package="Pydemo"), "Pygreet.py", sep="/")
-      command <- paste("python", path, name)
-      response <- system(command, intern=T)
-      print(response)
-    }
+{% highlight r %}
+greet <- function(name) {
+  path <- paste(system.file(package="Pydemo"), "Pygreet.py", sep="/")
+  command <- paste("python", path, name)
+  response <- system(command, intern=T)
+  print(response)
+}
+{% endhighlight %}
 
 Finally, the package has a **NAMESPACE** file and a **DESCRIPTION** file, and the folder **man** contains two simple documentation files. All of these files can be found in [Pydemo.tar](/static/Pydemo.tar). To finish building your package, navigate a terminal session to the parent of your package's main directory and run
 

@@ -47,39 +47,39 @@ There is a common algorithm for constructing Standard Brownian Motion on $(0, T)
 By simulating Brownian Motion and exponentiating the result, we can simulate GBM. My code below generates four simulated examples of GBM. In each case, $2^{10}$ points were generated for a Brownian Motion starting at (0,0) with drift factor 1 and noise factor 1. Exponentiation of the results gives us GBMs.
 
 <a id="Generate"></a>
-
-    BMrecur <- function(x, y, sigma) {
-        m <- length(x)
-        mid <- (m + 1)/2
-        delta <- x[m] - x[1]
-        y[mid] <- (y[1] + y[m])/2 + rnorm(1, sd = sigma * sqrt(delta)/2)
-        if (m <= 3) {
-            return(y[mid])
-        } else {
-            return(c(BMrecur(x[1:mid], y[1:mid], sigma), y[mid],
-                     BMrecur(x[mid:m], y[mid:m], sigma)))
-        }
+{% highlight r %}
+BMrecur <- function(x, y, sigma) {
+    m <- length(x)
+    mid <- (m + 1)/2
+    delta <- x[m] - x[1]
+    y[mid] <- (y[1] + y[m])/2 + rnorm(1, sd = sigma * sqrt(delta)/2)
+    if (m <= 3) {
+        return(y[mid])
+    } else {
+        return(c(BMrecur(x[1:mid], y[1:mid], sigma), y[mid],
+                 BMrecur(x[mid:m], y[mid:m], sigma)))
     }
-    
-    GenerateBM <- function(end = 1, initial = 0, mu = 0, sigma = 1, log2n = 10,
-                           geometric = F) {
-        n <- 2^log2n
-        x <- end * (0:n)/n
-        final <- initial + mu * end + rnorm(1, sd = sigma * sqrt(end))
-        y <- c(initial, rep(NA, n - 1), final)
-        y[2:n] <- c(BMrecur(x, y, sigma))
-        if (geometric) y <- exp(y)
-        return(cbind(x, y))
-    }
+}
+
+GenerateBM <- function(end = 1, initial = 0, mu = 0, sigma = 1, log2n = 10,
+                       geometric = F) {
+    n <- 2^log2n
+    x <- end * (0:n)/n
+    final <- initial + mu * end + rnorm(1, sd = sigma * sqrt(end))
+    y <- c(initial, rep(NA, n - 1), final)
+    y[2:n] <- c(BMrecur(x, y, sigma))
+    if (geometric) y <- exp(y)
+    return(cbind(x, y))
+}
 
 
-    plot(c(0, 1), c(0, 6), type = "n", main = "Simulated Geometric Brownian Motion", 
-        xlab = "Time", ylab = "Stock Price")
-    set.seed(3)
-    for (i in 1:4) {
-        lines(GenerateBM(mu = 1, geometric = T), col = i + 1)
-    }
-
+plot(c(0, 1), c(0, 6), type = "n", main = "Simulated Geometric Brownian Motion", 
+    xlab = "Time", ylab = "Stock Price")
+set.seed(3)
+for (i in 1:4) {
+    lines(GenerateBM(mu = 1, geometric = T), col = i + 1)
+}
+{% endhighlight %}
 
 {:.center}
 ![plot of chunk unnamed-chunk-2](/static/2012-12-28-the-black-scholes-model/unnamed-chunk-2.png) 

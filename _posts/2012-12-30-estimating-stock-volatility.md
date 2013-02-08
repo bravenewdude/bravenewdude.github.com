@@ -34,52 +34,52 @@ Thus, if we had true GBM, then we could let $n$ be as large as we like by splitt
 
 To demonstrate this issue, I have performed a simulation. It generates a 6.5 hour interval of GBM (equal to one trading day on the stock market) refined to $2^4$ units of time (about a minute and a half each). This process has the "look" of GBM, as long as we do not zoom in too far. The squared volatility of the simulated GBM (with true volatility of 1) was estimated as described above, splitting our data into $n = 2^k$ data points for $k = 2,3,4,5,6$. This process was repeated 10000 times, and the squared error for each $n$ was computed in each trial. Note that the code below uses the `GenerateBM` function [defined in the Black-Scholes article](/stochastic processes/2012/12/28/the-black-scholes-model#Generate).
 
-
-    EstVol <- function(n, GBM) {
-        # Estimate Volatility of GBM by splitting it into n units.
-        GBM.y <- GBM[, 2]
-        GBM.x <- GBM[, 1]
-        m <- nrow(GBM)
-        begin <- GBM.x[1]
-        end <- GBM.x[m]
-        l <- (end - begin)/n
-        y <- GBM.y[1]
-        if (n > 2) {
-            j <- 1
-            for (a in seq(begin + l, end - l, by = l)) {
-                while (GBM.x[j + 1] <= a) j <- j + 1
-                y <- c(y, GBM.y[j])
-            }
+{% highlight r %}
+EstVol <- function(n, GBM) {
+    # Estimate Volatility of GBM by splitting it into n units.
+    GBM.y <- GBM[, 2]
+    GBM.x <- GBM[, 1]
+    m <- nrow(GBM)
+    begin <- GBM.x[1]
+    end <- GBM.x[m]
+    l <- (end - begin)/n
+    y <- GBM.y[1]
+    if (n > 2) {
+        j <- 1
+        for (a in seq(begin + l, end - l, by = l)) {
+            while (GBM.x[j + 1] <= a) j <- j + 1
+            y <- c(y, GBM.y[j])
         }
-        y <- c(y, GBM.y[m])
-        v <- log(y[-1]/y[-(n + 1)])
-        est <- sum((v - mean(v))^2)/(n - 1)/l
-        return(est)
     }
-    
-    set.seed(1)
-    nsim <- 10000
-    refinement <- 2^(2:6)
-    errors <- matrix(NA, nsim, length(refinement))
-    estimates <- matrix(NA, nsim, length(refinement))
-    for (i in 1:nsim) {
-        GBM <- GenerateBM(end = 6.5, mu = 0.01, log2n = 4, geometric = T)
-        estimates[i, ] <- sapply(refinement, EstVol, GBM)
-        errors[i, ] <- (estimates[i, ] - 1)^2
-    }
-    results <- cbind(refinement, apply(estimates, 2, mean), apply(errors, 2, mean))
-    colnames(results) <- c("n", "avg volatility est", "avg sq error of est")
-    
-    results
+    y <- c(y, GBM.y[m])
+    v <- log(y[-1]/y[-(n + 1)])
+    est <- sum((v - mean(v))^2)/(n - 1)/l
+    return(est)
+}
+
+set.seed(1)
+nsim <- 10000
+refinement <- 2^(2:6)
+errors <- matrix(NA, nsim, length(refinement))
+estimates <- matrix(NA, nsim, length(refinement))
+for (i in 1:nsim) {
+    GBM <- GenerateBM(end = 6.5, mu = 0.01, log2n = 4, geometric = T)
+    estimates[i, ] <- sapply(refinement, EstVol, GBM)
+    errors[i, ] <- (estimates[i, ] - 1)^2
+}
+results <- cbind(refinement, apply(estimates, 2, mean), apply(errors, 2, mean))
+colnames(results) <- c("n", "avg volatility est", "avg sq error of est")
+
+results
 
 
-    ##       n avg volatility est avg sq error of est
-    ## [1,]  4              1.021              0.6818
-    ## [2,]  8              1.015              0.2913
-    ## [3,] 16              1.008              0.1347
-    ## [4,] 32              1.008              0.1284
-    ## [5,] 64              1.008              0.1270
-
+##       n avg volatility est avg sq error of est
+## [1,]  4              1.021              0.6818
+## [2,]  8              1.015              0.2913
+## [3,] 16              1.008              0.1347
+## [4,] 32              1.008              0.1284
+## [5,] 64              1.008              0.1270
+{% endhighlight %}
 
 
 The above table shows the average squared error for each value of $n$. We can see that the estimates tend to concentrate closer to the true value of 1 as $n$ increases to $2^4$, because up to that point we are incorporating more good data points. After that, increasing $n$ does not seem to reduce squared error very much. With too much refinement, the intervals are less like GBM. This demonstrates the trade-off between having a larger sample size and having more reliable data points.
@@ -108,18 +108,18 @@ A third estimator for squared volatility uses the fact that $\sum X_i^2 / l \sig
 \end{align*}</div>
 The estimator $V$ tends to be preferable when $n$ and $l$ are both small. For example, in the case of my [volatility profile data anlysis](/tutorial/2013/01/14/single-stock-circuit-breakers/), I have $n = 18$ dates and use $l = 5$ minutes, making the square root of the right-hand side of the inequality about 67.
 
+{% highlight r %}
+rightside <- function(n, l) {
+    num <- -2/(n-1) + sqrt(2)*sqrt(3*n^2 - 5*n + 2)
+    denom <- n*(n-1)*l
+    return(num/denom)
+}
 
-    rightside <- function(n, l) {
-        num <- -2/(n-1) + sqrt(2)*sqrt(3*n^2 - 5*n + 2)
-        denom <- n*(n-1)*l
-        return(num/denom)
-    }
-    
-    sqrt(rightside(18, 1/(20*6.5*252)))
+sqrt(rightside(18, 1/(20*6.5*252)))
 
 
-    ## [1] 66.99978
-
+## [1] 66.99978
+{% endhighlight %}
 
 
 In practice, stock prices typically have comparable volatility and drift parameters at the one-year scale, so this inequality is almost certainly satisfied. To understand why this is, realize that the drift parameter is inconsequential in determining price fluctuations on a 5-minute time scale. So pretending $\mu=0$ introduces almost no bias but decreases variance.

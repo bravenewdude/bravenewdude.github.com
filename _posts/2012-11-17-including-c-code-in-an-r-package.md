@@ -15,24 +15,30 @@ The process described below was completed on the Ubuntu 11.04 operating system. 
 
 The **src** folder within the package's main director is where any C code belongs. In Cdemo, the C code is in the file **Cadd.c**. It contains a function that adds 1 to each element in a vector of doubles.
 
-    void Caddone(double *x, int *length) {
-      for(int i=0; i<*length; i++) {
-        x[i] = x[i]+1;
-      }
-    }
+{% highlight c %}
+void Caddone(double *x, int *length) {
+  for(int i=0; i<*length; i++) {
+    x[i] = x[i]+1;
+  }
+}
+{% endhighlight %}
 
 In our package's main directory, there is a file called simply **NAMESPACE** and containing the lines
 
-    exportPattern(".")
-    useDynLib(Cdemo)
+{% highlight r %}
+exportPattern(".")
+useDynLib(Cdemo)
+{% endhighlight %}
 
 Now R code within this package can call the C function `Caddone` by using the `.C` method, as shown below. Within the **R** folder, we have a file **addone.R** with the code
 
-    addone <- function(x) {
-      x <- as.double(x)
-      .C("Caddone", DUP=F, x, length(x))
-      return(x)
-    }
+{% highlight r %}
+addone <- function(x) {
+  x <- as.double(x)
+  .C("Caddone", DUP=F, x, length(x))
+  return(x)
+}
+{% endhighlight %}
 
 Finally, the package has a **DESCRIPTION** file, and the folder **man** contains two simple documentation files. All of these files can be found in [Cdemo.tar](/static/Cdemo.tar). To finish building your package, navigate a terminal session to the parent of your package's main directory and run
 

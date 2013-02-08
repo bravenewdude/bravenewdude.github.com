@@ -30,15 +30,15 @@ I started by working with the data from 2010. During this period, the SSCB rules
 
 Here is a typical example of a stock's estimated squared volatility profile.
 
+{% highlight r %}
+vols <- read.csv("2010.csv", row.names = 1)
+t <- 2.5 + 5 * (0:77)
 
-    vols <- read.csv("2010.csv", row.names = 1)
-    t <- 2.5 + 5 * (0:77)
-    
-    set.seed(2)
-    i <- runif(1, 1, nrow(vols))
-    plot(t, vols[i, ], main = rownames(vols)[i], xlab = "Minutes into Day",
-         ylab = "Squared Volatility")
-
+set.seed(2)
+i <- runif(1, 1, nrow(vols))
+plot(t, vols[i, ], main = rownames(vols)[i], xlab = "Minutes into Day",
+     ylab = "Squared Volatility")
+{% endhighlight %}
 
 {:.center}
 ![plot of chunk unnamed-chunk-1](/static/2013-01-14-single-stock-circuit-breakers/unnamed-chunk-1.png) 
@@ -49,11 +49,11 @@ Here is a typical example of a stock's estimated squared volatility profile.
 
 It is clear from browsing more of these plots that the first and last points of the day tend to be the highest. They also seem to have the most variability. In fact, the following plot confirms that a strong relationship exists between spread and level. Times of the day with higher volatilities also have higher variation in their volatilities.
 
-
-    means <- apply(vols, 2, mean)
-    sds <- apply(vols, 2, sd)
-    plot(means, sds, xlab = "Level", ylab = "Spread", main = "Original Data")
-
+{% highlight r %}
+means <- apply(vols, 2, mean)
+sds <- apply(vols, 2, sd)
+plot(means, sds, xlab = "Level", ylab = "Spread", main = "Original Data")
+{% endhighlight %}
 
 {:.center}
 ![plot of chunk unnamed-chunk-2](/static/2013-01-14-single-stock-circuit-breakers/unnamed-chunk-2.png) 
@@ -61,12 +61,12 @@ It is clear from browsing more of these plots that the first and last points of 
 
 Generally, analyses go more smoothly if this relationship can be transformed away. A log transform does the trick.
 
-
-    vols <- log(vols)
-    means <- apply(vols, 2, mean)
-    sds <- apply(vols, 2, sd)
-    plot(means, sds, xlab = "Level", ylab = "Spread", main = "Log Transformed Data")
-
+{% highlight r %}
+vols <- log(vols)
+means <- apply(vols, 2, mean)
+sds <- apply(vols, 2, sd)
+plot(means, sds, xlab = "Level", ylab = "Spread", main = "Log Transformed Data")
+{% endhighlight %}
 
 {:.center}
 ![plot of chunk unnamed-chunk-3](/static/2013-01-14-single-stock-circuit-breakers/unnamed-chunk-3.png) 
@@ -77,24 +77,24 @@ Generally, analyses go more smoothly if this relationship can be transformed awa
 
 Clearly, we expect neighboring data points of a volatility profile to be very close to each other. In such cases as this, one can often improve the quality of one's data by letting neighboring points "inform" each other. With a little thought and exploration, I found that a parametric fit worked nicely to smooth the volatility profiles. The 78 data points are well summarized by a fifth degree polynomial.
 
+{% highlight r %}
+# Initialize
+stocks <- rownames(vols)
+n <- nrow(vols)
+m <- ncol(vols)
+t.mat <- cbind(t, t^2, t^3, t^4, t^5)
 
-    # Initialize
-    stocks <- rownames(vols)
-    n <- nrow(vols)
-    m <- ncol(vols)
-    t.mat <- cbind(t, t^2, t^3, t^4, t^5)
-    
-    # Demonstrate fit on random stock
-    set.seed(2)
-    i <- runif(1, 1, n)
-    v <- unlist(vols[i, ])
-    L <- lm(v ~ t.mat)
-    
-    # Plot original points with fittted curve
-    plot(t, v, main = stocks[i], xlab = "Minutes into Day",
-         ylab = "Log of Squared Volatility")
-    lines(t, L$fit, col = 2)
+# Demonstrate fit on random stock
+set.seed(2)
+i <- runif(1, 1, n)
+v <- unlist(vols[i, ])
+L <- lm(v ~ t.mat)
 
+# Plot original points with fittted curve
+plot(t, v, main = stocks[i], xlab = "Minutes into Day",
+     ylab = "Log of Squared Volatility")
+lines(t, L$fit, col = 2)
+{% endhighlight %}
 
 {:.center}
 ![plot of chunk unnamed-chunk-4](/static/2013-01-14-single-stock-circuit-breakers/unnamed-chunk-4.png) 
@@ -102,11 +102,11 @@ Clearly, we expect neighboring data points of a volatility profile to be very cl
 
 The residuals show no remaining structure in the data.
 
-
-    plot(t, L$res, main = stocks[i], xlab = "Minutes into Day",
-         ylab = "Residuals of Log of Squared Volatlity")
-    abline(h = 0, col = 2, lty = 2)
-
+{% highlight r %}
+plot(t, L$res, main = stocks[i], xlab = "Minutes into Day",
+     ylab = "Residuals of Log of Squared Volatlity")
+abline(h = 0, col = 2, lty = 2)
+{% endhighlight %}
 
 {:.center}
 ![plot of chunk unnamed-chunk-5](/static/2013-01-14-single-stock-circuit-breakers/unnamed-chunk-5.png) 
@@ -114,25 +114,25 @@ The residuals show no remaining structure in the data.
 
 I apply this smoothing procedure to each stock.
 
-
-    smooth <- matrix(NA, n, m, dimnames = list(stocks, t))
-    for (i in 1:n) {
-        v <- unlist(vols[i, ])
-        L <- lm(v ~ t.mat)
-        smooth[i, ] <- L$fit
-    }
-
+{% highlight r %}
+smooth <- matrix(NA, n, m, dimnames = list(stocks, t))
+for (i in 1:n) {
+    v <- unlist(vols[i, ])
+    L <- lm(v ~ t.mat)
+    smooth[i, ] <- L$fit
+}
+{% endhighlight %}
 
 
 Notice that the averages of the residuals do not show any discernable pattern either.
 
-
-    res <- vols - smooth
-    dimnames(res) <- list(stocks, t)
-    plot(t, apply(res, 2, mean), main = "Average of Residuals", ylab = "Mean",
-         xlab = "Minutes into Day")
-    abline(h = 0, col = 2, lty = 2)
-
+{% highlight r %}
+res <- vols - smooth
+dimnames(res) <- list(stocks, t)
+plot(t, apply(res, 2, mean), main = "Average of Residuals", ylab = "Mean",
+     xlab = "Minutes into Day")
+abline(h = 0, col = 2, lty = 2)
+{% endhighlight %}
 
 {:.center}
 ![plot of chunk unnamed-chunk-7](/static/2013-01-14-single-stock-circuit-breakers/unnamed-chunk-7.png) 
@@ -147,56 +147,57 @@ Ultimately, we want to know whether differences in volatility profiles are relat
 
 First, let us see if market cap has any effect on volatility profiles by making some plots. There is a clear relationship between market cap and any given column of the volatility profile matrix.
 
+{% highlight r %}
+cap <- read.csv("cap.csv", row.names = 1)
+cap.log <- log(cap[, 1])  # for 2010
+set.seed(1)
+i <- runif(1, 1, m)
+v <- smooth[, i]
 
-    cap <- read.csv("cap.csv", row.names = 1)
-    cap.log <- log(cap[, 1])  # for 2010
-    set.seed(1)
-    i <- runif(1, 1, m)
-    v <- smooth[, i]
-    
-    plot(cap.log, v, main = "2010", xlab = "Log of Market Cap",
-         ylab = paste("Smoothed Log of Squared Volatilities @ t =", t[i]))
-    # Because we found a relationship, we should control for it
-    cap.mat <- cbind(cap.log, cap.log^2)
-    L <- lm(v ~ cap.mat)
-    grid <- seq(19, 26, by = 0.1)
-    lines(grid, cbind(1, grid, grid^2) %*% L$coef, col = 2)
-
+plot(cap.log, v, main = "2010", xlab = "Log of Market Cap",
+     ylab = paste("Smoothed Log of Squared Volatilities @ t =", t[i]))
+# Because we found a relationship, we should control for it
+cap.mat <- cbind(cap.log, cap.log^2)
+L <- lm(v ~ cap.mat)
+grid <- seq(19, 26, by = 0.1)
+lines(grid, cbind(1, grid, grid^2) %*% L$coef, col = 2)
+{% endhighlight %}
 
 {:.center}
 ![plot of chunk unnamed-chunk-8](/static/2013-01-14-single-stock-circuit-breakers/unnamed-chunk-8.png) 
 
-    summary(L)
+{% highlight r %}
+summary(L)
 
 
-    ## 
-    ## Call:
-    ## lm(formula = v ~ cap.mat)
-    ## 
-    ## Residuals:
-    ##     Min      1Q  Median      3Q     Max 
-    ## -1.9557 -0.3881  0.0222  0.4344  1.8034 
-    ## 
-    ## Coefficients:
-    ##                Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)    28.68558    2.45335    11.7   <2e-16 ***
-    ## cap.matcap.log -2.51283    0.22010   -11.4   <2e-16 ***
-    ## cap.mat         0.05031    0.00492    10.2   <2e-16 ***
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
-    ## 
-    ## Residual standard error: 0.612 on 1687 degrees of freedom
-    ## Multiple R-squared: 0.319,	Adjusted R-squared: 0.319 
-    ## F-statistic:  396 on 2 and 1687 DF,  p-value: <2e-16
-
+## 
+## Call:
+## lm(formula = v ~ cap.mat)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -1.9557 -0.3881  0.0222  0.4344  1.8034 
+## 
+## Coefficients:
+##                Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)    28.68558    2.45335    11.7   <2e-16 ***
+## cap.matcap.log -2.51283    0.22010   -11.4   <2e-16 ***
+## cap.mat         0.05031    0.00492    10.2   <2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+## 
+## Residual standard error: 0.612 on 1687 degrees of freedom
+## Multiple R-squared: 0.319,	Adjusted R-squared: 0.319 
+## F-statistic:  396 on 2 and 1687 DF,  p-value: <2e-16
+{% endhighlight %}
 
 
 Plotting the residuals, we see that no clear pattern remains. Therefore, I am satisfied that we have controlled for market cap.
 
-
-    plot(cap.log, L$res, main = "2010", xlab = "Log of Market Cap",
-         ylab = paste("Residuals @ t =", t[i]))
-
+{% highlight r %}
+plot(cap.log, L$res, main = "2010", xlab = "Log of Market Cap",
+     ylab = paste("Residuals @ t =", t[i]))
+{% endhighlight %}
 
 {:.center}
 ![plot of chunk unnamed-chunk-9](/static/2013-01-14-single-stock-circuit-breakers/unnamed-chunk-9.png) 
@@ -204,119 +205,122 @@ Plotting the residuals, we see that no clear pattern remains. Therefore, I am sa
 
 In fact, the plots look basically the same for each column: there is always a curved negative relationship. A quadratic fit works well in every case. Therefore, I will use a quadratic fit to control each column for market cap.
 
-
-    for (i in 1:m) {
-        L <- lm(smooth[, i] ~ cap.mat)
-        smooth[, i] <- L$res + mean(smooth[, i])
-    }
-
+{% highlight r %}
+for (i in 1:m) {
+    L <- lm(smooth[, i] ~ cap.mat)
+    smooth[, i] <- L$res + mean(smooth[, i])
+}
+{% endhighlight %}
 
 
 #### Trading Frequency
 
 Next, we will consider the effect of trading frequency on the columns. We must first remove the relationship between trading frequency and market cap.
 
-
-    act <- read.csv("activity.csv", row.names = 1)
-    act.logmean <- log(apply(act[, 1:18], 1, mean))
-    plot(cap.log, act.logmean, xlab = "Log of Market Cap",
-         ylab = "Log of Avg of Number of Seconds in which Trades Occurred")
-    L <- lm(act.logmean ~ cap.mat)
-    lines(grid, cbind(1, grid, grid^2) %*% L$coef, col = 2)
-
+{% highlight r %}
+act <- read.csv("activity.csv", row.names = 1)
+act.logmean <- log(apply(act[, 1:18], 1, mean))
+plot(cap.log, act.logmean, xlab = "Log of Market Cap",
+     ylab = "Log of Avg of Number of Seconds in which Trades Occurred")
+L <- lm(act.logmean ~ cap.mat)
+lines(grid, cbind(1, grid, grid^2) %*% L$coef, col = 2)
+{% endhighlight %}
 
 {:.center}
 ![plot of chunk unnamed-chunk-11](/static/2013-01-14-single-stock-circuit-breakers/unnamed-chunk-11.png) 
 
-    summary(L)
+{% highlight r %}
+summary(L)
 
 
-    ## 
-    ## Call:
-    ## lm(formula = act.logmean ~ cap.mat)
-    ## 
-    ## Residuals:
-    ##     Min      1Q  Median      3Q     Max 
-    ## -2.2393 -0.3559  0.0556  0.3847  1.7676 
-    ## 
-    ## Coefficients:
-    ##                Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)    -11.1332     2.1404   -5.20  2.2e-07 ***
-    ## cap.matcap.log   1.4155     0.1920    7.37  2.6e-13 ***
-    ## cap.mat         -0.0247     0.0043   -5.76  1.0e-08 ***
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
-    ## 
-    ## Residual standard error: 0.534 on 1687 degrees of freedom
-    ## Multiple R-squared: 0.429,	Adjusted R-squared: 0.429 
-    ## F-statistic:  635 on 2 and 1687 DF,  p-value: <2e-16
-
+## 
+## Call:
+## lm(formula = act.logmean ~ cap.mat)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -2.2393 -0.3559  0.0556  0.3847  1.7676 
+## 
+## Coefficients:
+##                Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)    -11.1332     2.1404   -5.20  2.2e-07 ***
+## cap.matcap.log   1.4155     0.1920    7.37  2.6e-13 ***
+## cap.mat         -0.0247     0.0043   -5.76  1.0e-08 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+## 
+## Residual standard error: 0.534 on 1687 degrees of freedom
+## Multiple R-squared: 0.429,	Adjusted R-squared: 0.429 
+## F-statistic:  635 on 2 and 1687 DF,  p-value: <2e-16
+{% endhighlight %}
 
 
 The quadtratic fit seems good enough, so I will use it to control.
 
-
-    plot(cap.log, L$res, main = "2010", xlab = "Log of Market Cap",
-         ylab = "Residuals of Log of Avg Number of Seconds in which Trades Occurred")
-
+{% highlight r %}
+plot(cap.log, L$res, main = "2010", xlab = "Log of Market Cap",
+     ylab = "Residuals of Log of Avg Number of Seconds in which Trades Occurred")
+{% endhighlight %}
 
 {:.center}
 ![plot of chunk unnamed-chunk-12](/static/2013-01-14-single-stock-circuit-breakers/unnamed-chunk-12.png) 
 
-    act.logmean <- L$res + mean(act.logmean)
-
+{% highlight r %}
+act.logmean <- L$res + mean(act.logmean)
+{% endhighlight %}
 
 
 Now, I can look for a relationship between the columns and the trading frequency. Let's look at a random column.
 
+{% highlight r %}
+set.seed(2)
+i <- runif(1, 1, m)
+v <- smooth[, i]
 
-    set.seed(2)
-    i <- runif(1, 1, m)
-    v <- smooth[, i]
-    
-    plot(act.logmean, v, main = "2010",
-         xlab = "Log of Avg Number of Seconds in which Trades Occurred (MC Removed)", 
-         ylab = paste("Smoothed Log of Squared Volatilities @ t =", t[i], "(MC Removed)"))
-    act.mat <- cbind(act.logmean, act.logmean^2)
-    L <- lm(v ~ act.mat)
-    grid <- seq(6.5, 9, by = 0.1)
-    lines(grid, cbind(1, grid, grid^2) %*% L$coef, col = 2)
-
+plot(act.logmean, v, main = "2010",
+     xlab = "Log of Avg Number of Seconds in which Trades Occurred (MC Removed)", 
+     ylab = paste("Smoothed Log of Squared Volatilities @ t =", t[i], "(MC Removed)"))
+act.mat <- cbind(act.logmean, act.logmean^2)
+L <- lm(v ~ act.mat)
+grid <- seq(6.5, 9, by = 0.1)
+lines(grid, cbind(1, grid, grid^2) %*% L$coef, col = 2)
+{% endhighlight %}
 
 {:.center}
 ![plot of chunk unnamed-chunk-13](/static/2013-01-14-single-stock-circuit-breakers/unnamed-chunk-13.png) 
 
-    summary(L)
+{% highlight r %}
+summary(L)
 
 
-    ## 
-    ## Call:
-    ## lm(formula = v ~ act.mat)
-    ## 
-    ## Residuals:
-    ##     Min      1Q  Median      3Q     Max 
-    ## -2.1245 -0.3270  0.0433  0.3702  2.0216 
-    ## 
-    ## Coefficients:
-    ##                    Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)          12.667      1.913    6.62  4.7e-11 ***
-    ## act.matact.logmean   -4.213      0.488   -8.64  < 2e-16 ***
-    ## act.mat               0.297      0.031    9.56  < 2e-16 ***
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
-    ## 
-    ## Residual standard error: 0.544 on 1687 degrees of freedom
-    ## Multiple R-squared: 0.197,	Adjusted R-squared: 0.196 
-    ## F-statistic:  207 on 2 and 1687 DF,  p-value: <2e-16
-
+## 
+## Call:
+## lm(formula = v ~ act.mat)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -2.1245 -0.3270  0.0433  0.3702  2.0216 
+## 
+## Coefficients:
+##                    Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)          12.667      1.913    6.62  4.7e-11 ***
+## act.matact.logmean   -4.213      0.488   -8.64  < 2e-16 ***
+## act.mat               0.297      0.031    9.56  < 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+## 
+## Residual standard error: 0.544 on 1687 degrees of freedom
+## Multiple R-squared: 0.197,	Adjusted R-squared: 0.196 
+## F-statistic:  207 on 2 and 1687 DF,  p-value: <2e-16
+{% endhighlight %}
 
 
 A quadratic fit works well.
 
-
-    plot(act.logmean, L$res, main = "2010", xlab = "Log of Market Cap",
-         ylab = paste("Residuals @ t =", t[i]))
-
+{% highlight r %}
+plot(act.logmean, L$res, main = "2010", xlab = "Log of Market Cap",
+     ylab = paste("Residuals @ t =", t[i]))
+{% endhighlight %}
 
 {:.center}
 ![plot of chunk unnamed-chunk-14](/static/2013-01-14-single-stock-circuit-breakers/unnamed-chunk-14.png) 
@@ -324,64 +328,64 @@ A quadratic fit works well.
 
 Again, all of the columns give very similar plots.
 
-
-    for (i in 1:m) {
-        L <- lm(smooth[, i] ~ act.mat)
-        smooth[, i] <- L$res + mean(smooth[, i])
-    }
-
+{% highlight r %}
+for (i in 1:m) {
+    L <- lm(smooth[, i] ~ act.mat)
+    smooth[, i] <- L$res + mean(smooth[, i])
+}
+{% endhighlight %}
 
 
 Now, we need to repeat the smoothing and controlling process for the 2011 volatility data. The same steps work well in the 2011 case, too. I wrote a function to go through these steps for each year without making any plots.
 
+{% highlight r %}
+control <- function(y, x) {
+    L <- lm(y ~ x)
+    return(L$res + mean(y))
+}
 
-    control <- function(y, x) {
-        L <- lm(y ~ x)
-        return(L$res + mean(y))
+VolProfile <- function(vfile, cap, act) {
+    vols <- log(read.csv(vfile, row.names = 1))
+    stocks <- rownames(vols)
+    n <- nrow(vols)
+    m <- ncol(vols)
+    
+    # Smooth profiles
+    t <- 2.5 + 5 * (0:77)
+    t.mat <- cbind(t, t^2, t^3, t^4, t^5)
+    smooth <- matrix(NA, n, m, dimnames = list(stocks, t))
+    for (i in 1:n) {
+        L <- lm(unlist(vols[i, ]) ~ t.mat)
+        smooth[i, ] <- L$fit
     }
     
-    VolProfile <- function(vfile, cap, act) {
-        vols <- log(read.csv(vfile, row.names = 1))
-        stocks <- rownames(vols)
-        n <- nrow(vols)
-        m <- ncol(vols)
-        
-        # Smooth profiles
-        t <- 2.5 + 5 * (0:77)
-        t.mat <- cbind(t, t^2, t^3, t^4, t^5)
-        smooth <- matrix(NA, n, m, dimnames = list(stocks, t))
-        for (i in 1:n) {
-            L <- lm(unlist(vols[i, ]) ~ t.mat)
-            smooth[i, ] <- L$fit
-        }
-        
-        # Control Columns for Market Cap
-        cap.log <- log(cap)
-        cap.mat <- cbind(cap.log, cap.log^2)
-        for (i in 1:m) {
-            smooth[, i] <- control(smooth[, i], cap.mat)
-        }
-        
-        # Control Trading Frequency for Market Cap
-        act.logmean <- log(apply(act, 1, mean))
-        act.logmean <- control(act.logmean, cap.mat)
-        
-        # Control Columns for Trading Frequency
-        act.mat <- cbind(act.logmean, act.logmean^2)
-        for (i in 1:m) {
-            smooth[, i] <- control(smooth[, i], act.mat)
-        }
-        
-        return(smooth)
+    # Control Columns for Market Cap
+    cap.log <- log(cap)
+    cap.mat <- cbind(cap.log, cap.log^2)
+    for (i in 1:m) {
+        smooth[, i] <- control(smooth[, i], cap.mat)
     }
     
+    # Control Trading Frequency for Market Cap
+    act.logmean <- log(apply(act, 1, mean))
+    act.logmean <- control(act.logmean, cap.mat)
     
-    cap <- read.csv("cap.csv", row.names = 1, check.names = F)
-    act <- read.csv("activity.csv", row.names = 1)
+    # Control Columns for Trading Frequency
+    act.mat <- cbind(act.logmean, act.logmean^2)
+    for (i in 1:m) {
+        smooth[, i] <- control(smooth[, i], act.mat)
+    }
     
-    s2010 <- VolProfile("2010.csv", cap[, 1], act[, 1:18])
-    s2011 <- VolProfile("2011.csv", cap[, 2], act[, 19:68])
+    return(smooth)
+}
 
+
+cap <- read.csv("cap.csv", row.names = 1, check.names = F)
+act <- read.csv("activity.csv", row.names = 1)
+
+s2010 <- VolProfile("2010.csv", cap[, 1], act[, 1:18])
+s2011 <- VolProfile("2011.csv", cap[, 2], act[, 19:68])
+{% endhighlight %}
 
 
 
@@ -389,27 +393,29 @@ Now, we need to repeat the smoothing and controlling process for the 2011 volati
 
 It is still not obvious how we should compare the volatility profiles to each other. Each profile consists of 78 highly correlated values, and they all have a very similar shape to their curves. In other words, 78 values seems like overkill. Is there some simpler representation of each profile that still captures the variation among them? To me, this seems like a perfect chance to make use of [principal component analysis](https://en.wikipedia.org/wiki/Principal_component_analysis) (PCA).
 
+You may note that the data smoothing actually reduced the volatilities profiles to six dimensions. Perhaps I should perform the PCA on those parameter values. My rationale for using the 78 estimated volatility values is that they are all on a comparable scale with each other.
+
 #### Combined Data
 
 First, I will run PCA on all of the data from both years together.
 
-
-    combined <- rbind(s2010, s2011)
-    p <- princomp(combined)
-    vars <- p$sdev^2
-    varprops <- vars/sum(vars)
-    signif(varprops[1:8], 3)
-
-
-    ##   Comp.1   Comp.2   Comp.3   Comp.4   Comp.5   Comp.6   Comp.7   Comp.8 
-    ## 9.33e-01 2.31e-02 1.66e-02 1.29e-02 7.54e-03 6.62e-03 1.80e-16 6.61e-17
+{% highlight r %}
+combined <- rbind(s2010, s2011)
+p <- princomp(combined)
+vars <- p$sdev^2
+varprops <- vars/sum(vars)
+signif(varprops[1:8], 3)
 
 
-    plot(1:8, varprops[1:8], type = "s", main = "Combined Data",
-         xlab = "Number of Principal Components", 
-         ylab = "Proportion of Variability Gained")
-    abline(h = 0, lty = 2, col = 3)
+##   Comp.1   Comp.2   Comp.3   Comp.4   Comp.5   Comp.6   Comp.7   Comp.8 
+## 9.33e-01 2.31e-02 1.66e-02 1.29e-02 7.54e-03 6.62e-03 1.80e-16 6.61e-17
 
+
+plot(1:8, varprops[1:8], type = "s", main = "Combined Data",
+     xlab = "Number of Principal Components", 
+     ylab = "Proportion of Variability Gained")
+abline(h = 0, lty = 2, col = 3)
+{% endhighlight %}
 
 {:.center}
 ![plot of chunk unnamed-chunk-17](/static/2013-01-14-single-stock-circuit-breakers/unnamed-chunk-17.png) 
@@ -419,12 +425,12 @@ Indeed, over ninety three percent of the variability is concentrated in the firs
 
 Let us try to interpret these principal components by visualizing the first and second loadings. It seems that the first principal component is basically measuring the overall level of the volatility curves, emphasizing the middle of the day.
 
-
-    load1 <- p$loading[, 1]
-    t <- 2.5 + 5 * (0:77)
-    plot(t, load1, main = "Combined Data", xlab = "Minutes into Day",
-         ylab = "Weight in First Principal Component")
-
+{% highlight r %}
+load1 <- p$loading[, 1]
+t <- 2.5 + 5 * (0:77)
+plot(t, load1, main = "Combined Data", xlab = "Minutes into Day",
+     ylab = "Weight in First Principal Component")
+{% endhighlight %}
 
 {:.center}
 ![plot of chunk unnamed-chunk-18](/static/2013-01-14-single-stock-circuit-breakers/unnamed-chunk-18.png) 
@@ -432,11 +438,11 @@ Let us try to interpret these principal components by visualizing the first and 
 
 The second principal component acts as a measure of the difference between late and early volatility.
 
-
-    load2 <- p$loading[, 2]
-    plot(t, load2, main = "Combined Data", xlab = "Minutes into Day",
-         ylab = "Weight in Second Principal Component")
-
+{% highlight r %}
+load2 <- p$loading[, 2]
+plot(t, load2, main = "Combined Data", xlab = "Minutes into Day",
+     ylab = "Weight in Second Principal Component")
+{% endhighlight %}
 
 {:.center}
 ![plot of chunk unnamed-chunk-19](/static/2013-01-14-single-stock-circuit-breakers/unnamed-chunk-19.png) 
@@ -444,40 +450,40 @@ The second principal component acts as a measure of the difference between late 
 
 Below is a plot of the "landscape" of these two components, colored by group and year. Blue corresponds to non-SSCB, and red corresponds to SSCB. The lighter colored points are from 2010, while the darker ones are from 2011. The four means are also plotted in the appropriate colors.
 
+{% highlight r %}
+pc1 <- t(load1 %*% (t(combined) - p$center)) + sum(p$center * load1)
+pc2 <- t(load2 %*% (t(combined) - p$center)) + sum(p$center * load2)
 
-    pc1 <- t(load1 %*% (t(combined) - p$center)) + sum(p$center * load1)
-    pc2 <- t(load2 %*% (t(combined) - p$center)) + sum(p$center * load2)
-    
-    SSCBstocks <- readLines("RussellOrSP.txt")
-    stocks <- rownames(combined)
-    sscb <- stocks %in% SSCBstocks
-    group <- rep(sscb, 2)
-    year <- rep(c(1, 2), each = length(stocks))
-    cols <- sapply(year + 2 * group, function(x)
-                   switch(x, "cyan3", "blue", "pink2", "red"))
-    plot(pc1, pc2, pch = ".", col = cols, cex = 1.2, main = "Combined Data",
-         xlab = "First Principal Component", ylab = "Second Principal Component")
-    
-    # Plot means
-    pc1.2010 <- pc1[1:length(stocks), ]
-    pc2.2010 <- pc2[1:length(stocks), ]
-    pc1.2011 <- pc1[-(1:length(stocks)), ]
-    pc2.2011 <- pc2[-(1:length(stocks)), ]
-    
-    m1n0 <- mean(pc1.2010[!sscb])
-    m2n0 <- mean(pc2.2010[!sscb])
-    m1n1 <- mean(pc1.2011[!sscb])
-    m2n1 <- mean(pc2.2011[!sscb])
-    m1s0 <- mean(pc1.2010[sscb])
-    m2s0 <- mean(pc2.2010[sscb])
-    m1s1 <- mean(pc1.2011[sscb])
-    m2s1 <- mean(pc2.2011[sscb])
-    
-    text(m1n0, m2n0, "N0", col = "cyan3")
-    text(m1n1, m2n1, "N1", col = "blue")
-    text(m1s0, m2s0, "S0", col = "pink2")
-    text(m1s1, m2s1, "S1", col = "red")
+SSCBstocks <- readLines("RussellOrSP.txt")
+stocks <- rownames(combined)
+sscb <- stocks %in% SSCBstocks
+group <- rep(sscb, 2)
+year <- rep(c(1, 2), each = length(stocks))
+cols <- sapply(year + 2 * group, function(x)
+               switch(x, "cyan3", "blue", "pink2", "red"))
+plot(pc1, pc2, pch = ".", col = cols, cex = 1.2, main = "Combined Data",
+     xlab = "First Principal Component", ylab = "Second Principal Component")
 
+# Plot means
+pc1.2010 <- pc1[1:length(stocks), ]
+pc2.2010 <- pc2[1:length(stocks), ]
+pc1.2011 <- pc1[-(1:length(stocks)), ]
+pc2.2011 <- pc2[-(1:length(stocks)), ]
+
+m1n0 <- mean(pc1.2010[!sscb])
+m2n0 <- mean(pc2.2010[!sscb])
+m1n1 <- mean(pc1.2011[!sscb])
+m2n1 <- mean(pc2.2011[!sscb])
+m1s0 <- mean(pc1.2010[sscb])
+m2s0 <- mean(pc2.2010[sscb])
+m1s1 <- mean(pc1.2011[sscb])
+m2s1 <- mean(pc2.2011[sscb])
+
+text(m1n0, m2n0, "N0", col = "cyan3")
+text(m1n1, m2n1, "N1", col = "blue")
+text(m1s0, m2s0, "S0", col = "pink2")
+text(m1s1, m2s1, "S1", col = "red")
+{% endhighlight %}
 
 {:.center}
 ![plot of chunk unnamed-chunk-20](/static/2013-01-14-single-stock-circuit-breakers/unnamed-chunk-20.png) 
@@ -485,27 +491,27 @@ Below is a plot of the "landscape" of these two components, colored by group and
 
 Let us zoom in and just look at concentration ellipses to get a general idea the shapes and locations of the four groups.
 
+{% highlight r %}
+plot(c(14, 22), c(-3.5, -2.5), type = "n", main = "Combined Data", xlab = "First Principal Component", 
+    ylab = "Second Principal Component")
 
-    plot(c(14, 22), c(-3.5, -2.5), type = "n", main = "Combined Data", xlab = "First Principal Component", 
-        ylab = "Second Principal Component")
-    
-    text(m1n0, m2n0, "N0", col = "cyan3")
-    text(m1n1, m2n1, "N1", col = "blue")
-    text(m1s0, m2s0, "S0", col = "pink2")
-    text(m1s1, m2s1, "S1", col = "red")
-    
-    library(ellipse)
-    
-    Cn0 <- cov(cbind(pc1.2010[!sscb], pc2.2010[!sscb]))
-    Cn1 <- cov(cbind(pc1.2011[!sscb], pc2.2011[!sscb]))
-    Cs0 <- cov(cbind(pc1.2010[sscb], pc2.2010[sscb]))
-    Cs1 <- cov(cbind(pc1.2011[sscb], pc2.2011[sscb]))
-    
-    lines(ellipse(Cn0, centre = c(m1n0, m2n0), level = 0.05), col = "cyan3")
-    lines(ellipse(Cn1, centre = c(m1n1, m2n1), level = 0.05), col = "blue")
-    lines(ellipse(Cs0, centre = c(m1s0, m2s0), level = 0.05), col = "pink2")
-    lines(ellipse(Cs1, centre = c(m1s1, m2s1), level = 0.05), col = "red")
+text(m1n0, m2n0, "N0", col = "cyan3")
+text(m1n1, m2n1, "N1", col = "blue")
+text(m1s0, m2s0, "S0", col = "pink2")
+text(m1s1, m2s1, "S1", col = "red")
 
+library(ellipse)
+
+Cn0 <- cov(cbind(pc1.2010[!sscb], pc2.2010[!sscb]))
+Cn1 <- cov(cbind(pc1.2011[!sscb], pc2.2011[!sscb]))
+Cs0 <- cov(cbind(pc1.2010[sscb], pc2.2010[sscb]))
+Cs1 <- cov(cbind(pc1.2011[sscb], pc2.2011[sscb]))
+
+lines(ellipse(Cn0, centre = c(m1n0, m2n0), level = 0.05), col = "cyan3")
+lines(ellipse(Cn1, centre = c(m1n1, m2n1), level = 0.05), col = "blue")
+lines(ellipse(Cs0, centre = c(m1s0, m2s0), level = 0.05), col = "pink2")
+lines(ellipse(Cs1, centre = c(m1s1, m2s1), level = 0.05), col = "red")
+{% endhighlight %}
 
 {:.center}
 ![plot of chunk unnamed-chunk-21](/static/2013-01-14-single-stock-circuit-breakers/unnamed-chunk-21.png) 
@@ -519,35 +525,35 @@ One other notable observation is that volatility profiles in general are shiftin
 
 One more look at the data is worth pursuing. Let's repeat the PCA on the differences (2011 values minus 2010 values).
 
+{% highlight r %}
+changes <- s2011 - s2010
 
-    changes <- s2011 - s2010
-    
-    p <- princomp(changes)
-    vars <- p$sdev^2
-    varprops <- vars/sum(vars)
-    signif(varprops[1:8], 3)
+p <- princomp(changes)
+vars <- p$sdev^2
+varprops <- vars/sum(vars)
+signif(varprops[1:8], 3)
 
 
-    ##   Comp.1   Comp.2   Comp.3   Comp.4   Comp.5   Comp.6   Comp.7   Comp.8 
-    ## 8.29e-01 5.31e-02 3.60e-02 3.30e-02 2.53e-02 2.32e-02 1.04e-16 3.97e-17
-
+##   Comp.1   Comp.2   Comp.3   Comp.4   Comp.5   Comp.6   Comp.7   Comp.8 
+## 8.29e-01 5.31e-02 3.60e-02 3.30e-02 2.53e-02 2.32e-02 1.04e-16 3.97e-17
+{% endhighlight %}
 
 
 This time, the first two principal components together comprise nearly ninety percent of the variability.
 
+{% highlight r %}
+load1 <- p$loading[, 1]
+load2 <- p$loading[, 2]
+pc1 <- t(load1 %*% (t(changes) - p$center)) + sum(p$center * load1)
+pc2 <- t(load2 %*% (t(changes) - p$center)) + sum(p$center * load2)
 
-    load1 <- p$loading[, 1]
-    load2 <- p$loading[, 2]
-    pc1 <- t(load1 %*% (t(changes) - p$center)) + sum(p$center * load1)
-    pc2 <- t(load2 %*% (t(changes) - p$center)) + sum(p$center * load2)
-    
-    cols <- 2 + 2 * sscb
-    plot(pc1, pc2, pch = ".", col = cols, cex = 1.2, main = "Changes",
-         xlab = "First Principal Component", ylab = "Second Principal Component")
-    
-    points(mean(pc1[!sscb]), mean(pc2[!sscb]), col = 2, pch = "N")
-    points(mean(pc1[sscb]), mean(pc2[sscb]), col = 4, pch = "S")
+cols <- 2 + 2 * sscb
+plot(pc1, pc2, pch = ".", col = cols, cex = 1.2, main = "Changes",
+     xlab = "First Principal Component", ylab = "Second Principal Component")
 
+points(mean(pc1[!sscb]), mean(pc2[!sscb]), col = 2, pch = "N")
+points(mean(pc1[sscb]), mean(pc2[sscb]), col = 4, pch = "S")
+{% endhighlight %}
 
 {:.center}
 ![plot of chunk unnamed-chunk-23](/static/2013-01-14-single-stock-circuit-breakers/unnamed-chunk-23.png) 
@@ -557,15 +563,16 @@ Again, the picture shows no evidence that the SSCB rules have changed the affect
 
 For each component, a t-test fails to detect a significant difference between groups at the .05 level.
 
-
-    t.test(pc1[sscb], pc1[!sscb])$p.val
-
-
-    ## [1] 0.06916
+{% highlight r %}
+t.test(pc1[sscb], pc1[!sscb])$p.val
 
 
-    t.test(pc2[sscb], pc2[!sscb])$p.val
+## [1] 0.06916
 
 
-    ## [1] 0.8499
+t.test(pc2[sscb], pc2[!sscb])$p.val
+
+
+## [1] 0.8499
+{% endhighlight %}
 

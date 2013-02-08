@@ -64,23 +64,23 @@ as shown in *Essentials of Statistical Inference* by Young and Smith. Holding $\
 
 So in fact, $R(\theta)$ only depends on $\theta\_1^2$. Let us define $B(\theta\_1^2) := \E (1/\Vert X \Vert^2)$. For any given $\theta\_1^2$, we can solve it numerically by integrating over the appropriate noncentral chi-squared density. Let us plot this risk function against $\theta\_1^2$.
 
-
-    B <- function(t) {
-        # Note: This integral can be solved analytically
-        fun <- function(x) {
-            dchisq(x, df = 3, ncp = t)/x
-        }
-        return(integrate(fun, 0, Inf)$value)
+{% highlight r %}
+B <- function(t) {
+    # Note: This integral can be solved analytically
+    fun <- function(x) {
+        dchisq(x, df = 3, ncp = t)/x
     }
-    
-    grid <- seq(0, 25, by = 0.25)
-    b <- sapply(grid, B)
-    R <- 3 - b
-    plot(c(0, 25), c(2, 3), type = "n", ylab = "Risk",
-         xlab = expression(theta[1]^2))
-    abline(h = 3, lty = 2, col = 3)
-    lines(grid, R)
+    return(integrate(fun, 0, Inf)$value)
+}
 
+grid <- seq(0, 25, by = 0.25)
+b <- sapply(grid, B)
+R <- 3 - b
+plot(c(0, 25), c(2, 3), type = "n", ylab = "Risk",
+     xlab = expression(theta[1]^2))
+abline(h = 3, lty = 2, col = 3)
+lines(grid, R)
+{% endhighlight %}
 
 {:.center}
 ![plot of chunk unnamed-chunk-1](/static/2013-01-20-resolving-steins-paradox/unnamed-chunk-1.png) 
@@ -119,22 +119,22 @@ A similar argument gives us $C\_2$. The difference is that we want to find the e
 
 Let's look at a plot of the first component risk.
 
+{% highlight r %}
+C1 <- function(t) {
+    # Note: Order of integration is important here
+    # to avoid computational problems
+    inner <- function(v, w)
+      dchisq(v, df = 1, ncp = t) * dchisq(w, df = 2) * v/(v + w)^2
+    outer <- function(w) sapply(w, function(w) integrate(inner, w = w, 0, Inf)$value)
+    return(integrate(outer, 0, Inf)$value)
+}
 
-    C1 <- function(t) {
-        # Note: Order of integration is important here
-        # to avoid computational problems
-        inner <- function(v, w)
-          dchisq(v, df = 1, ncp = t) * dchisq(w, df = 2) * v/(v + w)^2
-        outer <- function(w) sapply(w, function(w) integrate(inner, w = w, 0, Inf)$value)
-        return(integrate(outer, 0, Inf)$value)
-    }
-    
-    R1 <- 1 - 2 * b + 5 * sapply(grid, C1)
-    plot(c(0, 25), c(0.6, 1.3), type = "n", ylab = "Risk 1",
-         xlab = expression(theta[1]^2))
-    abline(h = 1, lty = 2, col = 2)
-    lines(grid, R1)
-
+R1 <- 1 - 2 * b + 5 * sapply(grid, C1)
+plot(c(0, 25), c(0.6, 1.3), type = "n", ylab = "Risk 1",
+     xlab = expression(theta[1]^2))
+abline(h = 1, lty = 2, col = 2)
+lines(grid, R1)
+{% endhighlight %}
 
 {:.center}
 ![plot of chunk unnamed-chunk-2](/static/2013-01-20-resolving-steins-paradox/unnamed-chunk-2.png) 
@@ -144,20 +144,20 @@ If $\theta_1$ is close enough to zero, then your risk decreases. Otherwise, you 
 
 The only reason the overall risk is less than 3 everywhere is that the other two components' risks are far enough below 1 to make up for the additional risk in the first component.
 
+{% highlight r %}
+C2 <- function(t) {
+    inner <- function(w, v)
+      dchisq(v, df = 2, ncp = t) * dchisq(w, df = 1) * w/(v + w)^2
+    outer <- function(v) sapply(v, function(v) integrate(inner, v = v, 0, Inf)$value)
+    return(integrate(outer, 0, Inf)$value)
+}
 
-    C2 <- function(t) {
-        inner <- function(w, v)
-          dchisq(v, df = 2, ncp = t) * dchisq(w, df = 1) * w/(v + w)^2
-        outer <- function(v) sapply(v, function(v) integrate(inner, v = v, 0, Inf)$value)
-        return(integrate(outer, 0, Inf)$value)
-    }
-    
-    R2 <- 1 - 2 * b + 5 * sapply(grid, C2)
-    plot(c(0, 25), c(0.6, 1), type = "n", ylab = "Risk 2",
-         xlab = expression(theta[1]^2))
-    abline(h = 1, lty = 2, col = 2)
-    lines(grid, R2)
-
+R2 <- 1 - 2 * b + 5 * sapply(grid, C2)
+plot(c(0, 25), c(0.6, 1), type = "n", ylab = "Risk 2",
+     xlab = expression(theta[1]^2))
+abline(h = 1, lty = 2, col = 2)
+lines(grid, R2)
+{% endhighlight %}
 
 {:.center}
 ![plot of chunk unnamed-chunk-3](/static/2013-01-20-resolving-steins-paradox/unnamed-chunk-3.png) 
@@ -177,21 +177,21 @@ As a final exercise, I want to consider the behavior of the risk functions along
 
 To compute the risk of the first component, we revisit the original formulation of $V$ and $W$, with the exception that $W$ now has noncentrality parameter $2 \theta_1^2$.
 
+{% highlight r %}
+C <- function(t) {
+    inner <- function(w, v)
+      dchisq(v, df = 2, ncp = 2 * t) * dchisq(w, df = 1, ncp = t) * w/(v + w)^2
+    outer <- function(v) sapply(v, function(v) integrate(inner, v = v, 0, Inf)$value)
+    return(integrate(outer, 0, Inf)$value)
+}
 
-    C <- function(t) {
-        inner <- function(w, v)
-          dchisq(v, df = 2, ncp = 2 * t) * dchisq(w, df = 1, ncp = t) * w/(v + w)^2
-        outer <- function(v) sapply(v, function(v) integrate(inner, v = v, 0, Inf)$value)
-        return(integrate(outer, 0, Inf)$value)
-    }
-    
-    b3 <- sapply(3 * grid, B)
-    R1 <- 1 - 2 * b3 + 5 * sapply(grid, C)
-    plot(c(0, 25), c(0.6, 1), type = "n", ylab = "Risk 1",
-         xlab = expression(theta[1]^2))
-    abline(h = 1, lty = 2, col = 2)
-    lines(grid, R1)
-
+b3 <- sapply(3 * grid, B)
+R1 <- 1 - 2 * b3 + 5 * sapply(grid, C)
+plot(c(0, 25), c(0.6, 1), type = "n", ylab = "Risk 1",
+     xlab = expression(theta[1]^2))
+abline(h = 1, lty = 2, col = 2)
+lines(grid, R1)
+{% endhighlight %}
 
 {:.center}
 ![plot of chunk unnamed-chunk-4](/static/2013-01-20-resolving-steins-paradox/unnamed-chunk-4.png) 
