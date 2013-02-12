@@ -8,7 +8,7 @@ tags: [math]
 
 <div style='visibility: hidden; height: 0;'>$\newcommand{\E}{\mathbb{E}}$</div>
 
-When estimating the variance of a sequence $X\_1, \ldots, X\_n$ of i.i.d. $N(\mu, \sigma^2)$ random variables, a common procedure is to use the unbiased estimator $S^2 := \frac{V}{n-1}$, where $V := \sum(X_i - \bar{X})^2$. Note that $V/\sigma^2$ is [distributed](http://en.wikipedia.org/wiki/Chi-squared_distribution#Applications) $\chi^2_{n-1}$, and that its expectation is $n-1$. Therefore, letting $k := n-1$ be the degrees of freedom,
+When estimating the variance of a sequence $X\_1, \ldots, X\_n$ of i.i.d. $N(\mu, \sigma^2)$ random variables, a common procedure is to use the unbiased estimator $S^2 := \frac{V}{n-1}$, where $V := \sum(X_i - \bar{X})^2$. Note that $V/\sigma^2$ is [distributed](http://en.wikipedia.org/wiki/Chi-squared_distribution#Applications) $\chi^2_{n-1}$ and that its expectation is $n-1$. Therefore, letting $k := n-1$ be the degrees of freedom,
 
 
 <div>\begin{align*}
