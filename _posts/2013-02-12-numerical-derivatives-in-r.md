@@ -34,6 +34,7 @@ g <- function(x) {
     return(x^4/4)
 }
 
+par(mfrow = c(2, 2))
 grid <- seq(-2, 2, by = 0.01)
 for (i in 1:4) {
     plot(grid, sapply(grid, derivative, f = g, order = i), type = "l", xlab = "x", 

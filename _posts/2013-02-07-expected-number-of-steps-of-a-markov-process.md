@@ -9,7 +9,17 @@ tags: [math]
 <div style='visibility: hidden; height: 0;'>$\newcommand{\E}{\mathbb{E}}\newcommand{\I}{\mathbb{I}}\renewcommand{\P}{\mathbb{P}}$</div>
 
 
-This question comes from an old qualifying exam:
+If we want to find the expected number of steps until "completion" of a Markov process, often we can use conditioning to get a sufficient system of equations. Each state provides one equation. Let $T\_{S\_i}$ be a random variable corresponding to the number of steps required to reach completion, starting from state $S\_i$. Finally, let $p\_{i,j}$ be the transition probability from $S\_i$ to $S\_j$.
+
+<div>\begin{align*}
+\E [ T_{S_i} ] &= \sum_j p_{i,j} \E [ T_{S_i} \vert \text{next state is } S_j]\\
+ &= \sum_j p_{i,j} \E [ 1 + T_{S_j} \vert \text{next state is } S_j]\\
+ &= 1 + \sum_j p_{i,j} \E [ T_{S_j} ]
+\end{align*}</div>
+
+## Example
+
+Here's an example of this technique. This question comes from an old qualifying exam:
 
 > Hidden inside each box of Primate brand breakfast cereal is a small plastic figure of an animal: an ape, a baboon, or a chimp. Suppose a fraction $\alpha$ of the very large population of cereal boxes contain apes, a fraction $\beta$ contain baboons, and a fraction $\gamma$ contain chimps. Find the expected number of boxes you need to buy before you have at least one figure of each type.
 
