@@ -6,10 +6,6 @@ tags: [r]
 ---
 {% include JB/setup %}
 
-
-
-
-
 Assume I have an data set of $n$ cases of $p$ predictor variables and one response variable. The relationships between the predictors and the response are all approximately linear. In the future, I will get new cases of the predictor variables, and I hope to predict their corresponing response variables as accurately as possible. I'd like to consider three popular types of prediction methods: subset selection, ridge regression, and lasso regression. Which one is likely to give me the best predictions of my future data?
 
 One intuitive approach involves splitting my original data randomly into training and test groups, and seeing how well the methods predict the test data from the training data.
@@ -21,7 +17,7 @@ One intuitive approach involves splitting my original data randomly into trainin
 
 To choose a "best" prediction method, we need to decide what exactly we want to optimize. Let's assume that we want to minimize mean squared prediction error (MSPE).
 
-I wrote a function `compareMSPE` to perform a sensible MSPE estimation process for any given set of linear prediction methods.
+I wrote a function `compareMSPE` to perform a sensible MSPE estimation process for any given set of prediction methods.
 
 By default, `compareMSPE` compares subset selection, ridge regression, and lasso regression. To use `compareMSPE` for other methods, you will probably need to write your own helper functions, following the examples of `best.subset`, `best.ridge`, and `best.lasso`.
 
@@ -149,29 +145,21 @@ compareMSPE <- function(formula, data, methods = c(best.subset, best.ridge,
 Finally, let's run `compareMSPE` on a data set to see which method performs best.
 
 
-
-
-
 {% highlight r %}
 library(MASS)  # required for best.ridge
 library(lars)  # required for best.lasso
 library(foreach)  # required for compareMSPE
-{% endhighlight %}
 
 
-
-{% highlight r %}
 results <- compareMSPE(Assault ~ ., USArrests)
-{% endhighlight %}
 
-{% endhighlight %}
+
 ## best.subset  best.ridge  best.lasso 
 ##       12930        2523        2532
 {% endhighlight %}
 
 
 Let's look at boxplots to get a feel for the distributions of the prediction errors for the various methods that were tried.
-
 
 {% highlight r %}
 par(mfrow = c(1, 2))
@@ -181,7 +169,7 @@ boxplot(results[, 2:3], main = "Avg Squared Prediction Errors")
 {% endhighlight %}
 
 {:.center}
-![plot of chunk unnamed-chunk-6](/static/2013-02-15-comparing-prediction-methods/unnamed-chunk-6.png) 
+![plot of chunk unnamed-chunk-6](/static/2013-02-16-comparing-prediction-methods/unnamed-chunk-6.png) 
 
 
 For this data, ridge and lasso regression appear to be about equally good at predicting assault, and they are both much better than subset selection.
@@ -190,5 +178,3 @@ For this data, ridge and lasso regression appear to be about equally good at pre
 ## Caution
 
 Use this function in moderation! In general, don't use this function or other "all powerful" functions to do all the work for you. The most effective data analysis requires extensive thought and visualization. The more you manually play around with your data, the more likely you are to discover irregularities or to come up with insights. Then again, your time is valuable. Use automation with these trade-offs in mind.
-
-
