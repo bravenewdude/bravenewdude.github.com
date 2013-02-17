@@ -10,7 +10,7 @@ Assume I have an data set of $n$ cases of $p$ predictor variables and one respon
 
 One intuitive approach involves splitting my original data randomly into training and test groups, and seeing how well the methods predict the test data from the training data.
 
-(For information on these and other prediction methods, I recommend *Elements of Statistical Learning* by Hastie, Tibshirani, and Friedman, which is an outstanding textbook. It also discusses estimation of prediction error.)
+(For information on these and other prediction methods, I recommend *Elements of Statistical Learning* by Hastie, Tibshirani, and Friedman, which is an outstanding textbook that can be [downloaded for free](http://www.stanford.edu/~hastie/pub.htm). It also discusses estimation of prediction error.)
 
 
 ## compareMSPE
@@ -23,11 +23,13 @@ By default, `compareMSPE` compares subset selection, ridge regression, and lasso
 
 The default methods (subset, ridge, and lasso) all assume that the relationships between the response and the predictor variables are all approximately linear. The `pairs` function is a convenient way to judge whether this assumption is reasonable or not. In cases where a nonlinear relationship exists, often you can transform variables to get something close to linearity. 
 
-Otherwise, you could code up functions for non-linear prediction methods, such as k-nearest neighbors regression, and pass these functions into `compareMSPE`.
+Otherwise, you could code up functions for non-linear prediction methods, such as [k-nearest neighbors regression](https://en.wikipedia.org/wiki/K-nearest_neighbor_algorithm#For_estimating_continuous_variables), and pass these functions into `compareMSPE`.
 
 The function requires a numerical response variable. The requirements on the predictor variables will depend on the mechanics of the prediction method functions that `compareMSPE` calls. For example, perhaps categorical variables will need to be coded by dummy variables, in some cases.
 
 Below, you will notice several utility functions in the mix as well. The only one that `compareMSPE` really requires is `which.response`. However, its default prediction methods require the others. If you supply your own prediction methods, you will not need some of these other utility functions.
+
+Also, note that `best.ridge` requires `DFtoLambda`, which [can be found on an earlier post](/machine learning/2013/02/15/ridge-regression-degrees-of-freedom#DFtoLambda).
 
 
 {% highlight r %}
@@ -91,7 +93,9 @@ best.subset <- function(formula, data, new = NA) {
 best.ridge <- function(formula, data, new = NA) {
     # Returns coefficients of the best ridge regression, as determined by
     # 10-fold cross validation.
-    cvridge <- crossval(formula, data, method = ridge.predict, lam = 0:200)
+    r <- which.response(formula, data)
+    lam <- DFtoLambda(data[, -r])
+    cvridge <- crossval(formula, data, method = ridge.predict, lam = lam)
     lam <- (0:200)[which.min(cvridge)]
     l <- lm.ridge(formula, data, lam = lam)
     coef <- coef(l)
