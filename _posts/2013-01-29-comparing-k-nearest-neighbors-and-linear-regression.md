@@ -32,7 +32,7 @@ y.test <- X[y2or3, 1] == 3
 {% endhighlight %}
 
 
-Just for fun, let's glance at the first twenty-five scanned digits of the training dataset.
+Just for fun, let's glance at the first twenty-five scanned digits of the training dataset. This can be done with the `image` command, but I used `grid` graphics to have a little more control.
 
 {% highlight r %}
 drawDigit <- function(x) {
@@ -69,7 +69,7 @@ Because we only want to pursue a binary classification, we can use simple linear
 # Classification by linear regression
 L <- lm(y.train ~ X.train)
 yhat <- (cbind(1, X.test) %*% L$coef) >= 0.5
-L.error <- sum(yhat != y.test)/length(y.test)
+L.error <- mean(yhat != y.test)
 {% endhighlight %}
 
 
@@ -82,7 +82,7 @@ k <- c(1, 3, 5, 7, 15)
 k.error <- rep(NA, length(k))
 for (i in 1:length(k)) {
     yhat <- knn(X.train, X.test, y.train, k[i])
-    k.error[i] <- sum(yhat != y.test)/length(y.test)
+    k.error[i] <- mean(yhat != y.test)
 }
 {% endhighlight %}
 

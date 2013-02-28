@@ -32,6 +32,7 @@ Below, you will notice several utility functions in the mix as well. The only on
 Also, note that `best.ridge` requires `DFtoLambda`, which [can be found on an earlier post](/machine learning/2013/02/15/ridge-regression-degrees-of-freedom#DFtoLambda).
 
 
+<a id="crossval"></a>
 {% highlight r %}
 which.response <- function(formula, data) {
     # Determines which column of data is the response variable in the formula
@@ -45,18 +46,10 @@ which.response <- function(formula, data) {
     return(response)
 }
 
-ridge.predict <- function(formula, train, test, lam) {
-    # Predict test response values using a ridge regression fit on the
-    # training data for a range of lambda values.
-    coef <- lm.ridge(formula, train, lam = lam)$coef
-    r <- which.response(formula, train)
-    test.x <- scale(test[, -r])
-    return(mean(train[, r]) + test.x %*% coef)
-}
-
 crossval <- function(formula, data, K = min(10, nrow(data)), method, ...) {
-    # Performs K-fold cross validation to estimate mean squared prediction
-    # error for a range of parameter values
+    # Performs K-fold cross validation for a range of parameter values.
+    # If numerical, returns estimated mean squared prediction error;
+    # if categorical, returns error rates.
     n <- nrow(data)
     # permute rows into a random order
     data <- data[sample(1:n), ]
@@ -70,8 +63,21 @@ crossval <- function(formula, data, K = min(10, nrow(data)), method, ...) {
         # apply prediction method to get estimates
         return(method(formula, train, test, ...))
     }
-    MSPE <- apply(data[, r] - yhat, 2, function(x) mean(x^2))
+    if(is.numeric(data[, r])) {
+        MSPE <- apply(data[, r] - yhat, 2, function(x) mean(x^2))
+    } else {
+        MSPE <- apply(as.numeric(data[, r]) != yhat, 2, mean)
+    }
     return(MSPE)
+}
+
+ridge.predict <- function(formula, train, test, lam) {
+    # Predict test response values using a ridge regression fit on the
+    # training data for a range of lambda values.
+    coef <- lm.ridge(formula, train, lam = lam)$coef
+    r <- which.response(formula, train)
+    test.x <- scale(test[, -r])
+    return(mean(train[, r]) + test.x %*% coef)
 }
 
 best.subset <- function(formula, data, new = NA) {

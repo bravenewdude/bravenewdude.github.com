@@ -451,8 +451,8 @@ plot(t, load2, main = "Combined Data", xlab = "Minutes into Day",
 Below is a plot of the "landscape" of these two components, colored by group and year. Blue corresponds to non-SSCB, and red corresponds to SSCB. The lighter colored points are from 2010, while the darker ones are from 2011. The four means are also plotted in the appropriate colors.
 
 {% highlight r %}
-pc1 <- t(load1 %*% (t(combined) - p$center)) + sum(p$center * load1)
-pc2 <- t(load2 %*% (t(combined) - p$center)) + sum(p$center * load2)
+pc1 <- p$scores[, 1] + sum(p$center * load1)
+pc2 <- p$scores[, 2] + sum(p$center * load2)
 
 SSCBstocks <- readLines("RussellOrSP.txt")
 stocks <- rownames(combined)
