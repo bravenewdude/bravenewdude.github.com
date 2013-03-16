@@ -173,22 +173,11 @@ z <- qda(digit ~ ., X.train)
 ## Error: rank deficiency in group 0
 
 
-# Try an RDA algorithm with parameters set to be equivalent to QDA
+# Need to jitter the data to avoid exact multicolinearity
 
-library(klaR)
-
-# SAME AS QDA
-z <- rda(digit ~ ., X.train, gamma = 0, lambda = 0, crossval = F)
-# This works, but attempting to predict causes an error.
-yhat <- predict(z, X.train)$class
-
-
-## Error: Lapack routine dgesv: system is exactly singular: U[16,16] = 0
-
-
-# By setting lambda slightly above zero, we can accomplish approximate QDA
-# without running into the singular-matrix errors.
-z <- rda(digit ~ ., X.train, gamma = 0, lambda = 0.001, crossval = F)
+X.train.J <- X.train
+X.train.J[, -1] <- apply(X.train[,-1], 2, jitter)
+z <- qda(digit ~ ., X.train.J)
 
 # Find training and test error rates
 yhat.train <- predict(z, X.train)$class
@@ -199,29 +188,27 @@ qda.error <- c(mean(yhat.train != X.train$digit), mean(yhat.test != X.test$digit
 table(X.test$digit, yhat.test)
 
 
-##    yhat.test
-##       0   1   2   3   4   5   6   7   8   9
-##   0   0   0   0   0   0   0   0   0   0 359
-##   1   0   0   0   0   0   0   0   0   0 264
-##   2   0   0   0   0   0   0   0   0   0 198
-##   3   0   0   0   0   0   0   0   0   0 166
-##   4   0   0   0   0   0   0   0   0   0 200
-##   5   0   0   0   0   0   0   0   0   0 160
-##   6   0   0   0   0   0   0   0   0   0 170
-##   7   0   0   0   0   0   0   0   0   0 147
-##   8   0   0   0   0   0   0   0   0   0 166
-##   9   0   0   0   0   0   0   0   0   0 177
+##   yhat.test
+##      0   1   2   3   4   5   6   7   8   9
+##  0 333   0  18   3   1   0   0   0   4   0
+##  1   0 248   3   0   2   0   5   0   6   0
+##  2   3   0 181   6   1   1   0   0   6   0
+##  3   3   0   4 141   0   6   0   0  12   0
+##  4   1   1  10   2 155   1   0   1   2  27
+##  5   4   0   1   6   1 135   1   0  10   2
+##  6   2   0  12   0   2   8 143   0   3   0
+##  7   0   1   1   6   6   0   0 126   2   5
+##  8   4   0  14  16   0   7   0   0 121   4
+##  9   0   1   1   3   8   0   0   2   6 156
 {% endhighlight %}
 
-
-Although an approximate QDA avoids the singular matrix problem, the matrix is still very nearly singular. As a result, the algorithm still blows up and is unable to discriminate with any precision. It classifies every observation as a "9" in this case. Perhaps there are better solutions to the singular matrix problem, such as discarding redundant columns.
 
 
 ### Regularized Discriminant Analysis
 
-Technically, it's redundant to do [RDA](http://rss.acs.unt.edu/Rdoc/library/klaR/html/rda.html) in addition to LDA and QDA, because LDA and QDA are special cases of it. I could have just started with RDA, letting the $\lambda$ parameter vary over $[0, 1]$. In the klaR package's rda function, $\lambda$ represents the amount of weight given to the pooled covariance matrix. Because I have already looked at $\lambda=1$ (LDA) and $\lambda=0$ (QDA), I will use cross-validation for range of $\lambda$ values between these extremes. My helper function rda.predict comes in handy.
+Technically, it's redundant to do [RDA](http://rss.acs.unt.edu/Rdoc/library/klaR/html/rda.html) in addition to LDA and QDA, because LDA and QDA are special cases of it. I could have just started with RDA, letting the $\lambda$ parameter vary over $[0, 1]$. In the klaR package's rda function, $\lambda$ represents the amount of weight given to the pooled covariance matrix. Because I have already looked at $\lambda=1$ (LDA) and $\lambda=0$ (QDA), I will use cross-validation for range of $\lambda$ values between these extremes. My helper function `rda.predict` comes in handy.
 
-Just like QDA, RDA is plagued by the "blow up" problem. It classifies every row into the same group unless $\lambda$ is very nearly 1, in which case it is approximately LDA.
+Just like QDA, RDA will have problems with exactly multicolinear columns, so we will reuse the jittered data.
 
 
 {% highlight r %}
@@ -233,19 +220,11 @@ rda.predict <- function(formula, data, new, lambda, ...) {
     return(results)
 }
 
-lambda <- c(seq(0.05, 0.95, 0.1), seq(0.96, 0.99, 0.01))
-r.errors <- crossval(digit ~ ., X.train, K = 5, method = rda.predict,
+library(klaR)
+
+lambda <- seq(0.05, 0.95, 0.1)
+r.errors <- crossval(digit ~ ., X.train.J, K = 5, method = rda.predict,
                      lambda = lambda, gamma = 0, crossval = F)
-
-plot(lambda, r.errors, col = 2, ylab = "Error Rate",
-     main = "RDA Cross-validation Results")
-lines(lambda, r.errors, col = 2, lty = 2)
-{% endhighlight %}
-
-{:.center}
-![plot of chunk unnamed-chunk-9](/static/2013-02-27-comparing-classification-algorithms-for-handwritten-digits/unnamed-chunk-9.png) 
-
-{% highlight r %}
 lambda <- lambda[which.min(r.errors)]
 {% endhighlight %}
 
@@ -254,7 +233,7 @@ Now, I can use the best-performing $\lambda$ to try classifying the full trainin
 
 
 {% highlight r %}
-z <- rda(digit ~ ., X.train, gamma = 0, lambda = lambda, crossval = F)
+z <- rda(digit ~ ., X.train.J, gamma = 0, lambda = lambda, crossval = F)
 
 # Find training and test error rates
 yhat.train <- predict(z, X.train)$class
@@ -283,7 +262,7 @@ table(X.test$digit, yhat.test)
 
 ### Logistic Regression
 
-Finally, [logistic regression](https://en.wikipedia.org/wiki/Logistic_regression) makes fewer assumptions on the data. Let's see how it does by using the nnet package's multinom function and my lr.predict helper function.
+Finally, [logistic regression](https://en.wikipedia.org/wiki/Logistic_regression) makes fewer assumptions on the data. Let's see how it does by using the nnet package's `multinom` function and my `lr.predict` helper function.
 
 
 {% highlight r %}
@@ -354,8 +333,8 @@ error
 ##                        Training Error Rate Test Error Rate
 ## KNN with k = 1                   0.0000000         0.05630
 ## LDA                              0.0619942         0.11460
-## QDA                              0.9116719         0.91181
-## RDA with lambda = 0.97           0.0405980         0.09317
+## QDA                              0.0220820         0.13353
+## RDA with lambda = 0.95           0.0405980         0.09317
 ## Logistic Regression              0.0001372         0.10663
 {% endhighlight %}
 
