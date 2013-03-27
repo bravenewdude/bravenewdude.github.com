@@ -12,12 +12,12 @@ This is a simple exercise comparing several classification methods for identifyi
 
 {% highlight r %}
 # Read in the training data
-X.train <- read.table(gzfile("../zip.train.gz"))
+X.train <- read.table(gzfile("zip.train.gz"))
 names(X.train)[1] <- "digit"
 X.train$digit <- as.factor(X.train$digit)
 
 # Read in the test data
-X.test <- read.table(gzfile("../zip.test.gz"))
+X.test <- read.table(gzfile("zip.test.gz"))
 names(X.test)[1] <- "digit"
 X.test$digit <- as.factor(X.test$digit)
 {% endhighlight %}
@@ -264,7 +264,7 @@ table(X.test$digit, yhat.test)
 
 Finally, [logistic regression](https://en.wikipedia.org/wiki/Logistic_regression) makes fewer assumptions on the data. Let's see how it does by using the nnet package's `multinom` function and my `lr.predict` helper function.
 
-
+<a id="lrpredict"></a>
 {% highlight r %}
 lr.predict <- function(lr, data) {
     # Predicts the classes of the rows of data, based on a logistic regression
@@ -286,7 +286,7 @@ lr.predict <- function(lr, data) {
     p <- cbind(baseline, p)
     # Find class with highest probability
     indices <- apply(p, 1, which.max)
-    classes <- sapply(indices, function(i) return(z$lev[i]))
+    classes <- sapply(indices, function(i) return(lr$lev[i]))
     return(classes)
 }
 

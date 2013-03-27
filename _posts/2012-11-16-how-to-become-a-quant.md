@@ -38,6 +38,8 @@ Make sure you take a few statistics courses along the way. Take as many physics 
 
 I may write a future blog post on studying. For now, let me just mention one tip. There are some great lectures, such as MIT OpenCourseWare, available to watch on Youtube. Watch these! The lecturers are almost certainly better than your professors. Watching these videos while eating is an efficient way to make the most of your meal times.
 
+There are other good sources of information on [productivity](http://matt.might.net/articles/productivity-tips-hints-hacks-tricks-for-grad-students-academics/).
+
 
 ## Burnout
 
@@ -75,11 +77,11 @@ Don't join a fraternity or sorority. Their social events consume a lot of your t
 
 The math club or computer science club might be fun to join if you're interested. Just remember to keep your life simple. It becomes difficult to stay organized (and sane) if you accumulate too many obligations.
 
-Starting at the beginning of your sophomore year, try to get hired at your college's tutoring center. (You might need to apply and the end of your freshman year. Email the center to inquire.) This is a job that benefits you: it forces you to spend hours thinking quantitatively and reviewing your old material. And you're getting paid for it! Now that's efficient.
+Starting at the beginning of your sophomore year, try to get hired at your college's tutoring center. (You might need to apply at the end of your freshman year. Email the center to inquire.) This is a job that benefits you: it forces you to spend hours thinking quantitatively and reviewing your old material. And you're getting paid for it! Now that's efficient.
 
 Most people who use the tutoring center need help with very basic courses. Try your best to spend most of your time tutoring higher level courses if possible. Also, don't work too many hours per week. Four to six hours is probably good.
 
-You may hear that you can make more money by private tutoring. Yes, you can charge a little more, but in my opinion it isn't worth it. Cancellations and time-changes are common, and it's a hassle dealing with that week after week. You won't have time to deal with that. The routine and fixed hours of the tutoring center more than make up for the lower wage.
+You may hear that you can make more money by private tutoring. Yes, you can charge a little more, but in my opinion it isn't worth it. Cancellations and time-changes are common, and it's a hassle dealing with that week after week. You won't have time to deal with that. The routine and fixed hours of the tutoring center more than make up for the lower wage. After all, this job isn't really about the money. It's mostly about you thinking quantitatively and having a job to list on your resume.
 
 
 ## Summers
@@ -93,9 +95,9 @@ In your spare time during this REU summer, study for the GRE General Test and th
 
 ## Side Projects
 
-If you come up with any interesting ideas, build them. It's fun and educational, and it's another way to show off your skills and your initiative. Over the past few years, I've created several web applications, a podcast, a few R packages, an Arduino library, and this blog. Any code you produced for these projects should be available for download (on git-hub for example).
+If you come up with any interesting ideas, build them. It's fun and educational, and it's another way to show off your skills and your initiative. Over the past few years, I've created several web applications, a podcast, a few R packages, an Arduino library, and this blog. Any code you produced for these projects should be available for download (on git-hub for example). You might also consider joining an open-source project.
 
-You might also consider joining an open-source project.
+Side projects are fun, but don't over-extend yourself. You can only do so many things at once.
 
 
 ## Standardized Tests
@@ -110,7 +112,7 @@ Do a two-year Master's Degree in Applied Math. Again, I recommend a university w
 
 ## PhD
 
-Do your PhD in Statistics; apply to good programs.
+Do your [PhD](http://matt.might.net/articles/phd-school-in-pictures/) in Statistics; apply to good programs.
 
 
 ## Additional Study
