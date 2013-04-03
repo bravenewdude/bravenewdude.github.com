@@ -176,7 +176,7 @@ z <- qda(digit ~ ., X.train)
 # Need to jitter the data to avoid exact multicolinearity
 
 X.train.J <- X.train
-X.train.J[, -1] <- apply(X.train[,-1], 2, jitter)
+X.train.J[, -1] <- apply(X.train[, -1], 2, jitter)
 z <- qda(digit ~ ., X.train.J)
 
 # Find training and test error rates
