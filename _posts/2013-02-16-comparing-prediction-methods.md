@@ -67,6 +67,7 @@ crossval <- function(formula, data, K = min(10, nrow(data)), method, ...) {
         MSPE <- apply(data[, r] - yhat, 2, function(x) mean(x^2))
     } else {
         MSPE <- apply(as.numeric(data[, r]) != yhat, 2, mean)
+        # Careful: Make sure yhat is in the same range as as.numeric(data[, r])
     }
     return(MSPE)
 }

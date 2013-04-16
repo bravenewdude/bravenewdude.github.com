@@ -176,7 +176,7 @@ This creates a file **outstanding.csv** with the number of shares outstanding on
     AACC,30770000,30770000,30770000,30770000
     AAON,24520000,24520000,24520000,24520000
 
-For many stocks, I was unable to retrieve Yahoo! Finance or GetSplitHistory data, so they were thown out. Also, any stocks that had a split during either of the periods of interest were discarded from my list of good stocks.
+For many stocks, I was unable to retrieve Yahoo! Finance or GetSplitHistory data, so they were thrown out. Also, any stocks that had a split during either of the periods of interest were discarded from my list of good stocks.
 
 {% highlight r %}
 a <- read.csv("outstanding.csv", row.names = 1)

@@ -11,7 +11,7 @@ According to Wikipedia, [Market Capitalization](http://en.wikipedia.org/wiki/Mar
 
 My code estimates the number of shares outstanding on any historical date by considering the current number of shares outstanding and the splits that have occurred since that date. This procedure is definitely not perfect! Splits have a big impact on the number of shares outstanding, but [other factors](http://answers.yahoo.com/question/index?qid=20061026104715AAJUVbe) can affect the number as well. Hopefully the fluctuations caused by the other factors are relatively small. Regardless, the other factors are harder to get historical data for.
 
-The current number of shares outstanding can be retreived from [Yahoo! Finance](http://finance.yahoo.com/). Unfortunately, this database is incomplete; in particular, many small stocks are missing. Split histories can be found at [GetSplitHistory](http://getsplithistory.com/); it was also missing many stocks.
+The current number of shares outstanding can be retrieved from [Yahoo! Finance](http://finance.yahoo.com/). Unfortunately, this database is incomplete; in particular, many small stocks are missing. Split histories can be found at [GetSplitHistory](http://getsplithistory.com/); it was also missing many stocks.
 
 My code uses the `XML` package and [XPath](http://en.wikipedia.org/wiki/XPath). Also, because web scraping can take a long time and is particularly vulnerable to failure, I created an `append.csv` function. It behaves much like `write.csv`, but it builds the csv file one line at a time, in order to save your progress as you go.
 

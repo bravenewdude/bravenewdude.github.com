@@ -32,6 +32,7 @@ Assume we have data for $m$ trading days. The random variable
 Y_j := \sum_{i=1}^m(X_{i,j} - \bar{X}_j)^2/(l \sigma^2)
 \end{align*}</div>
 has an approximately $\chi^2\_{m-1}$ distribution, so the standard unbiased estimator of $\sigma^2$ is $S^2/l$, where $S^2 := \sum(X_{i,j} - \bar{X}\_j)^2/(m-1)$. The mean-squared error of this estimator is equal to its variance
+
 <div style='visibility: hidden; height: 0;'>$\newcommand{\V}{\text{Var}}$</div>
 
 <div>\begin{align*}
@@ -48,7 +49,7 @@ Unfortunately, after glancing at some plots, the assumption of nearly constant v
 
 ## Linearly Changing Volatility over Small Intervals
 
-After realizing this, I devised a more plausible assumption: the change in volatility over any five-minute interval is approximately linear. Let $V(t)$ be a process whose natural logarithm is a diffusion with linearly changing $\sigma(t)$. That is,
+After realizing this problem, I devised a more plausible assumption: the change in volatility over any five-minute interval is approximately linear. Let $V(t)$ be a process whose natural logarithm is a diffusion with linearly changing $\sigma(t)$. That is,
 
 <div>\begin{align*}
 \log V(t) &= v_0 + \mu t + \int_0^t \sigma(\tau) d W(\tau)\\
@@ -57,7 +58,7 @@ After realizing this, I devised a more plausible assumption: the change in volat
 
 Let us zero in on the complicated part of this expression by defining $R(t) := \int\_0^t (\sigma_0 + m\tau) d W(\tau)$. At any given time $t$, the diffusion $R(t)$ is locally approximated by a Brownian Motion with volatility $\sigma\_0 + mt$. In other words, $R(t+\delta) - R(t)$ should approach a $N(0, (\sigma\_0 + mt)^2 \delta)$ distribution as $\delta \rightarrow 0$.
 
-By transforming the time axis of a standard Brownian Motion in just the right way, we can produce a much more familiar-looking process with this same behavior. We need to find a transformation $D$ such that $W(D(t))$ has a "volatility" of $\sigma\_0 + mt$ at any time $t$. A change in time of $\delta$ from time $t$ must produce a change in $D$ by $(\sigma_0 + mt)^2 \delta$. That is, $D$ satisfies $D(t+\delta) = D(t) + (\sigma\_0 + mt)^2 \delta$ in the limit. Rearranging, we find that a solution is $D(t) = \sigma\_0^2 t + \sigma\_0 m t^2 + m^2 t^3/3$. So our final result is
+By transforming the time axis of a standard Brownian Motion in just the right way, we can produce a much more familiar-looking process with this same behavior. We need to find a transformation $D$ such that $W(D(t))$ has a "volatility" of $\sigma\_0 + mt$ at any time $t$. A change in time of $\delta$ from time $t$ must produce a change in $D$ by $(\sigma_0 + mt)^2 \delta$. That is, $D$ satisfies $D(t+\delta) = D(t) + (\sigma\_0 + mt)^2 \delta$ in the limit. Rearranging, and taking an anti-derivative, we find that a solution is $D(t) = \sigma\_0^2 t + \sigma\_0 m t^2 + m^2 t^3/3$. So our final result is
 
 <div>\begin{align*}
 W(\sigma_0^2 t + \sigma_0 m t^2 + m^2 t^3/3)
@@ -66,23 +67,23 @@ W(\sigma_0^2 t + \sigma_0 m t^2 + m^2 t^3/3)
 This diffusion has the same infinitesimal behavior as $R(t)$ at all times, so they are identical processes. The following simulations support this result. We will plot a diffusion on (0,1) with $\sigma(t) = 1-t$ (i.e. linear with $\sigma_0=1$ and $m=-1$). First, we generate the desired diffusion sequentially.
 
 {% highlight r %}
-    LinearVolDiffusion <- function(end = 1, initial = 0, mu = 0, sigma0 = 1, m = 0, 
-        n = 1000) {
-        delta <- 1/n
-        x <- delta * (0:n)
-        y <- c(initial, rep(NA, n))
-        for (i in 1:n) {
-            t <- x[i] + delta/2
-            y[i + 1] <- y[i] + mu * delta + rnorm(1, sd = (sigma0 + m * t) * sqrt(delta))
-        }
-        return(cbind(x, y))
-    }
-    
-    plot(c(0, 1), c(-1.5, 1.5), type = "n", main = "Sigma Changes by Step", xlab = "Time", 
-        ylab = "Diffusion")
-    for (i in 1:4) {
-        lines(LinearVolDiffusion(m = -1), col = i + 1)
-    }
+LinearVolDiffusion <- function(end = 1, initial = 0, mu = 0, sigma0 = 1, m = 0, 
+n = 1000) {
+delta <- 1/n
+x <- delta * (0:n)
+y <- c(initial, rep(NA, n))
+for (i in 1:n) {
+    t <- x[i] + delta/2
+    y[i + 1] <- y[i] + mu * delta + rnorm(1, sd = (sigma0 + m * t) * sqrt(delta))
+}
+return(cbind(x, y))
+}
+
+plot(c(0, 1), c(-1.5, 1.5), type = "n", main = "Sigma Changes by Step", xlab = "Time", 
+ ylab = "Diffusion")
+for (i in 1:4) {
+lines(LinearVolDiffusion(m = -1), col = i + 1)
+}
 {% endhighlight %}
 
 {:.center}
@@ -92,26 +93,26 @@ This diffusion has the same infinitesimal behavior as $R(t)$ at all times, so th
 Next, we generate the same diffusion using standard Brownian Motion and the $D$ transformation discovered earlier. Note that the `GenerateBM` function invoked below [can be found in an earlier post](/stochastic processes/2012/12/28/the-black-scholes-model#Generate).
 
 {% highlight r %}
-    right <- function(f, b = 10) {
-        while (f(b) < 0) b <- 10 * b
-        return(b)
-    }
-    
-    D <- function(t, sigma0 = 1, m = -1) {
-        return(sigma0^2 * t + sigma0 * m * t^2 + m^2 * t^3/3)
-    }
-    
-    Dinv <- function(x, ...) {
-        sub <- function(t) D(t, ...) - x
-        return(uniroot(sub, lower = 0, upper = right(sub))$root)
-    }
-    
-    plot(c(0, 1), c(-1.5, 1.5), type = "n", main = "SBM with Transformed Time Axis", 
-        xlab = "Time", ylab = "Diffusion")
-    for (i in 1:4) {
-        b <- GenerateBM(end = D(1))
-        lines(sapply(b[, 1], Dinv), b[, 2], col = i + 1)
-    }
+right <- function(f, b = 10) {
+while (f(b) < 0) b <- 10 * b
+    return(b)
+}
+
+D <- function(t, sigma0 = 1, m = -1) {
+    return(sigma0^2 * t + sigma0 * m * t^2 + m^2 * t^3/3)
+}
+
+Dinv <- function(x, ...) {
+    sub <- function(t) D(t, ...) - x
+    return(uniroot(sub, lower = 0, upper = right(sub))$root)
+}
+
+plot(c(0, 1), c(-1.5, 1.5), type = "n", main = "SBM with Transformed Time Axis", 
+    xlab = "Time", ylab = "Diffusion")
+for (i in 1:4) {
+    b <- GenerateBM(end = D(1))
+    lines(sapply(b[, 1], Dinv), b[, 2], col = i + 1)
+}
 {% endhighlight %}
 
 {:.center}

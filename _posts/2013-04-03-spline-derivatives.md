@@ -50,7 +50,7 @@ Now, the `predict.smooth.spline` method can give us the derivative of the fit cu
 
 <div>\begin{align*}
 \frac{d R}{d \Omega} &= \left( \frac{d R}{d \log \Omega} \right) \left( \frac{d \log \Omega}{d \Omega} \right)\\
- &= \left( \frac{d R}{d \log \Omega} \right) (\Omega)
+ &= \left( \frac{d R}{d \log \Omega} \right) \left( \frac{1}{\Omega} \right)
 \end{align*}</div>
 
 

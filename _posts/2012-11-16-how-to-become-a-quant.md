@@ -73,7 +73,7 @@ However, blogging can be time-consuming. One way to streamline the process is by
 
 ## Extracurricular Activities
 
-Don't join a fraternity or sorority. Their social events consume a lot of your time, making it hard to get much work done. Serious athletic teams are overly time-consuming too. Also, don't join any political groups. They can be time-consuming, and they tend to be hotbeds of terrible reasoning. (For similar reasons, I suggest not reading the news.)
+Don't join a fraternity or sorority. Their social events consume a lot of your time, making it hard to get much work done. Serious athletic teams are overly time-consuming too. Also, don't join any political groups. They can be time-consuming, and they tend to be hotbeds of terrible reasoning. (For similar reasons, I suggest [not reading the news](http://m.guardiannews.com/media/2013/apr/12/news-is-bad-rolf-dobelli).)
 
 The math club or computer science club might be fun to join if you're interested. Just remember to keep your life simple. It becomes difficult to stay organized (and sane) if you accumulate too many obligations.
 
