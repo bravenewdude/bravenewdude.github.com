@@ -31,7 +31,7 @@ Non-quantitative interests are great. But if you're serious about becoming a qua
 
 Double-major in math and computer science. To fulfill science requirements, take physics courses. To fulfill social science requirements, take economics courses. To fulfill humanities requirements, probably philosophy courses are your best bet; in particular, check for critical thinking and/or logic courses and see it they would count.
 
-Make sure you take a few statistics courses along the way. Take as many physics courses as you want. Economics is fine too, if you stick to the most quantitative courses. Go for a physics or economics minor if you want.
+Make sure you take a few statistics courses along the way. Take as many physics courses as you want; go for a physics minor if you want.
 
 
 ## Studying
