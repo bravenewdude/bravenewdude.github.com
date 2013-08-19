@@ -48,7 +48,7 @@ Keep in mind that these authors aren't perfect. Some parts of their books are mo
  - More Damned Lies and Statistics - Joel Best
  - How to Lie with Statistics - Darrell Huff
 
-Also, let me recommend *against* something. [Avoid news/politics](http://m.guardiannews.com/media/2013/apr/12/news-is-bad-rolf-dobelli) like the plague!
+Also, let me recommend *against* something. [Avoid news/politics](http://m.guardiannews.com/media/2013/apr/12/news-is-bad-rolf-dobelli) like the plague! [Seriously](http://www.cracked.com/blog/7-reasons-news-looks-worse-than-it-really-is/).
 
 
 ## Science
