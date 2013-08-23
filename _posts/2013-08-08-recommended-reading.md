@@ -30,7 +30,7 @@ But it only scratches the surface. It's almost impossible to appreciate the leve
 
 ## Randomness
 
-Let me define a few concepts. A *belief system* is a set of propositions that a person believes to be true. Two belief systems $A$ and $B$ are *contradictory* if there exists a proposition $p$ such that $p \in A$ and $~p \in B$. (There's a richer version of these definitions in which each belief system assigns a probability of truth to its propositions. For now, though, let's just stick to this simpler formulation.)
+Let me define a few concepts. A *belief system* is a set of propositions that a person believes to be true. Two belief systems $A$ and $B$ are *contradictory* if there exists a proposition $p$ such that $p \in A$ and $\textasciitilde p \in B$. (There's a richer version of these definitions in which each belief system assigns a probability of truth to its propositions. For now, though, let's just stick to this simpler formulation.)
 
 Even very smart people are very often wrong. In fact, **if I have a set of N people with pairwise contradictory belief systems, then at least N-1 of them are wrong** (i.e. they believe at least one false proposition). The world contains plenty of very smart people, but it also home to a plethora of different belief systems. Typically, these belief systems contradict each other, even when they have much in common. My conclusion is that the *vast* majority of people have imperfect belief systems.
 
