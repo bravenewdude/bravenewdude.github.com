@@ -9,7 +9,7 @@ tags: [finance]
 
 ## Constant Volatility over Small Intervals
 
-Stock prices are generally modeled by Geometric Brownian Motion. Each stock is assumed to have a volatility parameter that is roughly stable over time frames on the order of, say, a year. In practice, stock prices tend to change much more rapidly at the beginning and end of each trading day than they do in the middle. To analyze intra-day volatilities, we need to use a more general diffusion model that allows the volatility to depend on $t$. I will refer to a stock's daily volatility pattern as its "volatility profile."
+Stock prices are often modeled by Geometric Brownian Motion. Each stock is assumed to have a volatility parameter that is roughly stable over time frames on the order of, say, a year. In practice, stock prices tend to change much more rapidly at the beginning and end of each trading day than they do in the middle. To analyze intra-day volatilities, we need to use a more general diffusion model that allows the volatility to depend on $t$. I will refer to a stock's daily volatility pattern as its "volatility profile."
 
 In theory, one could compute volatility estimates over arbitrarily small time intervals. However, the more you zoom in, the less "GBM-like" stock prices are. For our analysis, we broke each trading day ($T=6.5$ hours) into seventy-eight five-minute ($l=5$ minutes) intervals. On day $i$, represent a stock price in terms of a standard Brownian Motion $W_i$ by
 
