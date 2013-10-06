@@ -43,7 +43,7 @@ There are other good sources of information on [productivity](http://matt.might.
 
 ## Burnout
 
-So, I know that I just recommended watching math lecures during your meals. It may seem that this quant-training regimen requires you to spend every waking moment studying. Don't do that! Relax! Watch TV, play video games (but not an MMORPG), play intermurals, go to bars every now and then, make friends, and have fun. There's no rush. Becoming an expert takes years and years. Work hard but don't burn yourself out.
+So, I know that I just recommended watching math lecures during your meals. It may seem that this quant-training regimen requires you to spend every waking moment studying. Don't do that! Relax! Watch TV, play video games (but not an MMORPG), play intramural sports, go to bars every now and then, make friends, and have fun. There's no rush. Becoming an expert takes years and years. Work hard but don't burn yourself out.
 
 A very serious student probably spends about half of his waking time on coursework. That's plenty. The real key is taking the right courses, as described above. If you do that, then you're going to become an expert without having to overwork yourself.
 
