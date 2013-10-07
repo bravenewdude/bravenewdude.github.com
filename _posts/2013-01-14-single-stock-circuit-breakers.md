@@ -8,7 +8,7 @@ tags: [finance]
 
 
 <p style="background-color: antiquewhite; padding: 20px;">
-NOTE: The analysis described in this article is out of date. Since writing it, I have changed my mind about a few decisions and realized a few oversights. A much better analysis is available for [download as a pdf](http://www.stat.yale.edu/~wdb22/SingleStockCircuitBreakers.pdf). Let me warn you that it's about forty pages long.
+NOTE: The analysis described in this article is out of date. Since writing it, I have changed my mind about a few decisions and realized a few oversights. A much better analysis is available for <a href="http://www.stat.yale.edu/~wdb22/SingleStockCircuitBreakers.pdf">download as a pdf</a>. Let me warn you that it's about forty pages long.
 </p>
 
 On May 6, 2010, the U.S. stock market experienced what has come to be called the "[flash crash](http://en.wikipedia.org/wiki/May_6,_2010_flash_crash)," in which the prices of various stocks fluctuated violently. Overall, the market rapidly plunged about nine percent and recovered minutes later. In respone, the SEC and stock exchanges devised the Single-Stock Circuit Breaker (SSCB) rules, which were implemented gradually. According to [Traders Magazine](http://www.tradersmagazine.com/news/single-stock-circuit-breakers-sec-flash-crash-trading-106018-1.html),
