@@ -7,7 +7,11 @@ tags: [finance]
 {% include JB/setup %}
 
 
-On May 6, 2010, the U.S. stock market experienced what has come to be called the "[flash crash](http://en.wikipedia.org/wiki/May_6,_2010_flash_crash)," in which the prices of various stocks fluctuated violently. Overall, the market rapidly plunged about nine percent and recovered minutes later. In respone, the SEC and stock exchanges devised the Single-Stock Circuit Breaker (SSCB) rules, which were implemented gradually. According to Traders Magazine \Footnote{http://www.tradersmagazine.com/news/single-stock-circuit-breakers-sec-flash-crash-trading-106018-1.html},
+<p style="background-color: antiquewhite; padding: 20px;">
+NOTE: The analysis described in this article is out of date. Since writing it, I have changed my mind about a few decisions and realized a few oversights. A much better analysis is available for [download as a pdf](http://www.stat.yale.edu/~wdb22/SingleStockCircuitBreakers.pdf). Let me warn you that it's about forty pages long.
+</p>
+
+On May 6, 2010, the U.S. stock market experienced what has come to be called the "[flash crash](http://en.wikipedia.org/wiki/May_6,_2010_flash_crash)," in which the prices of various stocks fluctuated violently. Overall, the market rapidly plunged about nine percent and recovered minutes later. In respone, the SEC and stock exchanges devised the Single-Stock Circuit Breaker (SSCB) rules, which were implemented gradually. According to [Traders Magazine](http://www.tradersmagazine.com/news/single-stock-circuit-breakers-sec-flash-crash-trading-106018-1.html),
 
 > The single-stock circuit breakers will pause trading in any component stock of the  Russell 1000 or S&P 500 Index in the event that the price of that stock has moved 10 percent or more in the preceding five minutes. The pause generally will last five minutes, and is intended to give the markets a hiatus to attract trading interest at the last price, as well as to give traders time to think rationally.
 
@@ -15,7 +19,7 @@ It is important to note that the rules do not apply to the first fifteen minutes
 
 Under the direction of [Dr. Michael Kane](http://publichealth.yale.edu/people/michael_kane.profile), I am analyzing recent stock data. The aim of our research is to understand the effects of the SSCB rules. In particular, **do the rules have any effect on the daily [volatility profiles](/stochastic processes/2013/01/08/volatility-profiles/) of stocks?**
 
-My data analysis uses the following files: [2010.csv](/static/2013-01-14-single-stock-circuit-breakers/2010.csv), [2011.csv](/static/2013-01-14-single-stock-circuit-breakers/2011.csv), [cap.csv](/static/2013-01-14-single-stock-circuit-breakers/cap.csv), [activity.csv](/static/2013-01-14-single-stock-circuit-breakers/activity.csv), and [RussellOrSP.txt](/static/2013-01-14-single-stock-circuit-breakers/RussellOrSP.txt). NOTE: These files are currently out of date, as is this whole analysis; it will be updated soon.
+My data analysis uses the following files: [2010.csv](/static/2013-01-14-single-stock-circuit-breakers/2010.csv), [2011.csv](/static/2013-01-14-single-stock-circuit-breakers/2011.csv), [cap.csv](/static/2013-01-14-single-stock-circuit-breakers/cap.csv), [activity.csv](/static/2013-01-14-single-stock-circuit-breakers/activity.csv), and [RussellOrSP.txt](/static/2013-01-14-single-stock-circuit-breakers/RussellOrSP.txt).
 
 
 ## Data Analysis
