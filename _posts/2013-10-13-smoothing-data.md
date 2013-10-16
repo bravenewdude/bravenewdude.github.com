@@ -121,7 +121,7 @@ You might be curious just *how smooth* you should make your fit curve. A good wa
 Let me caution you not to smooth indiscriminately. As this example showed, smoothing makes a lot of sense in some situations, but you need to think carefully about your data before deciding to smooth it. You don't want to accidentally erase an important pattern in your data by smoothing over it!
 
 
-## Estimating derivatives
+## Estimating Derivatives
 
 Another application of smoothing is estimating derivatives of $g$ from the data. I've posted [an article about this](/tutorial/2013/04/03/spline-derivatives/) before. Recently, a British physics student contacted me for help estimating second derivatives from his [data](/static/WT.csv). I did a little work for him, so I decided I may as well share it on this blog.
 
