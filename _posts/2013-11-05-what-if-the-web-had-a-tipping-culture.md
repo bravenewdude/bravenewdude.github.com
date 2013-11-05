@@ -35,7 +35,7 @@ What if a user finished using your incredible service or reading your great cont
 
 Imagine that your users could immediately give you a dollar (or more) with the click of a button. What fraction of them would do it? The answer will vary a lot by your service and your user base. If one percent of your visitors tipped you one dollar each, that would bring in orders of magnitude more money than ads typically do.
 
-Is one percent a reasonable estimate? I'm not sure. Maybe it's a little on the optimistic side, but I think it's probably in the ballpark for high-quality sites. It might take some time for people to get used to the idea of web-tipping, but if it was convenient enough a small proportion of web users would give small tips for useful and enjoyable content. That's all it would take for this to be a viable alternative to ads. It might also be a viable alternative to paid upgrades.
+Is one percent a reasonable estimate? I'm not sure. Maybe it's a little on the optimistic side, but I think it's probably in the ballpark for high-quality sites that provide a substantial service. It might take some time for people to get used to the idea of web-tipping, but if it was convenient enough a small proportion of web users would give small tips for useful and enjoyable content. That's all it would take for this to be a viable alternative to ads. It might also be a viable alternative to paid upgrades.
 
 The "tip widget" above is fully functional (hint!), and it takes approximately one minute to [make one for yourself](http://tipwidget.appspot.com), assuming you already have a Google Merchant account. You can customize your widget to look however you want.
 
