@@ -37,7 +37,9 @@ Imagine that your users could immediately give you a dollar (or more) with the c
 
 Is one percent a reasonable estimate? I'm not sure. Maybe it's a little on the optimistic side, but I think it's probably in the ballpark for high-quality sites. It might take some time for people to get used to the idea of web-tipping, but if it was convenient enough a small proportion of web users would give small tips for useful and enjoyable content. That's all it would take for this to be a viable alternative to ads. It might also be a viable alternative to paid upgrades.
 
-The "tip widget" above is fully functional (hint!), and it takes approximately one minute to [make one for yourself](http://tipwidget.appspot.com), assuming you already have a Google Merchant account. Then customize your widget to look however you want. Let's give this a try!
+The "tip widget" above is fully functional (hint!), and it takes approximately one minute to [make one for yourself](http://tipwidget.appspot.com), assuming you already have a Google Merchant account. You can customize your widget to look however you want.
+
+Let's give this a try!
 
 <br />
 
