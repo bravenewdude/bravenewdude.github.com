@@ -22,7 +22,7 @@ What if a user finished using your incredible service or reading your great cont
   <div id="tipwidgetright">
         <div>Amount: $<input type="text" id="tipwidgetamount" placeholder="1.00" /></div>
         <div><input type="image" src="https://checkout.google.com/buttons/checkoutMobile.gif?w=118&h=24&style=trans&variant=no-text"
-               alt="Tip" onclick="tipwidgetsupport('185804764220139124118');" /></div>
+               alt="Tip" onclick="tipwidgetsupport('110370840777223333593');" /></div>
   </div>
   <span class="tipwidgetclear"></span>
   <div id="tipwidgetbottom">
