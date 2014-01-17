@@ -33,10 +33,12 @@ for (n in 1:10) {
     png(paste(n, ".png", sep = ""), width = 400, height = 400)
     grid.newpage()
     pushViewport(viewport(x = 0.15, y = 0.15, w = unit(10, "cm"),
-                          h = unit(10 * sqrt(3)/2, "cm"), just = c("left", "bottom"),
+                          h = unit(10 * sqrt(3)/2, "cm"),
+						  just = c("left", "bottom"),
                           xscale = c(0, n), yscale = c(0, n)))
     drawSimplex()
-    grid.text("Possible Empirical Distributions", 0.5, 1.2, gp = gpar(fontsize = 20))
+    grid.text("Possible Empirical Distributions", 0.5, 1.2,
+	          gp = gpar(fontsize = 20))
     grid.text(paste("n =", n), 0.04, 0.7, just = "left", 
               gp = gpar(fontsize = 25, col = 2))
     for (i in 0:n) {
@@ -203,7 +205,8 @@ drawHD <- function(q1, q2) {
 png("Q1.png", height = 700, width = 700)
 grid.newpage()
 drawHD(1/2, 1/3)
-pushViewport(viewport(x = 0.25, y = 0, w = 0.5, h = 0.5, just = c("left", "bottom")))
+pushViewport(viewport(x = 0.25, y = 0, w = 0.5, h = 0.5,
+             just = c("left", "bottom")))
 drawCurves(HplusD, q1 = 1/2, q2 = 1/3, fstr = "H+D", ds = c(1.2, 1.6, 2))
 popViewport(1)
 dev.off()
@@ -226,7 +229,8 @@ Also, notice that in the $Q=(1/3,1/3,1/3)$ case, this expression is equal to $\l
 png("Q2.png", height = 700, width = 700)
 grid.newpage()
 drawHD(1/3, 1/3)
-pushViewport(viewport(x = 0.25, y = 0, w = 0.5, h = 0.5, just = c("left", "bottom")))
+pushViewport(viewport(x = 0.25, y = 0, w = 0.5, h = 0.5,
+             just = c("left", "bottom")))
 pushViewport(viewport(w = unit(10, "cm"), h = unit(10 * sqrt(3)/2, "cm")))
 drawSimplex()
 grid.polygon(x = c(0, 1, 0.5), y = c(0, 0, 1), gp = gpar(fill = 3))
