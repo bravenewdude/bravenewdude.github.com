@@ -34,11 +34,11 @@ for (n in 1:10) {
     grid.newpage()
     pushViewport(viewport(x = 0.15, y = 0.15, w = unit(10, "cm"),
                           h = unit(10 * sqrt(3)/2, "cm"),
-						  just = c("left", "bottom"),
+                          just = c("left", "bottom"),
                           xscale = c(0, n), yscale = c(0, n)))
     drawSimplex()
     grid.text("Possible Empirical Distributions", 0.5, 1.2,
-	          gp = gpar(fontsize = 20))
+              gp = gpar(fontsize = 20))
     grid.text(paste("n =", n), 0.04, 0.7, just = "left", 
               gp = gpar(fontsize = 25, col = 2))
     for (i in 0:n) {
