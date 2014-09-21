@@ -2,7 +2,7 @@
 layout: post
 title: How to Become a Quant
 description: The core quantitative skills and how to develop them
-category: quant
+category: opinion
 tags: [opinion, college]
 ---
 {% include JB/setup %}

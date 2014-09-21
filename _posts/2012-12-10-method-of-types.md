@@ -381,7 +381,7 @@ dev.off()
 
 One of the most fundamental results in [large deviations theory](https://en.wikipedia.org/wiki/Large_deviations_theory) is [Sanov's Theorem](https://en.wikipedia.org/wiki/Sanov%27s_theorem). It tells us about the probabilities of rare events as $n$ gets large.
 
-When the support of $X_i$ is discrete or a [Polish space](https://en.wikipedia.org/wiki/Polish_space), Sanov's Theorem requires $E$ to be a convex and weakly-closed set in the space of possible distributions for $X_i$. However, in the finite setting that we have been dealing with, a similar Theorem holds with no such requirements on $E$.
+When the support of $X_i$ is discrete or a [Polish space](https://en.wikipedia.org/wiki/Polish_space), Sanov's Theorem requires $E$ to be a convex and weakly-closed set in the space of possible distributions for $X_i$. However, in the finite setting that we have been dealing with, a similar theorem holds with no such requirements on $E$.
 
 We can use the method of types tools developed above to prove a simplified version of Sanov's result for any rare event $E$ in the probability simplex.
 

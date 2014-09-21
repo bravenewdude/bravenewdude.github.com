@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Recommended Reading
-category: quant
+category: opinion
 tags: [opinion, college]
 ---
 {% include JB/setup %}
@@ -26,6 +26,10 @@ This is the book that showed me how deep and fascinating mathematics is.
 But it only scratches the surface. It's almost impossible to appreciate the level of clarity and rigor in foundational mathematical thinking without years of deep study. Along those lines, here is a textbook that I think is great for starting the transition from Freshman math to real mathematics.
 
  - Discrete Mathematics and Its Applications - Kenneth Rosen
+
+Finally, I can't imagine a better book connecting mathemtatics to real-world reasoning than this next one.
+
+ - Probability Theory: The Logic of Science - E. T. Jaynes
 
 
 ## Randomness
