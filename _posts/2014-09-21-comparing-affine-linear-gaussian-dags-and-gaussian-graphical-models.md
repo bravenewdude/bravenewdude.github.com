@@ -29,8 +29,8 @@ Intuitively, ALGD sparsity captures our notion of causal complexity. Because it 
 
 ### Proposition 1 *(Comparing DAG Sparsity to GGM Sparsity)*
 
-<div>Given any $k$-dimensional multivariate Gaussian distribution, let $L$ be any sparsest ALGD coefficient matrix and $M$ be the moral matrix. Then
-\begin{align*}
+Given any $k$-dimensional multivariate Gaussian distribution, let $L$ be any sparsest ALGD coefficient matrix and $M$ be the moral matrix. Then
+<div>\begin{align*}
 \|M\|_0 - \|L\|_0 \leq \frac{(k-1)(k-2)}{2}
 \end{align*}</div>
 and there exist distributions achieving this bound.
@@ -39,7 +39,7 @@ and there exist distributions achieving this bound.
 
 This can be shown by strong induction. The base case of $k=1$ is trivial. In that case, no edges are possible in either a DAG or GGM representation. Therefore, $\|M\|_0 = \|L\|_0 = 0$ and so $\|M\|_0 - \|L\|_0 \leq \frac{(1-1)(1-2)}{2} = 0$ as required.
 
-Before proving the inductive step, we describe how to generate a distribution that achieves this upper bound. First, variables $X_1, \ldots, X_{k-1}$ are generated independently of each other. Then, $X_k$ is any linear combination (with strictly non-zero coefficients) of the previous $k-1$ variables plus Gaussian noise. Then each pair of variables are dependent conditioned on all the others. Thus the GGM is a complete graph and $\|M\|_0 = \binom{k}{2} = \frac{k(k-1)}{2}$. The sparsest DAG has edges from each of $X_1, \ldots, X_{k-1}$ to $X_k$ giving $\|L\|_0 = k-1$. This distribution achieves the upper bound with $\|M\|_0 - \|L\|_0 \leq \frac{(k-1)(k-2)}{2}$.
+Before proving the inductive step, we describe how to generate a distribution that achieves this upper bound. First, variables $X\_1, \ldots, X\_{k-1}$ are generated independently of each other. Then, $X_k$ is any linear combination (with strictly non-zero coefficients) of the previous $k-1$ variables plus Gaussian noise. Then each pair of variables are dependent conditioned on all the others. Thus the GGM is a complete graph and $\|M\|_0 = \binom{k}{2} = \frac{k(k-1)}{2}$. The sparsest DAG has edges from each of $X\_1, \ldots, X\_{k-1}$ to $X_k$ giving $\|L\|_0 = k-1$. This distribution achieves the upper bound with $\|M\|_0 - \|L\|_0 \leq \frac{(k-1)(k-2)}{2}$.
 
 Now, we can prove the inductive step. First, notice that $\|M\|_0$ cannot exceed $\binom{k}{2}$ because it corresponds to the complete GGM. Therefore, any distribution with $\|L\|_0 \geq k-1$ cannot possibly make $\|M\|_0 - \|L\|_0$ larger than our proposed upper bound. Finally, consider the case that $\|L\|_0 < k-1$. Then there is a DAG representation of the distribution that does not have enough edges to span the full graph, leaving at least one isolated node. Each isolated node must represent a variable that is independent of all the others. Likewise, it will have no edges in the GGM. Finding the difference $\|M\|_0 - \|L\|_0$ reduces to the problem of finding this difference on a subset of variables with cardinality strictly less than $k$ (by ignoring the isolated nodes). If we adopt the inductive hypothesis that our upper bound statement holds for problems of size $1, \ldots, k-1$, then that bound must hold for our subproblem. That bound is less than $\frac{(k-1)(k-2)}{2}$, which completes the proof. $\square$
 
