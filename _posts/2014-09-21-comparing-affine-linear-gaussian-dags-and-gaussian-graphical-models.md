@@ -21,19 +21,18 @@ The same reasoning does not hold for the inverse covariance matrix, however. In 
 
 The Gaussian graphical model (GGM) representation of a Gaussian distribution is parametrized by the elements of the inverse covariance matrix. The non-zero elements of the inverse covariance can be portrayed as undirected edges in a graph.
 
-Given any DAG $G$, the \emph{moralized graph} for $G$ is constructed by creating edges between any two nodes that share a child then removing the orientations of all edges. If a DAG $G$ corresponds to an ALDG representation of a distribution P, then the GGM for P is the moralized graph of $G$.
+Given any DAG $G$, the *moralized graph* for $G$ is constructed by creating edges between any two nodes that share a child then removing the orientations of all edges. If a DAG $G$ corresponds to an ALDG representation of a distribution P, then the GGM for P is the moralized graph of $G$.
 
-For a Gaussian distribution with covariance $\Sigma$, let us use the term \emph{moral matrix} for the $k$ by $k$ matrix $M$ that agrees with $\Sigma^{-1}$ below the diagonal (strictly below) and is filled with zeros elsewhere. Note that $\Sigma^{-1}$ is equal to the sum of $M$ and $M'$ and a diagonal matrix. Then the non-zeros in $M$ correspond exactly to the edges of the GGM of our distribution.
+For a Gaussian distribution with covariance $\Sigma$, let us use the term *moral matrix* for the $k$ by $k$ matrix $M$ that agrees with $\Sigma^{-1}$ below the diagonal (strictly below) and is filled with zeros elsewhere. Note that $\Sigma^{-1}$ is equal to the sum of $M$ and $M'$ and a diagonal matrix. Then the non-zeros in $M$ correspond exactly to the edges of the GGM of our distribution.
 
 Intuitively, ALGD sparsity captures our notion of causal complexity. Because it often achieves similar sparsity, we could say that GGM sparsity approximately  measures causal complexity also. However, the next result shows that a DAG representation \emph{can be} much sparser than an inverse covariance representation.
 
 ### Proposition 1 *(Comparing DAG Sparsity to GGM Sparsity)*
 
-</div>Given any $k$-dimensional multivariate Gaussian distribution, let $L$ be any sparsest ALGD coefficient matrix and $M$ be the moral matrix. Then
+<div>Given any $k$-dimensional multivariate Gaussian distribution, let $L$ be any sparsest ALGD coefficient matrix and $M$ be the moral matrix. Then
 \begin{align*}
 \|M\|_0 - \|L\|_0 \leq \frac{(k-1)(k-2)}{2}
-\end{align*}
-</div>
+\end{align*}</div>
 and there exist distributions achieving this bound.
 
 ### Proof
