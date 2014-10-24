@@ -38,7 +38,7 @@ Make sure you take a few statistics courses along the way. Take as many physics 
 
 I may write a future blog post on studying. For now, let me just mention one tip. There are some great lectures, such as MIT OpenCourseWare, available to watch on Youtube. Watch these! The lecturers are almost certainly better than your professors. Watching these videos while eating is an efficient way to make the most of your meal times.
 
-There are other good sources of information on [productivity](http://matt.might.net/articles/productivity-tips-hints-hacks-tricks-for-grad-students-academics/).
+There are other good sources of information on [productivity](http://matt.might.net/articles/productivity-tips-hints-hacks-tricks-for-grad-students-academics/). My favorite author on the topic is [Cal Newport](http://calnewport.com) who stresses the importance of [deliberate practice](http://calnewport.com/blog/2010/01/06/the-grandmaster-in-the-corner-office-what-the-study-of-chess-experts-teaches-us-about-building-a-remarkable-life/).
 
 
 ## Burnout
@@ -97,7 +97,7 @@ In your spare time during this REU summer, study for the GRE General Test and th
 
 If you come up with any interesting ideas, build them. It's fun and educational, and it's another way to show off your skills and your initiative. Over the past few years, I've created several web applications, a podcast, a few R packages, an Arduino library, and this blog. Any code you produced for these projects should be available for download (on git-hub for example). You might also consider joining an open-source project.
 
-Side projects are fun, but don't over-extend yourself. You can only do so many things at once.
+Side projects are fun, but don't over-extend yourself. You [can only do so many things at once](http://calnewport.com/blog/2009/08/02/pruning-your-list-of-what-matters/). Keep your life simple and [avoid overly distracting habits/addictions](http://calnewport.com/blog/2010/01/29/an-argument-for-quitting-facebook/).
 
 
 ## Standardized Tests
