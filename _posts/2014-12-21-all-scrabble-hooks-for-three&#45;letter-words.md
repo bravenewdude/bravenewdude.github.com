@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "All Scrabble Hooks for Three letter Words"
+title: "All Scrabble Hooks for Three&#45;letter Words"
 category: tutorial
 tags: [python]
 ---
