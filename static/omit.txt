@@ -20,11 +20,13 @@ approximately
 arbitrary
 arbitrarily
 areas
+argument
 art
 article
 assignments
 assumption
 attempt
+average
 back
 based
 basically
@@ -39,6 +41,7 @@ big
 bins
 black
 blog
+books
 break
 building
 built
@@ -128,6 +131,7 @@ equations
 exact
 examples
 exception
+exchange
 exercise
 exists
 expected
@@ -448,6 +452,7 @@ structure
 students
 study
 subintervals
+subset
 success
 sufficient
 suggest
