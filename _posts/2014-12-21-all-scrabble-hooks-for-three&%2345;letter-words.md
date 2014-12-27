@@ -9,7 +9,7 @@ tags: [python]
 
 I'm a big Scrabble fan, and I was recently looking for a list of all the hooks for the three-letter words. For two letter words, this list ("the 2-to-make-3 list") is in the book *Everything Scrabble* and easy to find [on the web](http://www.wolfberg.net/scrabble/wordlists/OWL2/twos-to-threes.html). But I wasn't able to find an up-to-date ([OWL2](http://www.scrabbleplayers.org/w/Official_Tournament_and_Club_Word_List)) version of the 3-to-make-4 list. So I decided to make one for myself and share it here.
 
-It's easy to find a list of all the allowed three-letter and four-letter words at sites such as [scrabutility](http://scrabutility.com/index.php). I've saved these word lists as text files [threes.txt](/static/threes.txt) and [fours.txt](/static/fours.txt). Then to create the list, I wrote some python code.
+It's easy to find a list of all the allowed three-letter and four-letter words at sites such as [scrabutility](http://scrabutility.com/index.php). I saved these word lists as text files [threes.txt](/static/threes.txt) and [fours.txt](/static/fours.txt). Then to create the list, I wrote some python code.
 
 {% highlight py3 %}
 # Read files to create list of three-letter words and list of four-letter words
