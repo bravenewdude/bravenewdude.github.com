@@ -8,7 +8,7 @@ tags: [r]
 
 
 
-This is a simple exercise that looks at using splines to reduce a a model to a simpler basis in order to better classify phoneme data. The data and a description are available on the  \textit{Elements of Statistical Learning} [textbook's website](http://www-stat.stanford.edu/~tibs/ElemStatLearn/data.html). It is further described in section 5.2.3 of the textbook.
+This is a simple exercise that looks at using splines to reduce a a model to a simpler basis in order to better classify phoneme data. The data and a description are available on the  _Elements of Statistical Learning_ [textbook's website](http://www-stat.stanford.edu/~tibs/ElemStatLearn/data.html). It is further described in section 5.2.3 of the textbook.
 
 The data come from sound clips of people speaking a variety of phonemes: "aa," "ao," "dcl," "iy," and "sh." There are 256 features, corresponding to a digitized periodogram reading at equally spaced frequencies.
 
