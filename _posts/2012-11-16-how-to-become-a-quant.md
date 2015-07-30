@@ -38,7 +38,7 @@ Make sure you take a few statistics courses along the way. Take as many physics 
 
 I may write a future blog post on studying. For now, let me just mention one tip. There are some great lectures, such as MIT OpenCourseWare, available to watch on Youtube. Watch these! The lecturers are almost certainly better than your professors. Watching these videos while eating is an efficient way to make the most of your meal times.
 
-There are other good sources of information on [productivity](http://matt.might.net/articles/productivity-tips-hints-hacks-tricks-for-grad-students-academics/). My favorite author on the topic is [Cal Newport](http://calnewport.com) who stresses the importance of [deliberate practice](http://calnewport.com/blog/2010/01/06/the-grandmaster-in-the-corner-office-what-the-study-of-chess-experts-teaches-us-about-building-a-remarkable-life/).
+There are other good sources of information on [productivity](http://matt.might.net/articles/productivity-tips-hints-hacks-tricks-for-grad-students-academics/). My favorite author on the topic is [Cal Newport](http://calnewport.com) who stresses the importance of [deliberate practice](http://calnewport.com/blog/2010/01/06/the-grandmaster-in-the-corner-office-what-the-study-of-chess-experts-teaches-us-about-building-a-remarkable-life/). An interesting and related topic is [flow](http://malcolmocean.com/2013/06/flow-vs-deliberate-practice/).
 
 
 ## Burnout
