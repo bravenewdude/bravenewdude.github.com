@@ -6,7 +6,7 @@ tagline: Math, CS, Data
 {% include JB/setup %}
 
 
-Hi, I'm [David](http://stat.yale.edu/~wdb22). This blog is about mathematics, computer science, and data analysis. They make for a dangerously powerful combination, and I strive to continually develop my expertise in all three.
+Hi, I'm [David](http://www.stat.yale.edu/~wdb22). This blog is about mathematics, computer science, and data analysis. They make for a dangerously powerful combination, and I strive to continually develop my expertise in all three.
 
 The posts listed below include tutorials, solved math problems, practical advice, and other thoughts.
 
