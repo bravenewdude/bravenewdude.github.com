@@ -174,7 +174,7 @@ sample(1:9, 1)
 
 ## Final Thoughts
 
-Here's a problem you might run into when trying to use this technique. What if you've already looked at your data before creating the lineup? Well, then you will probably recognize it in the lineup, which will bias your judgment. I suggest showing the lineup to a peer who has not already seen the data and asking for his impressions.
+Here's a problem you might run into when trying to use this technique. What if you've already looked at your data before creating the lineup? Well, then you will probably recognize it in the lineup, which will bias your judgment. I suggest showing the lineup to a peer who has not already seen the data and asking for his or her impressions.
 
 It is very easy to see patterns in noise. This null lineup trick is a nice informal way to help you decide whether your "pattern" is real.
 
